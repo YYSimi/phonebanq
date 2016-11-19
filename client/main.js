@@ -3,8 +3,18 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 
-Router.route('/mySenators');
-Router.route('/')
+Router.configure({
+   layoutTemplate: 'main' 
+});
+
+Router.route('/mySenators', {
+    name: 'mySenators'
+});
+Router.route('/', {
+    name: 'home',
+    template: 'info'
+})
+
 
 Template.hello.onCreated(function helloOnCreated() {
   // counter starts at 0
