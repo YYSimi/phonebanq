@@ -15,6 +15,10 @@ Router.route('/', {
     template: 'info'
 })
 
+Template.mySenators.helpers({
+    senators : Senators.find({state: "WA"}),
+    nSenators : Senators.find({state: "WA"}).count(),
+})
 
 Template.hello.onCreated(function helloOnCreated() {
   // counter starts at 0

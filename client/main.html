@@ -3,7 +3,22 @@
 </head>
 
 <template name="mySenators">
-  <h2> This will eventually tell you who your senators are! </h2>
+  <div class="container">
+      <h1> {{nSenators}} Senators registered </h1>
+      <ul>
+      {{#each senators}}
+        <li> Senator Name: {{first_name}} {{last_name}} -- {{district_phone}}</li>
+      {{/each}}
+      </ul>
+  </div>
+</template>
+
+<template name="dailyPrompt">
+
+</template>
+
+<template name="weeklyPrompt">
+
 </template>
 
 <template name="hello">
@@ -15,7 +30,7 @@
   <h1>PhoneBanq</h1>
     {{> yield}}
   <hr/>
-  <p> Making our voices loud and clear. </p>
+  <p> Making our voices heard. </p>
 </template>
 
 <template name="info">
