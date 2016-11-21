@@ -9,8 +9,9 @@ Meteor.startup(() => {
 
 });
 
+
 Accounts.onLogin(function(loginAttempt) {
-    console.log(loginAttempt)
+    // console.log(loginAttempt)
     
     var services = null;
     if (loginAttempt.user) { services = loginAttempt.user.services}
@@ -19,11 +20,11 @@ Accounts.onLogin(function(loginAttempt) {
         
         // TODO:  check for permissions
         
-       console.log(services.facebook);
-       Meteor.http.get("https://graph.facebook.com/v2.8/me?fields=location&access_token=" + services.facebook.accessToken, 
+       // console.log(services.facebook);
+       Meteor.http.get("https://graph.facebook.com/v2.8/me?fields=location{location}&access_token=" + services.facebook.accessToken, 
                         function(error, result) {
                             if (!error) {
-                                console.log(result);
+                                console.log(result.data.location.location.state);
                             }
                             else {
                                 console.log(error)
