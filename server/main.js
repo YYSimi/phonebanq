@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
+import '../imports/api/users.js';
+
 function populateSenators() {
     console.log(Senators.find().count());
 }
@@ -25,6 +27,7 @@ Accounts.onLogin(function(loginAttempt) {
                         function(error, result) {
                             if (!error) {
                                 console.log(result.data.location.location.state);
+                                Meteor.call('users.setState', result.data.location.location.state)
                             }
                             else {
                                 console.log(error)

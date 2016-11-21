@@ -9,6 +9,10 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         }
         
-        Senators.update( $set: { state: state } );
+        console.log(this.userId);
+        console.log(Meteor.users.findOne(this.userId).profile);
+        Meteor.users.update({ _id: this.userId}, { $set: {"profile.state" : state} });
+        console.log(Meteor.users.findOne(this.userId).profile);
+        // Senators.update( $set: { state: state } );
     }
 })
