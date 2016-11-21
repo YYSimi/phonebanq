@@ -1,3 +1,7 @@
+import '../ui/body.js';
+import '../ui/mySenators.js'
+import '../ui/navigation.js'
+
 Router.configure({
    layoutTemplate: 'main' 
 });
