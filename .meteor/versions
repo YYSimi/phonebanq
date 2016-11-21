@@ -20,6 +20,8 @@ caching-compiler@1.1.9
 caching-html-compiler@1.0.7
 callback-hook@1.0.10
 check@1.2.4
+coffeescript@1.0.17
+dburles:mongo-collection-instances@0.3.4
 ddp@1.2.5
 ddp-client@1.2.9
 ddp-common@1.2.8
@@ -36,6 +38,7 @@ facebook@1.2.8
 fastclick@1.0.13
 geojson-utils@1.0.10
 hot-code-push@1.0.4
+houston:admin@2.0.7
 html-tools@1.0.11
 htmljs@1.0.11
 http@1.1.8
@@ -50,6 +53,7 @@ iron:middleware-stack@1.1.0
 iron:router@1.0.13
 iron:url@1.0.11
 jquery@1.11.10
+lai:collection-extensions@0.1.4
 launch-screen@1.0.12
 less@1.0.14
 livedata@1.0.18
@@ -93,6 +97,7 @@ templating@1.2.15
 templating-compiler@1.2.15
 templating-runtime@1.2.15
 templating-tools@1.0.5
+tmeasday:paginated-subscription@0.2.4
 tracker@1.1.1
 ui@1.0.12
 underscore@1.0.10
