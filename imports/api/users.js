@@ -16,33 +16,34 @@ Meteor.methods({
         // Senators.update( $set: { state: state } );
     },
     
-    'users.registerPermission'(permissionName) {  // Register a valid user permission with the server
-        check(permissionName, String);
-        if (!checkPermissions(this.userId, 'admin')) {
-            throw new Meteor.Error('not-authorized');
-        }
+    //TODO:  Remove this code if we decide we don't want it.
+    // 'users.registerPermission'(permissionName) {  // Register a valid user permission with the server
+        // check(permissionName, String);
+        // if (!checkPermissions(this.userId, 'admin')) {
+            // throw new Meteor.Error('not-authorized');
+        // }
         
-        //TODO:  Register this as a legitimate permission in the DB
+        // //TODO:  Register this as a legitimate permission in the DB
         
-    },
+    // },
     
-    'users.setPermissions'(uid, permissionName, state) { // Give another user various permissions
-        check(permissions, String);
-        check(uid, Number);
-        check(state, Boolean);
-        if (!this.userId) {
-            throw new Meteor.Error('not-authorized');
-        }
+    // 'users.setPermissions'(uid, permissionName, state) { // Give another user various permissions
+        // check(permissions, String);
+        // check(uid, Number);
+        // check(state, Boolean);
+        // if (!this.userId) {
+            // throw new Meteor.Error('not-authorized');
+        // }
         
-        //TODO:  Validate that this is a legitimate permission
+        // //TODO:  Validate that this is a legitimate permission
         
-        //TODO:  Set the permission on the user in the DB
-    },
+        // //TODO:  Set the permission on the user in the DB
+    // },
     
-    'users.checkPermissions'(uid, permissionName) {
-        check(permissionName, String);
-        check(uid, Number);
+    // 'users.checkPermissions'(uid, permissionName) {
+        // check(permissionName, String);
+        // check(uid, Number);
         
-        //TODO:  Implement permissions check in DB
-    },
+        // //TODO:  Implement permissions check in DB
+    // },
 })
