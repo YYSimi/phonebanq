@@ -24,3 +24,5 @@ iron:router
 accounts-facebook
 accounts-ui
 service-configuration
+accounts-password
+audit-argument-checks
