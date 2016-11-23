@@ -28,18 +28,18 @@ Template.myTasks.helpers({
     }
 })
 
-Template.oneTask.helpers({
+Template.Task.helpers({
     taskInfo() { 
-        console.log(this);
+        console.log(this.task);
         
         //TODO:  Make this OO-ified
-        switch (this.task_type) {
+        switch (this.task.task_type) {
             case "dailyCallPrompts":
-                console.log(taskCollections[this.task_type]);
-                return DailyCallPrompts.findOne(new Mongo.ObjectID(this.task_id)).supporter_script;
+                console.log(taskCollections[this.task.task_type]);
+                return DailyCallPrompts.findOne(new Mongo.ObjectID(this.task.task_id)).supporter_script;
             case "weeklyCallPrompts":
-                console.log(taskCollections[this.task_type]);
-                return taskCollections[this.task_type].findOne(new Mongo.ObjectID(this.task_id)).Script;
+                console.log(taskCollections[this.task.task_type]);
+                return taskCollections[this.task.task_type].findOne(new Mongo.ObjectID(this.task.task_id)).Script;
         }
     }
 })

@@ -1,11 +1,15 @@
 <template name="myTasks">
+  {{> Tasks tasks=getTasks}}
+</template>
+
+<template name="Tasks">
   <ul>
-  {{#each getTasks}}
-    {{> oneTask}}
+  {{#each task in tasks}}
+    {{> Task task=task}}
   {{/each}}
   </ul>
 </template>
 
-<template name="oneTask">
+<template name="Task">
   <li>{{ taskInfo }}</li>
 </template>
