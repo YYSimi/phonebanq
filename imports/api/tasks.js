@@ -30,7 +30,7 @@ export function CreateRandomUserTask(userId) {
     var foundTaskType;
     var foundTask;
     
-    Meteor.call('users.updateTaskCount', userId);
+    Meteor.call('users.updateTaskCount', userId);  //TODO:  Figure out when/where this should be updated.
     if (Meteor.call('users.getTaskCount', userId) >= 2) {
         return false;
     }
