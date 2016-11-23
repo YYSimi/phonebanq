@@ -22,7 +22,8 @@ Meteor.methods({
             { $set: { "statistics.activeTasks" : UserTasks.find({ user_id: userId}).count() } }
             );
     },
-    'users.getTaskCount'() {
-        return Meteor.users.findOne(this.userId).statistics.activeTasks;
+    'users.getTaskCount'(userId) {
+        check(userId, String); // TODO:  Should this be an int?
+        return Meteor.users.findOne(userId).statistics.activeTasks;
     }
 })

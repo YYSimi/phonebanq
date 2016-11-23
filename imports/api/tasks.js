@@ -30,6 +30,11 @@ export function CreateRandomUserTask(userId) {
     var foundTaskType;
     var foundTask;
     
+    Meteor.call('users.updateTaskCount', userId);
+    if (Meteor.call('users.getTaskCount', userId) >= 2) {
+        return false;
+    }
+    
     // Randomly choose a task type
     IterateRandomStart(taskTypes, (taskType) => {
         foundTaskType = taskType;
