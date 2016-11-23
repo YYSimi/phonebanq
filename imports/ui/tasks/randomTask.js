@@ -4,5 +4,7 @@ import './randomTask.html'
 import '../../api/tasks.js'
 
 Template.randomTask.helpers({
-    test() {console.log(Meteor.call('tasks.createNew', 12345)); return "Helpers test"}
+    test() { 
+        Meteor.call('tasks.createRandom', Meteor.userId());
+        return "Helpers test"}
 })

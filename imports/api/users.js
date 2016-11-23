@@ -13,37 +13,16 @@ Meteor.methods({
         console.log(Meteor.users.findOne(this.userId).profile);
         Meteor.users.update({ _id: this.userId}, { $set: {"profile.state" : state} });
         console.log(Meteor.users.findOne(this.userId).profile);
-        // Senators.update( $set: { state: state } );
     },
-    
-    //TODO:  Remove this code if we decide we don't want it.
-    // 'users.registerPermission'(permissionName) {  // Register a valid user permission with the server
-        // check(permissionName, String);
-        // if (!checkPermissions(this.userId, 'admin')) {
-            // throw new Meteor.Error('not-authorized');
-        // }
-        
-        // //TODO:  Register this as a legitimate permission in the DB
-        
-    // },
-    
-    // 'users.setPermissions'(uid, permissionName, state) { // Give another user various permissions
-        // check(permissions, String);
-        // check(uid, Number);
-        // check(state, Boolean);
-        // if (!this.userId) {
-            // throw new Meteor.Error('not-authorized');
-        // }
-        
-        // //TODO:  Validate that this is a legitimate permission
-        
-        // //TODO:  Set the permission on the user in the DB
-    // },
-    
-    // 'users.checkPermissions'(uid, permissionName) {
-        // check(permissionName, String);
-        // check(uid, Number);
-        
-        // //TODO:  Implement permissions check in DB
-    // },
+    'users.updateTaskCount'(userId) { // Caches how many tasks the user currently has active.
+        check(userId, String); // TODO:  Should this be an int?
+                              // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
+        Meteor.users.update(
+            { _id: userId },
+            { $set: { "statistics.activeTasks" : UserTasks.find({ user_id: userId}).count() } }
+            );
+    },
+    'users.getTaskCount'() {
+        return Meteor.users.findOne(this.userId).statistics.activeTasks;
+    }
 })
