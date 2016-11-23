@@ -1,0 +1,12 @@
+<template name="myTasks">
+  <p> myTasks display </p>
+  <ul>
+  {{#each getTasks}}
+    {{> oneTask}}
+  {{/each}}
+  </ul>
+</template>
+
+<template name="oneTask">
+  <li>{{ taskInfo }}</li>
+</template>
