@@ -14,16 +14,13 @@ Meteor.methods({
         Meteor.users.update({ _id: this.userId}, { $set: {"profile.state" : state} });
         console.log(Meteor.users.findOne(this.userId).profile);
     },
-    'users.updateTaskCount'(userId) { // Caches how many tasks the user currently has active.
-        check(userId, String); // TODO:  Should this be an int?
-                              // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
+    'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
         Meteor.users.update(
-            { _id: userId },
-            { $set: { "statistics.activeTasks" : UserTasks.find({ user_id: userId}).count() } }
+            { _id: Meteor.userId() },
+            { $set: { "statistics.activeTasks" : UserTasks.find({ user_id: Meteor.userId()}).count() } }
             );
     },
-    'users.getTaskCount'(userId) {
-        check(userId, String); // TODO:  Should this be an int?
-        return Meteor.users.findOne(userId).statistics.activeTasks;
+    'users.getTaskCount'() {
+        return Meteor.users.findOne(Meteor.userId()).statistics.activeTasks;
     }
 })

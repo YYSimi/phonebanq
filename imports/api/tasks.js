@@ -25,13 +25,13 @@ function IterateRandomStart(array, action) {
    
 };
 
-export function CreateRandomUserTask(userId) {
+function CreateRandomUserTask(userId) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;
     
-    Meteor.call('users.updateTaskCount', userId);  //TODO:  Figure out when/where this should be updated.
-    if (Meteor.call('users.getTaskCount', userId) >= 2) {
+    Meteor.call('users.updateTaskCount');  //TODO:  Figure out when/where this should be updated.
+    if (Meteor.call('users.getTaskCount') >= 2) {
         return false;
     }
     
@@ -70,7 +70,7 @@ export function CreateRandomUserTask(userId) {
         }
         console.log(userTask);
         Meteor.call('tasks.createNew', userTask);
-        Meteor.call('users.updateTaskCount', userId);
+        Meteor.call('users.updateTaskCount');
         console.log("nTasks = " + Meteor.call('users.getTaskCount'));
     }
 };
@@ -85,10 +85,9 @@ Meteor.methods({
         UserTasks.insert(task);
         return true;
     },
-    'tasks.createRandom'(userId) {
-        check(userId, String);  // TODO:  Figure out if Uid should be a string or a number.
+    'tasks.createRandom'() {
         if (Meteor.isServer) {
-            CreateRandomUserTask(userId);
+            CreateRandomUserTask(Meteor.userId());
         }
     }
 })
