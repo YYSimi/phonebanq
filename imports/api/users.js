@@ -9,10 +9,7 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         }
         
-        console.log(this.userId);
-        console.log(Meteor.users.findOne(this.userId).profile);
         Meteor.users.update({ _id: this.userId}, { $set: {"profile.state" : state} });
-        console.log(Meteor.users.findOne(this.userId).profile);
     },
     'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
         Meteor.users.update(

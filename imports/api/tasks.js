@@ -40,9 +40,13 @@ function CreateRandomUserTask(userId) {
         foundTaskType = taskType;
         //console.log(taskCollections[taskType].find().fetch());
             IterateRandomStart(taskCollections[taskType].find().fetch(), (task) => {
+
+                var existingTask = UserTasks.findOne( { user_id : userId, task_id: task._id._str } );
+                console.log("Checking for Existing task");
+                console.log(existingTask);
                 // If we found a valid task, break!
-                // TODO:  All tasks are valid right now.  Need to filter based on user preference/completion status/date
-                if (true) {
+                // TODO:  Never returns duplicates right now.  Need to filter based on preference/completion status/date as well.
+                if (!existingTask) {
                     foundTask = task;
                     fFoundTask = true;
                     return false;
