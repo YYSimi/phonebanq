@@ -21,13 +21,19 @@ Template.myTasks.helpers({
             switch (task.task_type) {
                 case "dailyCallPrompts":
                     return {
-                        info: DailyCallPrompts.findOne(new Mongo.ObjectID(task.task_id)).supporter_script
+                        type: task.task_type,
+                        data: DailyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
                     };
                 case "weeklyCallPrompts":
                     return {
-                        info: WeeklyCallPrompts.findOne(new Mongo.ObjectID(task.task_id)).Script
+                        type: task.task_type,
+                        data: WeeklyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
                     };
             }
         });
     }
 })
+
+Template.registerHelper('equals', function (a, b) {
+    return a === b;
+});
