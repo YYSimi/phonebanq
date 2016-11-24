@@ -1,29 +1,37 @@
 <template name="myTasks">
-  {{> Tasks getTasks}}
+  {{> UserTasks getTasks}}
 </template>
 
-<template name="Tasks">
+<template name="UserTasks">
   <ul>
-  {{#each task in this}}
+  {{#each userTask in this}}
     <li>
-      {{> Task task}}
+      {{> UserTask userTask}}
     </li>
   {{/each}}
   </ul>
 </template>
 
-<template name="Task">
-  {{#if equals task_type dailyCallPrompts}}
-    {{> DailyCallPrompt data}}
+<template name="UserTask">
+  {{#if equals type "dailyCallPrompts"}}
+    {{> DailyCallPrompt task}}
   {{/if}}
-  {{#if equals task_type weeklyCallPrompts}}
-    {{> WeeklyCallPrompt data}}
+  {{#if equals type "weeklyCallPrompts"}}
+    {{> WeeklyCallPrompt task}}
   {{/if}}
 </template>
 
 <template name="DailyCallPrompt">
   <p>{{Issue}}</p>
-  <p>{{supporter_script}}</p>
+  <p>
+    <b>Supporter script</b><br/>
+    {{supporter_script}}
+  </p>
+  <p>
+    <b>Opposition script</b><br/>
+    {{opposition_script}}
+  </p>
+  <p>Call on {{call_day_of_week}}</p>
 </template>
 
 <template name="WeeklyCallPrompt">

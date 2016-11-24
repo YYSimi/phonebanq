@@ -22,12 +22,12 @@ Template.myTasks.helpers({
                 case "dailyCallPrompts":
                     return {
                         type: task.task_type,
-                        data: DailyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
+                        task: DailyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
                     };
                 case "weeklyCallPrompts":
                     return {
                         type: task.task_type,
-                        data: WeeklyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
+                        task: WeeklyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
                     };
             }
         });
