@@ -21,10 +21,9 @@ Template.myTasks.onCreated(function () {
 
 Template.myTasks.helpers({
     getTasks() {
-        console.log("Returning all tasks for uid" + Meteor.userId());
-        var result = UserTasks.find({ user_id: Meteor.userId() });
-        console.log(result);
-        return result;
+        var tasks = UserTasks.find({ user_id: Meteor.userId() });
+        console.log("Found " + tasks.count() + " tasks for uid" + Meteor.userId());
+        return tasks;
     }
 })
 
