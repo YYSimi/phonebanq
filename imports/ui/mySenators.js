@@ -15,9 +15,6 @@ Template.mySenators.helpers({
         return [];
         },
     nSenators() {
-        if (Meteor.user()) {
-            return Senators.find({state: Meteor.user().profile.state}).count();
-        }
-        return 0;
+        return senators().count();
     }
 })
