@@ -6,7 +6,6 @@ accounts-ui@1.1.4
 accounts-ui-unstyled@1.1.6
 allow-deny@1.0.5
 audit-argument-checks@1.0.7
-autopublish@1.0.7
 autoupdate@1.2.11
 babel-compiler@6.13.0
 babel-runtime@1.0.1

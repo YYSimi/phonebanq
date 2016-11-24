@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Mongo } from 'meteor/mongo';
+import { Meteor } from 'meteor/meteor';
 
 import './myTasks.html'
 import '../../api/tasks.js'
@@ -10,6 +11,13 @@ var taskCollections = {
     dailyCallPrompts : DailyCallPrompts,
     weeklyCallPrompts : WeeklyCallPrompts
 }
+
+// TODO:  Is this the right place to do the subscription?
+Template.myTasks.onCreated(function () {
+    Meteor.subscribe('userTasks');
+    Meteor.subscribe('dailyCallPrompts');
+    Meteor.subscribe('weeklyCallPrompts');
+});
 
 Template.myTasks.helpers({
     getTasks() {

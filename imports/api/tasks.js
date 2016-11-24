@@ -8,6 +8,23 @@ var taskCollections = {
     weeklyCallPrompts : WeeklyCallPrompts
 }
 
+// Handle publication for tasks.  TODO:  Is this the correct file for this?
+
+if (Meteor.isServer) {
+    Meteor.publish('userTasks', function userTasksPublication() {
+        return UserTasks.find({ user_id : this.userId });
+    });
+    Meteor.publish('dailyCallPrompts', function () {
+        return DailyCallPrompts.find();
+    });
+    Meteor.publish('weeklyCallPrompts', function() {
+        return WeeklyCallPrompts.find();
+    });
+    Meteor.publish('nationalSenators', function() {
+        return Senators.find();
+    })
+}
+
 //  Iterates over an array starting at a random index.
 //  Action should be a function that takes an array element and returns true to continue iteration, false to break.
 
