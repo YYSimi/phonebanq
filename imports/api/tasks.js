@@ -123,7 +123,8 @@ function UpdateUserTasks(userId) {
         is_completed: false,
         is_repeatable: false,
         never_show_again: false,
-        lasts_until : { $lt : oldTaskCutoffDate } } );
+        lasts_until : { $lt : oldTaskCutoffDate }
+    });
 }
 
 Meteor.methods({

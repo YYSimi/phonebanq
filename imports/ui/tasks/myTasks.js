@@ -21,11 +21,13 @@ Template.myTasks.helpers({
             switch (task.task_type) {
                 case "dailyCallPrompts":
                     return {
+                        userTask: task,
                         type: task.task_type,
                         task: DailyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
                     };
                 case "weeklyCallPrompts":
                     return {
+                        userTask: task,
                         type: task.task_type,
                         task: WeeklyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
                     };

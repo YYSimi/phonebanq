@@ -13,6 +13,7 @@
 </template>
 
 <template name="UserTask">
+  <p> Expires on {{userTask.lasts_until}} </p>
   {{#if equals type "dailyCallPrompts"}}
     {{> DailyCallPrompt task}}
   {{/if}}
@@ -38,5 +39,5 @@
 <template name="WeeklyCallPrompt">
   <p>{{CTA}}</p>
   <p>{{Script}}</p>
-  <p>From {{StartDate}} to {{EndDate}}</p>
+  <p>People to call: </p>
 </template>
