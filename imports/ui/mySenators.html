@@ -1,9 +1,8 @@
 <template name="mySenators">
   <div class="container">
-      <h1> {{nSenators}} Senators registered </h1>
       <ul>
       {{#each senators}}
-        <li> Senator Name: {{first_name}} {{last_name}} -- {{district_phone}}</li>
+        <li> US Senator {{first_name}} {{last_name}} -- {{district_phone}}</li>
       {{/each}}
       </ul>
   </div>

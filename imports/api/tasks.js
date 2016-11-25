@@ -46,9 +46,10 @@ function CreateRandomUserTask(userId) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;
+    var nMaxTasks = 10; //Todo:  put this in settings.
     
     Meteor.call('users.updateTaskCount');  //TODO:  Figure out when/where this should be updated.
-    if (Meteor.call('users.getTaskCount') >= 2) {
+    if (Meteor.call('users.getTaskCount') >= nMaxTasks) {
         return false;
     }
     
@@ -78,19 +79,21 @@ function CreateRandomUserTask(userId) {
 
     if (fFoundTask) {
         console.log(foundTask);
+        var today = new Date().setUTCHours(0,0,0,0);
+        var tomorrow = new Date().setUTCHours(23, 59, 59, 999);
         // TODO:  Figure out security model here!  MUST DO THIS BEFORE PUBLIC PUBLISH.
         var userTask = {
             user_id: userId,
             task_type: foundTaskType,
             task_id: foundTask._id._str,
             task_statistics: "TBA",
-            given_on: new Date(),
-            lasts_until: "TBA",
+            given_on: tomorrow,
+            lasts_until: tomorrow,
             is_completed: false,
             never_show_again: false
         }
         console.log(userTask);
-        Meteor.call('tasks.createNew');
+        UserTasks.insert(userTask);
         Meteor.call('users.updateTaskCount');
         console.log("nTasks = " + Meteor.call('users.getTaskCount'));
     }
@@ -98,14 +101,6 @@ function CreateRandomUserTask(userId) {
 
 Meteor.methods({
     // Create a new task for the given user
-    'tasks.createNew'() {
-        check(task, Match.Any); // TODO:  Make this secure.
-        if (!Meteor.userId()) {
-            throw new Meteor.Error('not-authorized');
-        }        
-        UserTasks.insert(task);
-        return true;
-    },
     'tasks.createRandom'() {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-autherized')
