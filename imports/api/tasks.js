@@ -90,7 +90,7 @@ function CreateRandomUserTask(userId) {
             never_show_again: false
         }
         console.log(userTask);
-        Meteor.call('tasks.createNew', userTask);
+        Meteor.call('tasks.createNew');
         Meteor.call('users.updateTaskCount');
         console.log("nTasks = " + Meteor.call('users.getTaskCount'));
     }
@@ -98,15 +98,18 @@ function CreateRandomUserTask(userId) {
 
 Meteor.methods({
     // Create a new task for the given user
-    'tasks.createNew'(task) {
+    'tasks.createNew'() {
         check(task, Match.Any); // TODO:  Make this secure.
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }        
         UserTasks.insert(task);
         return true;
     },
     'tasks.createRandom'() {
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('not-autherized')
+        }
         if (Meteor.isServer) {
             CreateRandomUserTask(Meteor.userId());
         }
