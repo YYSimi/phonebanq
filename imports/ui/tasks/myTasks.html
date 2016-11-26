@@ -3,7 +3,6 @@
 </template>
 
 <template name="UserTasks">
-  <div class="container">
   <ul class="list-group">
   {{#each userTask in this}}
     <li class="list-group-item" id={{userTask.userTask._id}}>
@@ -11,7 +10,6 @@
     </li>
   {{/each}}
   </ul>
-  </div>
 </template>
 
 <template name="UserTask">

@@ -1,11 +1,25 @@
 <template name="info">
-  {{> navigation}}
 </template>
 
-<template name="navigation">
-  <ul>
-    <li><a href="{{pathFor route='mySenators'}}">Find my Senators' Contact info</a></li>
-    <li><a href="{{pathFor route='randomTask'}}">Generate a random task</a></li>
-    <li><a href="{{pathFor route='myTasks'}}"> Show my task list </a></li>
-  </ul>
+<template name="nav">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <p class="navbar-brand"> Phonebanq </p>
+        <ul class="nav navbar-nav">
+          <li><a href="{{pathFor route='mySenators'}}">Find my Senators</a></li>
+          <li><a href="{{pathFor route='randomTask'}}">Generate a task</a></li>
+          <li><a href="{{pathFor route='myTasks'}}"> Show my task list </a></li>
+          <li><a href="{{pathFor route='about'}}"> About Phonebanq </a></li>
+        </ul>
+        <div class="navbar-text navbar-right">
+          {{> loginButtons}}
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  
+
+
 </template>
