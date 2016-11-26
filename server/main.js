@@ -8,8 +8,8 @@ Meteor.startup(() => {
         {service: "facebook"},
         {
             $set : {
-                "appId": ENV['FACEBOOK_APP_ID'],
-                "secret": ENV['FACEBOOK_SECRET']
+                "appId": process.env['FACEBOOK_APP_ID'],
+                "secret": process.env['FACEBOOK_SECRET']
             }
         }
     )
@@ -17,8 +17,6 @@ Meteor.startup(() => {
 
 
 Accounts.onLogin(function(loginAttempt) {
-    // console.log(loginAttempt)
-    
     var services = null;
     if (loginAttempt.user) { services = loginAttempt.user.services}
     
