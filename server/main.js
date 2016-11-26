@@ -23,12 +23,9 @@ Accounts.onLogin(function(loginAttempt) {
     if(services && services.facebook) {
         
         // TODO:  check for permissions
-        
-       // console.log(services.facebook);
        Meteor.http.get("https://graph.facebook.com/v2.8/me?fields=location{location}&access_token=" + services.facebook.accessToken, 
                         function(error, result) {
                             if (!error) {
-                                console.log(result.data.location.location.state);
                                 Meteor.call('users.setState', result.data.location.location.state)
                             }
                             else {
