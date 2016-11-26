@@ -149,6 +149,6 @@ Meteor.methods({
             throw new Meteor.Error('not-autherized',
             "The logged-in user does not own this task.");
         }
-        UserTasks.update(userTaskId, {$set: {is_completed : true}});
+        UserTasks.update(userTaskId, { $set: {is_completed : true, is_active:false } });
     }
 })

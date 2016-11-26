@@ -40,8 +40,7 @@ Template.myTasks.helpers({
 Template.UserTask.events({
     'click .js-task-success'() {
         console.log(this);
-        console.log("hiding " + this.userTask._id)
-        $("#"+this.userTask._id).hide('slow', function() {
+        $("#"+this.userTask._id).hide('slow', () => {
             console.log("Hiding succeeded");
             Meteor.call('tasks.completeTask', this.userTask._id);
         })
