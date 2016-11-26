@@ -4,8 +4,6 @@ import '../imports/api/users.js';
 import '../imports/api/tasks.js';
 
 Meteor.startup(() => {
-    console.log("setting appId to " + process.env['FACEBOOK_APP_ID'])
-    console.log("setting secret to " + process.env['FACEBOOK_SECRET'])
     ServiceConfiguration.configurations.update (
         {service: "facebook"},
         {
