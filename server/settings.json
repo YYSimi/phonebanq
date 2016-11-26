@@ -1,7 +1,7 @@
 {
   "public": {
     "tasks" : { 
-      "nMaxActiveTasks": 10,
+      "nMaxActiveTasks": 4,
       "nTaskRetryDelayDays": 3
     }
   },

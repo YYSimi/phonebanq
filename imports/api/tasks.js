@@ -46,10 +46,10 @@ function CreateRandomUserTask(userId) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;
-
+    var nMaxActiveTasks = 4;
     
     Meteor.call('users.updateTaskCount');  //TODO:  Figure out when/where this should be updated.
-    if (Meteor.call('users.getTaskCount') >= Meteor.settings.public.tasks.nMaxActiveTasks) {
+    if (Meteor.call('users.getTaskCount') >= nMaxActiveTasks) {
         return false;
     }
     
@@ -117,7 +117,8 @@ function UpdateUserTasks(userId) {
 
     // Purge old tasks that are non-active, non-completed, and non-"never show again"
     var oldTaskCutoffDate = new Date();
-    oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - Meteor.settings.public.tasks.nTaskRetryDelayDays);
+    var nTaskRetryDelayDays = 3;
+    oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - nTaskRetryDelayDays);
     UserTasks.remove({
         user_id: userId,
         is_completed: false,
