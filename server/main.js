@@ -6,7 +6,12 @@ import '../imports/api/tasks.js';
 Meteor.startup(() => {
     ServiceConfiguration.configurations.update (
         {service: "facebook"},
-        {$set : Meteor.settings.private.oAuth.facebook }
+        {
+            $set : {
+                "appId": ENV['FACEBOOK_APP_ID'],
+                "secret": ENV['FACEBOOK_SECRET']
+            }
+        }
     )
 });
 
