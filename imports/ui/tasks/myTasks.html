@@ -6,7 +6,7 @@
   <div class="container">
   <ul class="list-group">
   {{#each userTask in this}}
-    <li class="list-group-item">
+    <li class="list-group-item" id={{userTask.userTask._id}}>
       {{> UserTask userTask}}
     </li>
   {{/each}}
@@ -15,6 +15,7 @@
 </template>
 
 <template name="UserTask">
+  <button class="btn-success js-task-success"> Mark as Complete </button>
   <p> Expires on {{userTask.lasts_until}} </p>
   {{#if equals type "dailyCallPrompts"}}
     {{> DailyCallPrompt task}}

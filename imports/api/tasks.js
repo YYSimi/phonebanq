@@ -129,13 +129,25 @@ function UpdateUserTasks(userId) {
 
 Meteor.methods({
     // Create a new task for the given user
+    // TODO:  Move these to a new "userTasks" class?
     'tasks.createRandom'() {
         if (!Meteor.userId()) {
             throw new Meteor.Error('not-autherized')
         }
         if (Meteor.isServer) {
             UpdateUserTasks(Meteor.userId());
-            //CreateRandomUserTask(Meteor.userId());
+            CreateRandomUserTask(Meteor.userId());
         }
+    },
+
+    'tasks.completeTask'(userTaskId) {
+        check(userTaskId, String); // TODO:  should these be numbers?
+        console.log('completing task ' + userTaskId );
+        userTask = UserTasks.findOne(userTaskId);
+        if (Meteor.userId() != userTask.user_id) {
+            throw new Meteor.Error('not-autherized',
+            "The logged-in user does not own this task.");
+        }
+        UserTasks.update(userTaskId, {$set: {is_completed : true}});
     }
 })

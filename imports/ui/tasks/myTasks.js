@@ -12,9 +12,10 @@ Template.myTasks.onCreated(function () {
     Meteor.subscribe('dailyCallPrompts');
     Meteor.subscribe('weeklyCallPrompts');
 });
+
 Template.myTasks.helpers({
     getTasks() {
-        var tasks = UserTasks.find({ user_id: Meteor.userId() });
+        var tasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false });
         console.log("Found " + tasks.count() + " tasks for uid" + Meteor.userId());
         
         return tasks.map(task => {
@@ -34,7 +35,18 @@ Template.myTasks.helpers({
             }
         });
     }
-})
+});
+
+Template.UserTask.events({
+    'click .js-task-success'() {
+        console.log(this);
+        console.log("hiding " + this.userTask._id)
+        $("#"+this.userTask._id).hide('slow', function() {
+            console.log("Hiding succeeded");
+            Meteor.call('tasks.completeTask', this.userTask._id);
+        })
+    },
+});
 
 Template.registerHelper('equals', function (a, b) {
     return a === b;
