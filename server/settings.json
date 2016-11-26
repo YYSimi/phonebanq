@@ -1,0 +1,10 @@
+{
+  "public": {
+    "tasks" : { 
+      "nMaxActiveTasks": 10,
+      "nTaskRetryDelayDays": 3
+    }
+  },
+  "private": {
+  }
+}
