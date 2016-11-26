@@ -3,13 +3,15 @@
 </template>
 
 <template name="UserTasks">
-  <ul>
+  <div class="container">
+  <ul class="list-group">
   {{#each userTask in this}}
-    <li>
+    <li class="list-group-item">
       {{> UserTask userTask}}
     </li>
   {{/each}}
   </ul>
+  </div>
 </template>
 
 <template name="UserTask">
