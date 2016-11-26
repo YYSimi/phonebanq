@@ -23,23 +23,3 @@
     {{> WeeklyCallPrompt task}}
   {{/if}}
 </template>
-
-<template name="DailyCallPrompt">
-  <p>{{Issue}}</p>
-  <p>
-    <b>Supporter script</b><br/>
-    {{supporter_script}}
-  </p>
-  <p>
-    <b>Opposition script</b><br/>
-    {{opposition_script}}
-  </p>
-  <p>Call on {{call_day_of_week}}</p>
-  <p>People to call: {{> mySenators}} </p>
-</template>
-
-<template name="WeeklyCallPrompt">
-  <p>{{CTA}}</p>
-  <p>{{Script}}</p>
-  <p>People to call: </p>
-</template>
