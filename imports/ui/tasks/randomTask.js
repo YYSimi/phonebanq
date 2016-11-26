@@ -4,7 +4,7 @@ import './randomTask.html'
 import '../../api/tasks.js'
 
 Template.randomTask.helpers({
-    test() {  //TODO:  Rename this method
+    createRandom() {  //TODO: Move this method to someplace more sensible
         Meteor.call('tasks.createRandom');
-        return "Helpers test"}
+    }
 })

@@ -18,6 +18,8 @@ Meteor.methods({
             );
     },
     'users.getTaskCount'() {
-        return Meteor.users.findOne(Meteor.userId()).statistics.activeTasks;
+        taskCount = Meteor.users.findOne(Meteor.userId()).statistics.activeTasks;
+        if (!taskCount) {taskCount = 0;}
+        return taskCount;
     }
 })
