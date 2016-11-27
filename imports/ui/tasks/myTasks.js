@@ -39,11 +39,12 @@ Template.myTasks.helpers({
 
 Template.UserTask.events({
     'click .js-task-success'() {
-        console.log(this);
-        $("#"+this.userTask._id).hide('slow', () => {
-            console.log("Hiding succeeded");
-            Meteor.call('tasks.completeTask', this.userTask._id);
-        })
+        
+        //TODO:  re-enable animations.  They're not working properly at the moment.
+        //$("#"+this.userTask._id).hide('slow', () => {
+        //    console.log("Hiding succeeded");
+        Meteor.call('tasks.completeTask', this.userTask._id);
+        //})
     },
 });
 
