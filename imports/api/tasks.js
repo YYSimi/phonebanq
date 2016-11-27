@@ -150,5 +150,16 @@ Meteor.methods({
             "The logged-in user does not own this task.");
         }
         UserTasks.update(userTaskId, { $set: {is_completed : true, is_active:false } });
+    },
+
+    'tasks.unCompleteTask'(userTaskId) {
+        check(userTaskId, String); // TODO:  should these be numbers?
+        console.log('uncompleting task ' + userTaskId );
+        userTask = UserTasks.findOne(userTaskId);
+        if (Meteor.userId() != userTask.user_id) {
+            throw new Meteor.Error('not-autherized',
+            "The logged-in user does not own this task.");
+        }
+        UserTasks.remove(userTaskId);
     }
 })

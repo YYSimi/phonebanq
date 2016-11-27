@@ -1,21 +1,23 @@
-<template name="myTasks">
-  <h1> Available Tasks </h1>
-  {{> UserTasks getTasks}}
+<template name="completedTasks">
+  <div class="page-header">
+    <h1>Completed Tasks</h1>
+  </div>
+  {{> UserTasksII getTasks}}
 </template>
 
-<template name="UserTasks">
+<template name="UserTasksII">
   <ul class="list-group js-userTasks-list">
   {{#each userTask in this}}
     <li class="list-group-item" id={{userTask.userTask._id}}>
-      {{> UserTask userTask}}
+      {{> UserTaskII userTask}}
     </li>
   {{/each}}
   </ul>
 </template>
 
-<template name="UserTask">
+<template name="UserTaskII">
   <span class="pull-right">
-  <button class="btn-success js-task-success"> Mark as Complete </button>
+  <button class="btn-warning js-task-unsuccess"> Mark as incomplete </button>
   </span>
   <p> Expires on {{userTask.lasts_until}} </p>
   {{#if equals type "dailyCallPrompts"}}

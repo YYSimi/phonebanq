@@ -6,6 +6,7 @@ import '../ui/about.js'
 import '../ui/tasks/randomTask.js'
 import '../ui/tasks/dailyCallPrompt.js'
 import '../ui/tasks/weeklyCallPrompt.js'
+import '../ui/tasks/completedTasks.js'
 import '../ui/tasks/myTasks.js'
 
 
@@ -27,6 +28,10 @@ Router.route('/randomTask', {
 
 Router.route('/myTasks', {
     name: 'myTasks'
+});
+
+Router.route('/completedTasks', {
+    name: 'completedTasks'
 });
 
 Router.route('/', {
