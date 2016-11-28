@@ -6,7 +6,6 @@ import '../ui/about.js'
 
 import '../ui/userSettings.js'
 
-import '../ui/tasks/randomTask.js'
 import '../ui/tasks/dailyCallPrompt.js'
 import '../ui/tasks/weeklyCallPrompt.js'
 import '../ui/tasks/completedTasks.js'
@@ -27,10 +26,6 @@ Router.route('/mySenators', {
 
 Router.route('/userSettings', {
     name: 'userSettings'
-});
-
-Router.route('/randomTask', {
-    name: 'randomTask'
 });
 
 Router.route('/myTasks', {
