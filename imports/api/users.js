@@ -17,14 +17,9 @@ Meteor.methods({
     },
     'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              
         // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
-        Meteor.users.update(
-            { _id: Meteor.userId() },
-            { $set: { "statistics.activeTasks" : UserTasks.find({ user_id: Meteor.userId()}).count() } }
-            );
+        UpdateTaskCount(Meteor.userId());
     },
     'users.getTaskCount'() {
-        taskCount = Meteor.users.findOne(Meteor.userId()).statistics.activeTasks;
-        if (!taskCount) {taskCount = 0;}
-        return taskCount;
+        return GetTaskCount(userId);
     }
-})
+});

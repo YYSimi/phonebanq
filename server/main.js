@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
+import { UpdateUserTasks } from '../lib/common.js'
 
 Meteor.startup(() => {
     ServiceConfiguration.configurations.update (
@@ -60,32 +61,6 @@ Accounts.onLogin(function(loginAttempt) {
 })
 
 // TODO:  This code is duplicated in imports/ui/main.js.  Get rid of that dupe!
-
-function UpdateUserTasks(userId) {
-    // Mark any expired active tasks as inactive
-    var expiredTaskCutoffDate = new Date();
-    activeExpired = UserTasks.find({
-        user_id: userId,
-        is_active: true,
-        lasts_until : { $lt : new Date() }
-    });
-
-    activeExpired.forEach( function (item) {
-        item.is_active = false;
-    });
-
-    // Purge old tasks that are non-active, non-completed, and non-"never show again"
-    var oldTaskCutoffDate = new Date();
-    var nTaskRetryDelayDays = 3;
-    oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - nTaskRetryDelayDays);
-    UserTasks.remove({
-        user_id: userId,
-        is_completed: false,
-        is_repeatable: false,
-        never_show_again: false,
-        lasts_until : { $lt : oldTaskCutoffDate }
-    });
-}
 
 // Schedule a job to update the userTask database once per day.
 function UpdateAllUserTasks(){
