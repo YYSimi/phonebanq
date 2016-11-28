@@ -1,4 +1,5 @@
 import '../ui/body.js';
+import '../ui/home.js';
 import '../ui/mySenators.js'
 import '../ui/navigation.js'
 import '../ui/about.js'
@@ -41,6 +42,5 @@ Router.route('/completedTasks', {
 });
 
 Router.route('/', {
-    name: 'home',
-    template: 'info'
+    name: 'home'
 })
