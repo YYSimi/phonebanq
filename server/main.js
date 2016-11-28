@@ -13,13 +13,29 @@ Meteor.startup(() => {
             }
         }
     )
+    UpdateAllUserTasks();
+    var fnSetUpdateTimer = function () {
+        var midnight = new Date();
+        midnight.setHours(24);
+        midnight.setMinutes(0);
+        midnight.setSeconds(0);
+        midnight.setMinutes(0);
+        var timeUntilMidnight = (midnight.getTime() - new Date().getTime())
+        Meteor.setTimeout(
+            function() { UpdateAllUserTasks(); fnSetUpdateTimer() }, 
+            timeUntilMidnight)
+        }
+    fnSetUpdateTimer();
 });
 
 
 Accounts.onLogin(function(loginAttempt) {
     var services = null;
-    if (loginAttempt.user) { services = loginAttempt.user.services}
+    if (!loginAttempt.user) { return; }
     
+    services = loginAttempt.user.services;
+
+    // Populate the User's location data
     if(services && services.facebook) {
         
         // TODO:  check for permissions
@@ -36,4 +52,46 @@ Accounts.onLogin(function(loginAttempt) {
                         })
         }
     }
+
+    // Update the user's task list.
+
+    UpdateUserTasks(loginAttempt.user._id);
+
 })
+
+// TODO:  This code is duplicated in imports/ui/main.js.  Get rid of that dupe!
+
+function UpdateUserTasks(userId) {
+    // Mark any expired active tasks as inactive
+    var expiredTaskCutoffDate = new Date();
+    activeExpired = UserTasks.find({
+        user_id: userId,
+        is_active: true,
+        lasts_until : { $lt : new Date() }
+    });
+
+    activeExpired.forEach( function (item) {
+        item.is_active = false;
+    });
+
+    // Purge old tasks that are non-active, non-completed, and non-"never show again"
+    var oldTaskCutoffDate = new Date();
+    var nTaskRetryDelayDays = 3;
+    oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - nTaskRetryDelayDays);
+    UserTasks.remove({
+        user_id: userId,
+        is_completed: false,
+        is_repeatable: false,
+        never_show_again: false,
+        lasts_until : { $lt : oldTaskCutoffDate }
+    });
+}
+
+// Schedule a job to update the userTask database once per day.
+function UpdateAllUserTasks(){
+    console.log("updating all user tasks");
+    Meteor.users.find().forEach(function(user) {
+        console.log("updating user tasks for " + user._id);
+        UpdateUserTasks(user._id);
+    })
+}

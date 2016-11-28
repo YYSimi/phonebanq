@@ -102,6 +102,8 @@ function CreateRandomUserTask(userId) {
     }
 };
 
+// TODO:  This code is duplicated in server/main.js.  Get rid of that dupe!
+
 function UpdateUserTasks(userId) {
     // Mark any expired active tasks as inactive
     var expiredTaskCutoffDate = new Date();
