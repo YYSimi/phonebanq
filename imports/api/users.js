@@ -3,15 +3,20 @@ import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
 Meteor.methods({
-    'users.setState'(state) { //Set the User's US state
+    'users.setState'(state, dataSource) { //Set the User's US state.  Record what auth provider or settings pane was used.
         check(state, String);
+        check(dataSource, String);
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
         
-        Meteor.users.update({ _id: this.userId}, { $set: {"profile.state" : state} });
+        Meteor.users.update({ _id: this.userId}, { $set:
+            {"profile.state" : state,
+            "profile.stateDataSource" : dataSource } });
+
     },
-    'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
+    'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              
+        // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
         Meteor.users.update(
             { _id: Meteor.userId() },
             { $set: { "statistics.activeTasks" : UserTasks.find({ user_id: Meteor.userId()}).count() } }

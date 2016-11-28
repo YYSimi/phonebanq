@@ -12,6 +12,7 @@
           <li><a href="{{pathFor route='myTasks'}}"> Show my task list </a></li>
           <li><a href="{{pathFor route='completedTasks'}}"> Show completed tasks </a></li>
           <li><a href="{{pathFor route='about'}}"> About Phonebanq </a></li>
+          {{#if currentUser}} <li><a href="{{pathFor route='userSettings'}}"> Settings </a></li> {{/if}}
         </ul>
         <div class="navbar-text navbar-right">
           {{> loginButtons}}

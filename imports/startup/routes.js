@@ -3,6 +3,8 @@ import '../ui/mySenators.js'
 import '../ui/navigation.js'
 import '../ui/about.js'
 
+import '../ui/userSettings.js'
+
 import '../ui/tasks/randomTask.js'
 import '../ui/tasks/dailyCallPrompt.js'
 import '../ui/tasks/weeklyCallPrompt.js'
@@ -20,6 +22,10 @@ Router.route('/about', {
 
 Router.route('/mySenators', {
     name: 'mySenators'
+});
+
+Router.route('/userSettings', {
+    name: 'userSettings'
 });
 
 Router.route('/randomTask', {
