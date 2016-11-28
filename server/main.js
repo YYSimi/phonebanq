@@ -2,9 +2,11 @@ import { Meteor } from 'meteor/meteor';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
-import { UpdateUserTasks } from '../lib/common.js'
+import { PopulateUserTasks, UpdateUserTasks } from '../lib/common.js'
 
 Meteor.startup(() => {
+    Houston.add_collection(Meteor.users);
+
     ServiceConfiguration.configurations.update (
         {service: "facebook"},
         {
@@ -23,8 +25,11 @@ Meteor.startup(() => {
         midnight.setMinutes(0);
         var timeUntilMidnight = (midnight.getTime() - new Date().getTime())
         Meteor.setTimeout(
-            function() { UpdateAllUserTasks(); fnSetUpdateTimer() }, 
-            timeUntilMidnight)
+            function() { 
+                UpdateAllUserTasks(); 
+                fnSetUpdateTimer() }, 
+//            timeUntilMidnight)
+                1000*10);
         }
     fnSetUpdateTimer();
 });
@@ -54,13 +59,16 @@ Accounts.onLogin(function(loginAttempt) {
         }
     }
 
+    if (!Meteor.user().profile.fHasLoggedInBefore) {
+        OnFirstLogin(Meteor.userId());
+        Meteor.users.update(
+            { _id: Meteor.userId() },
+            { $set: { "profile.fHasLoggedInBefore" : true } })
+    }
+
     // Update the user's task list.
-
     UpdateUserTasks(loginAttempt.user._id);
-
 })
-
-// TODO:  This code is duplicated in imports/ui/main.js.  Get rid of that dupe!
 
 // Schedule a job to update the userTask database once per day.
 function UpdateAllUserTasks(){
@@ -68,5 +76,12 @@ function UpdateAllUserTasks(){
     Meteor.users.find().forEach(function(user) {
         console.log("updating user tasks for " + user._id);
         UpdateUserTasks(user._id);
+        PopulateUserTasks(user._id);
     })
+}
+
+function OnFirstLogin(userId) {
+    console.log("running OnFirstLogin");
+    UpdateUserTasks(userId);
+    PopulateUserTasks(userId);
 }
