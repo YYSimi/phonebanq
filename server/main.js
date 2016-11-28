@@ -59,7 +59,9 @@ Accounts.onLogin(function(loginAttempt) {
         }
     }
 
-    if (!Meteor.user().profile.fHasLoggedInBefore) {
+    // TODO:  Figure out when "profile" gets populated
+    // TODO:  Figure out best practices for querying javascript objects that may be null. 
+    if (!Meteor.user().profile || Meteor.user().profile.fHasLoggedInBefore) {
         OnFirstLogin(Meteor.userId());
         Meteor.users.update(
             { _id: Meteor.userId() },
