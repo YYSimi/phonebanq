@@ -15,7 +15,7 @@ Template.myTasks.onCreated(function () {
 
 Template.myTasks.helpers({
     getTasks() {
-        var tasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false });
+        var tasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
         console.log("Found " + tasks.count() + " tasks for uid" + Meteor.userId());
         
         return tasks.map(task => {
@@ -44,6 +44,22 @@ Template.UserTask.events({
         //$("#"+this.userTask._id).hide('slow', () => {
         //    console.log("Hiding succeeded");
         Meteor.call('tasks.completeTask', this.userTask._id);
+        //})
+    },
+    'click .js-task-hide'() {
+        
+        //TODO:  re-enable animations.  They're not working properly at the moment.
+        //$("#"+this.userTask._id).hide('slow', () => {
+        //    console.log("Hiding succeeded");
+        Meteor.call('tasks.cancelTask', this.userTask._id);
+        //})
+    },
+    'click .js-task-hideForever'() {
+        
+        //TODO:  re-enable animations.  They're not working properly at the moment.
+        //$("#"+this.userTask._id).hide('slow', () => {
+        //    console.log("Hiding succeeded");
+        Meteor.call('tasks.hideTaskForever', this.userTask._id);
         //})
     },
 });

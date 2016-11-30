@@ -43,7 +43,7 @@ Template.UserTaskII.events({
         //TODO:  re-enable animations.  They're not working properly at the moment.
         //$("#"+this.userTask._id).hide('slow', () => {
         //    console.log("Hiding succeeded");
-        Meteor.call('tasks.unCompleteTask', this.userTask._id);
+        Meteor.call('tasks.cancelTask', this.userTask._id);
         //})
     },
 });

@@ -45,7 +45,7 @@ Meteor.methods({
         UserTasks.update(userTaskId, { $set: {is_completed : true, is_active:false } });
     },
 
-    'tasks.unCompleteTask'(userTaskId) {
+    'tasks.cancelTask'(userTaskId) {
         check(userTaskId, String); // TODO:  should these be numbers?
         console.log('uncompleting task ' + userTaskId );
         userTask = UserTasks.findOne(userTaskId);
@@ -54,5 +54,24 @@ Meteor.methods({
             "The logged-in user does not own this task.");
         }
         UserTasks.remove(userTaskId);
+    },
+
+    // TODO:  Create a class-like interface for managing UserTasks, then have the Meteor methods call directly into the class.
+
+    'tasks.hideTaskForever'(userTaskId) {
+        check(userTaskId, String); // TODO:  should these be numbers?
+        console.log('uncompleting task ' + userTaskId );
+        userTask = UserTasks.findOne(userTaskId);
+        if (Meteor.userId() != userTask.user_id) {
+            throw new Meteor.Error('not-autherized',
+            "The logged-in user does not own this task.");
+        }
+        
+        UserTasks.update(
+            { _id: userTaskId },
+            { $set: { "is_active" : "false",  "never_show_again" : true} }
+        );
+
+        UpdateUserTasks(userTaskId);
     }
 })
