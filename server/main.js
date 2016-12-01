@@ -110,7 +110,9 @@ function UpdateAllUserTasks(){
         UpdateUserTasks(user._id);
         var nNewTasksCreated = PopulateUserTasks(user._id);
         if (nNewTasksCreated > 0) {
-            NotifyFacebookUser(user);
+            if (user.services && user.service.facebook) {
+                NotifyFacebookUser(user);
+            }
         }
     })
 }
@@ -120,7 +122,9 @@ function OnFirstLogin(userId) {
     UpdateUserTasks(userId);
     var nNewTasksCreated = PopulateUserTasks(userId);
     if (nNewTasksCreated > 0) {
-        NotifyFacebookUser(Meteor.User());
+        if (user.services && user.service.facebook) {
+            NotifyFacebookUser(user);
+        }
     }
 }
 
