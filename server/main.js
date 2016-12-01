@@ -110,7 +110,7 @@ function UpdateAllUserTasks(){
         UpdateUserTasks(user._id);
         var nNewTasksCreated = PopulateUserTasks(user._id);
         if (nNewTasksCreated > 0) {
-            if (user.services && user.service.facebook) {
+            if (user.services && user.services.facebook) {
                 NotifyFacebookUser(user);
             }
         }
@@ -122,7 +122,7 @@ function OnFirstLogin(userId) {
     UpdateUserTasks(userId);
     var nNewTasksCreated = PopulateUserTasks(userId);
     if (nNewTasksCreated > 0) {
-        if (user.services && user.service.facebook) {
+        if (user.services && user.services.facebook) {
             NotifyFacebookUser(user);
         }
     }
