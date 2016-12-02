@@ -5,11 +5,14 @@ import '../imports/api/users.js';
 import '../imports/api/tasks.js';
 import { PopulateUserTasks, UpdateUserTasks } from '../lib/common.js';
 
-// TODO:  Figure out how we are supposed to abstract things nicely in JS.
-// server-side global variables go here for now.
-var appInfo = {
-    fbAppAccessToken: undefined
-}
+var fbAppInfo = function(){
+    var fbAppAccessToken = undefined
+    
+    return {
+        getAccesstoken() {return fbAppAccessToken},
+        setAccessToken(token) {fbAppAccessToken = token}
+    };
+}();
 
 Meteor.startup(() => {
     Houston.add_collection(Meteor.users);
@@ -46,9 +49,7 @@ Meteor.startup(() => {
             }
             else {
                 console.log( response );
-                console.log("setting token to " + response.content.split('=')[1])
-                appInfo.fbAppAccessToken = response.content.split('=')[1];
-                console.log("set token to " + appInfo.fbAppAccessToken)
+                fbAppInfo.setAccessToken(response.content.split('=')[1]);
             }
         }
     )
@@ -143,7 +144,7 @@ function NotifyFacebookUser(user) {
     
     httpRequestStr='https://graph.facebook.com/' +
         userFbInfo.id +  '/notifications' +
-        "?access_token=" + appInfo.fbAppAccessToken +
+        "?access_token=" + fbAppInfo.getAccesstoken() +
         "&href=/myTasks" +
         "&template=New task available #America";
     
