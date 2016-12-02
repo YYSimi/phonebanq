@@ -22,9 +22,6 @@ Meteor.startup(() => {
     var fbAppId = process.env['FACEBOOK_APP_ID'] || fbLocalhostAppId;
     var fbSecret = process.env['FACEBOOK_SECRET'] || fbLocalhostSecret;
 
-    console.log("AppId env var is " + process.env['FACEBOOK_APP_ID']);
-    console.log("using app Id" + fbAppId);
-
     ServiceConfiguration.configurations.update (
         {service: "facebook"},
         {
