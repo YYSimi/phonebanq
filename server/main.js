@@ -14,19 +14,30 @@ var appInfo = {
 Meteor.startup(() => {
     Houston.add_collection(Meteor.users);
 
+    var fbLocalhostAppId = '332532203786554';
+    var fbLocalhostSecret = '8b3e5e818c702c199a429e5c7e96311a';
+
+    // If the environment gives override values (i.e. real values) for appID/secret, use those.
+    // Otherwise, use appID/secret for localhost.
+    var fbAppId = process.env['FACEBOOK_APP_ID'] || fbLocalhostAppId;
+    var fbSecret = process.env['FACEBOOK_SECRET'] || fbLocalhostSecret;
+
+    console.log("AppId env var is " + process.env['FACEBOOK_APP_ID']);
+    console.log("using app Id" + fbAppId);
+
     ServiceConfiguration.configurations.update (
         {service: "facebook"},
         {
             $set : {
-                "appId": process.env['FACEBOOK_APP_ID'],
-                "secret": process.env['FACEBOOK_SECRET'],
+                "appId": fbAppId,
+                "secret": fbSecret,
             }
         }
     )
 
     httpRequestStr='https://graph.facebook.com/oauth/access_token' +
-            "?client_id=" + process.env['FACEBOOK_APP_ID'] +
-            "&client_secret=" + process.env['FACEBOOK_SECRET'] +
+            "?client_id=" + fbAppId +
+            "&client_secret=" + fbSecret +
             "&grant_type=client_credentials";
 
     console.log("Request string is " + httpRequestStr);
