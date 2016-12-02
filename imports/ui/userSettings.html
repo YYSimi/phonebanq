@@ -9,8 +9,12 @@
 <template name="loggedInUserSettings">
   <div class="form-group row">
     <label for="user-state" class="col-xs-2 col-form-label"> State of Residence </label>
-    <div class="col-xs-1">
+    <div class="col-xs-2">
       <input class="form-control" type="text" value={{profile.state}} id="user-state" readonly="{{isLocationFromFacebook}}"/>
+    </div>
+    <label for="user-zip" class="col-xs-2 col-form-label"> Zip Code </label>
+    <div class="col-xs-2">
+      <input class="form-control" type="text" value="{{profile.zipCode}}" id="user-zip" readonly="{{isLocationFromFacebook}}"/>
     </div>
   </div>
   <!-- TODO:  Make this only show up if FB login is active {{#if isUserLoggedInToFacebook}} -->

@@ -15,7 +15,24 @@ Meteor.methods({
         
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.state" : state} });
+    },
+    'users.setZipCode'(zipCode) {
+        check(zipCode, String);
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
 
+        Meteor.users.update({ _id: this.userId}, { $set:
+            {"profile.zipCode" : zipCode} });
+    },
+    'users.setStreet'(street) {
+        check(street, String)
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+
+        Meteor.users.update({ _id: this.userId}, { $set:
+            {"profile.street" : street} });
     },
     'users.setLocationDataSource'(locationDataSource) {   //TODO:  LocationDataSource needs to be an Enum!
         check(locationDataSource, String);
