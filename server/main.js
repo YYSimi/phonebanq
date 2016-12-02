@@ -6,7 +6,7 @@ import '../imports/api/tasks.js';
 import { PopulateUserTasks, UpdateUserTasks } from '../lib/common.js';
 
 var fbAppInfo = function(){
-    var fbAppAccessToken = undefined
+    var fbAppAccessToken = '';
     
     return {
         getAccesstoken() {return fbAppAccessToken},
@@ -146,7 +146,7 @@ function NotifyFacebookUser(user) {
         userFbInfo.id +  '/notifications' +
         "?access_token=" + fbAppInfo.getAccesstoken() +
         "&href=/myTasks" +
-        "&template=New task available #America";
+        "&template=New task available.  For America.";
     
     console.log("Posting http request to " + httpRequestStr)
 
