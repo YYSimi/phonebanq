@@ -1,9 +1,23 @@
 <template name="userSettings">
+  {{#if currentUser}}
+    {{>loggedInUserSettings currentUser}}
+  {{else}}
+    <p> Please log-in to access this page </p>
+  {{/if}}
+</template>
+
+<template name="loggedInUserSettings">
   <div class="form-group row">
     <label for="user-state" class="col-xs-2 col-form-label"> State of Residence </label>
     <div class="col-xs-1">
-      <input class="form-control" type="text" value={{state}} id="user-state"/>
+      <input class="form-control" type="text" value={{profile.state}} id="user-state" readonly="{{isLocationFromFacebook}}"/>
     </div>
   </div>
+  <!-- TODO:  Make this only show up if FB login is active {{#if isUserLoggedInToFacebook}} -->
+    <div class="form-group row">
+      <label class="col-sm-2"> Use my Facebook profile to update my location </label>
+      <input class="form-check-input js-userSettings-useFacebookCheckbox" id="checkboxTempId" type="checkbox" checked="{{isLocationFromFacebook}}"/>
+    </div>
+  <!-- {{/if}} -->
   <button type="submit" class="btn btn-primary js-userSettings-submit"> Submit </button>
 </template>

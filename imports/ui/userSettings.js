@@ -2,20 +2,17 @@ import { Template } from 'meteor/templating';
   
 import './userSettings.html';
 
-Template.userSettings.helpers({
-    state() {
-        user = Meteor.user();
-        if (user && user.profile && user.profile.state){
-            return user.profile.state;
-        }
-        return "";
+Template.loggedInUserSettings.helpers({
+    isLocationFromFacebook() {
+        return this.profile && this.profile.locationDataSource === "facebook";
     }
 })
 
-Template.userSettings.events({
+Template.loggedInUserSettings.events({
     'click .js-userSettings-submit'() {
-                console.log("setting state to " + $('#user-state').val())
-                console.log($('#user-state'))
-                Meteor.call('users.setState', $('#user-state').val(), "manual" );
-        },
+        Meteor.call('users.setState', $('#user-state').val());
+    },
+    'click .js-userSettings-useFacebookCheckbox'(event) {
+        Meteor.call('users.setLocationDataSource', event.target.checked ? "facebook" : "manual" );
+    }
 });
