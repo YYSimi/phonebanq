@@ -1,7 +1,7 @@
 <template name="mySenators">
   <ul>
     {{#each senators}}
-      <li> US Senator {{first_name}} {{last_name}} -- {{district_phone}}</li>
+      <li> US Senator {{first_name}} {{last_name}} ({{party}}) from {{state_name}} : {{phone}}</li>
     {{/each}}
   </ul>
 </template>

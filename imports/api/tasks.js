@@ -16,9 +16,12 @@ if (Meteor.isServer) {
     Meteor.publish('weeklyCallPrompts', function() {
         return WeeklyCallPrompts.find();
     });
-    Meteor.publish('nationalSenators', function() {
+    Meteor.publish('senators', function() {
         return Senators.find();
-    })
+    });
+    Meteor.publish('representatives', function() {
+        return Representatives.find();
+    });
 }
 
 Meteor.methods({

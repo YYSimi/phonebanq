@@ -1,6 +1,7 @@
-import '../ui/body.js';
-import '../ui/home.js';
+import '../ui/body.js'
+import '../ui/home.js'
 import '../ui/mySenators.js'
+import '../ui/myRepresentatives.js'
 import '../ui/navigation.js'
 import '../ui/about.js'
 
@@ -22,6 +23,10 @@ Router.route('/about', {
 
 Router.route('/mySenators', {
     name: 'mySenators'
+});
+
+Router.route('/myRepresentatives', {
+    name: 'myRepresentatives'
 });
 
 Router.route('/userSettings', {

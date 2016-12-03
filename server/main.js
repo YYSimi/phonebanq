@@ -3,7 +3,7 @@ import { HTTP } from 'meteor/http';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
-import { PopulateUserTasks, UpdateUserTasks, PopulateLocationFromFacebook } from '../lib/common.js';
+import { PopulateUserTasks, UpdateUserTasks, PopulateLocationFromFacebook} from '../lib/common.js';
 
 var fbAppInfo = function(){
     var fbAppAccessToken = '';
@@ -40,8 +40,6 @@ Meteor.startup(() => {
             "&client_secret=" + fbSecret +
             "&grant_type=client_credentials";
 
-    console.log("Request string is " + httpRequestStr);
-
     HTTP.get(httpRequestStr, 
         function(error, response) { 
             if (error) {
@@ -77,6 +75,9 @@ Accounts.onLogin(function(loginAttempt) {
     var services = null;
     if (!loginAttempt.user) { return; }
     
+    // TODO:  Are we calling this too often?
+    GetCongressionalInfo(loginAttempt.user);
+
     services = loginAttempt.user.services;
 
     // Populate the User's location data
@@ -149,4 +150,51 @@ function NotifyFacebookUser(user) {
             console.log(response);
         }
     });
+}
+
+function GetCongressionalInfo(user) {
+    console.log("Getting congressional info for user ")
+    console.log(user);
+    if (user.profile.zipCode) {
+    var httpRequestStr = 'https://congress.api.sunlightfoundation.com/legislators/locate?zip=' + user.profile.zipCode;
+
+    HTTP.get(httpRequestStr,
+        function (error, response) {
+            if (error) {
+                console.log(error);  //TODO:  Figure out how to properly log and handle errors.
+            }
+            else {
+                var congressInfo = {
+                    house : [],
+                    senate : []
+                }
+                response.data.results.forEach( function(elt) {
+                    if (elt.chamber === "house") {
+                        congressInfo.house.push(elt.bioguide_id);
+                        var storedRepresentative = Representatives.findOne( {buiguide_id: elt.buiguide_id} );
+                        if (storedRepresentative) {
+                            Representatives.update(storedRepresentative._id, elt);
+                        } 
+                        else {
+                            Representatives.insert(elt);
+                        }
+                    }
+                    if (elt.chamber === "senate") {
+                        congressInfo.senate.push(elt.bioguide_id);
+                        var storedSenator = Senators.findOne( {bioguide_id: elt.bioguide_id });
+                        if (storedSenator) {
+                            Senators.update(storedSenator._id, elt);
+                        }
+                        else {
+                            Senators.insert(elt);
+                        }
+                    }
+                });
+
+                Meteor.users.update(
+                    { _id: user._id},
+                    { $set: {"profile.congressInfo" : congressInfo} });
+            }
+        })
+    }
 }
