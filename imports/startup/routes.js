@@ -7,11 +7,9 @@ import '../ui/about.js'
 
 import '../ui/userSettings.js'
 
-import '../ui/tasks/dailyCallPrompt.js'
-import '../ui/tasks/weeklyCallPrompt.js'
 import '../ui/tasks/completedTasks.js'
 import '../ui/tasks/myTasks.js'
-
+import '../ui/tasks/phoneTask.js'
 
 Router.configure({
    layoutTemplate: 'main' 

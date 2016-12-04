@@ -9,30 +9,28 @@ import '../../api/tasks.js'
 // TODO:  Is this the right place to do the subscription?
 Template.completedTasks.onCreated(function () {
     Meteor.subscribe('userTasks');
-    Meteor.subscribe('dailyCallPrompts');
-    Meteor.subscribe('weeklyCallPrompts');
+    Meteor.subscribe('tasks');
+    Meteor.subscribe('phoneTasks');
 });
 
 Template.completedTasks.helpers({
-    getTasks() {
-        var tasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: true });
-        console.log("Found " + tasks.count() + " tasks for uid" + Meteor.userId());
-        
-        return tasks.map(task => {
-            switch (task.task_type) {
-                case "dailyCallPrompts":
-                    return {
-                        userTask: task,
-                        type: task.task_type,
-                        task: DailyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
-                    };
-                case "weeklyCallPrompts":
-                    return {
-                        userTask: task,
-                        type: task.task_type,
-                        task: WeeklyCallPrompts.findOne(new Mongo.ObjectID(task.task_id))
-                    };
+    getUserTasks() {
+        var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: true, is_active: false });
+        return userTasks.map(userTask => {
+            var retval =  {
+                userTask: userTask,
+                task: Tasks.findOne(new Mongo.ObjectID(userTask.task_id))
             }
+
+            switch(retval.task.task_type) {
+                case "phone":
+                    retval.taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(retval.task.task_detail_id));
+                    break;
+                default:
+                    throw "Invalid task type";
+            }
+
+            return retval;
         });
     }
 });

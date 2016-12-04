@@ -1,0 +1,25 @@
+<template name="PhoneTask">
+  {{#if general_script}}
+  <p>
+    <b>Call script</b><br/>
+    {{general_script}}
+  </p>
+  {{else}}
+  <p>
+    <b>Supporter script</b><br/>
+    {{supporter_script}}
+  </p>
+  <p>
+    <b>Opposition script</b><br/>
+    {{opposition_script}}
+  </p>
+  {{/if}}
+  <p>People to call: </p>
+  {{#if call_my_national_senators}}
+    {{> mySenators}}
+  {{/if}}
+  {{#if call_my_national_representatives}}
+    {{> myRepresentatives}}
+  {{/if}}
+
+</template>

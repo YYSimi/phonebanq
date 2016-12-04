@@ -1,6 +1,6 @@
 <template name="completedTasks">
     <h1>Completed Tasks</h1>
-  {{> UserTasksII getTasks}}
+  {{> UserTasksII getUserTasks}}
 </template>
 
 <template name="UserTasksII">
@@ -17,11 +17,5 @@
   <span class="pull-right">
   <button class="btn-warning js-task-unsuccess"> Mark as incomplete </button>
   </span>
-  <p> Expires on {{userTask.lasts_until}} </p>
-  {{#if equals type "dailyCallPrompts"}}
-    {{> DailyCallPrompt task}}
-  {{/if}}
-  {{#if equals type "weeklyCallPrompts"}}
-    {{> WeeklyCallPrompt task}}
-  {{/if}}
+  {{> UserTaskDetail }}
 </template>

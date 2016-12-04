@@ -1,6 +1,6 @@
 <template name="myTasks">
   <h1> Available Tasks </h1>
-  {{> UserTasks getTasks}}
+  {{> UserTasks getUserTasks}}
 </template>
 
 <template name="UserTasks">
@@ -19,11 +19,13 @@
   <button class="btn-warning js-task-hide"> Not interested right now </button>
   <button class="btn-danger js-task-hideForever"> Never show again </button>
   </span>
+  {{> UserTaskDetail }}
+</template>
+
+<template name="UserTaskDetail">
+  <p> {{task.tiny_description}} </p>
   <p> Expires on {{userTask.lasts_until}} </p>
-  {{#if equals type "dailyCallPrompts"}}
-    {{> DailyCallPrompt task}}
-  {{/if}}
-  {{#if equals type "weeklyCallPrompts"}}
-    {{> WeeklyCallPrompt task}}
+  {{#if equals task.task_type "phone"}}
+    {{> PhoneTask taskDetail}}
   {{/if}}
 </template>

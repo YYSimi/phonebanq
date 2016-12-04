@@ -10,11 +10,13 @@ if (Meteor.isServer) {
     Meteor.publish('userTasks', function userTasksPublication() {
         return UserTasks.find({ user_id : this.userId });
     });
-    Meteor.publish('dailyCallPrompts', function () {
-        return DailyCallPrompts.find();
+    // TODO:  Only publish tasks that are currently active for the user!
+    Meteor.publish('tasks', function() {
+        return Tasks.find();
     });
-    Meteor.publish('weeklyCallPrompts', function() {
-        return WeeklyCallPrompts.find();
+    // TODO:  Only publish tasks that are currently active for the user!
+    Meteor.publish('phoneTasks', function() {
+        return PhoneTasks.find();
     });
     Meteor.publish('senators', function() {
         return Senators.find();
@@ -38,7 +40,7 @@ Meteor.methods({
     },
 
     'tasks.completeTask'(userTaskId) {
-        check(userTaskId, String); // TODO:  should these be numbers?
+        check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         console.log('completing task ' + userTaskId );
         userTask = UserTasks.findOne(userTaskId);
         if (Meteor.userId() != userTask.user_id) {
@@ -49,7 +51,7 @@ Meteor.methods({
     },
 
     'tasks.cancelTask'(userTaskId) {
-        check(userTaskId, String); // TODO:  should these be numbers?
+        check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         console.log('uncompleting task ' + userTaskId );
         userTask = UserTasks.findOne(userTaskId);
         if (Meteor.userId() != userTask.user_id) {
@@ -62,7 +64,7 @@ Meteor.methods({
     // TODO:  Create a class-like interface for managing UserTasks, then have the Meteor methods call directly into the class.
 
     'tasks.hideTaskForever'(userTaskId) {
-        check(userTaskId, String); // TODO:  should these be numbers?
+        check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         console.log('uncompleting task ' + userTaskId );
         userTask = UserTasks.findOne(userTaskId);
         if (Meteor.userId() != userTask.user_id) {
