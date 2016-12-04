@@ -133,23 +133,32 @@ function OnFirstLogin(userId) {
 function NotifyFacebookUser(user) {
     console.log(user);
     userFbInfo = user.services.facebook;
-    
-    httpRequestStr='https://graph.facebook.com/' +
-        userFbInfo.id +  '/notifications' +
-        "?access_token=" + fbAppInfo.getAccesstoken() +
-        "&href=/myTasks" +
-        "&template=New task available.  For America.";
-    
-    console.log("Posting http request to " + httpRequestStr)
 
-    HTTP.post(httpRequestStr, {}, function (error, response) {
-        if (error) {
-            console.log(error);
+    var latestUserTaskCursor = UserTasks.find({user_id: user._id, is_active:true}, {sort: {given_on : -1} });
+    if (latestUserTaskCursor.count() > 0) {
+        var latestUserTask = latestUserTaskCursor.fetch()[0];
+        latestTask = Tasks.findOne(new Mongo.ObjectID(latestUserTask.task_id));
+
+        if (latestTask) {
+            //TODO:  Make sure that the notification message is not longer than 180 characters.
+            var notificationMessage = latestTask.brief_description + "."
+
+            httpRequestStr='https://graph.facebook.com/' +
+                userFbInfo.id +  '/notifications' +
+                "?access_token=" + fbAppInfo.getAccesstoken() +
+                "&href=/myTasks" +
+                "&template=" + notificationMessage;
+
+            HTTP.post(httpRequestStr, {}, function (error, response) {
+                if (error) {
+                    console.log(error);
+                }
+                else {
+                    console.log(response);
+                }
+            });
         }
-        else {
-            console.log(response);
-        }
-    });
+    }
 }
 
 function GetCongressionalInfo(user) {
