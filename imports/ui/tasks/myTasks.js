@@ -23,7 +23,10 @@ Template.myTasks.helpers({
 
             switch(retval.task.task_type) {
                 case "phone":
+                    console.log("Looking for phoneTask with id " + retval.task.task_detail_id + ".");
                     retval.taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(retval.task.task_detail_id));
+                    console.log("Found the following task:");
+                    console.log(retval.taskDetail);
                     break;
                 default:
                     throw "Invalid task type";
