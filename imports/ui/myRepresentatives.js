@@ -1,5 +1,4 @@
 import { Template } from 'meteor/templating';
-import { GetCongressionalInfo } from '../../lib/common.js'
 
 import './myRepresentatives.html';
 

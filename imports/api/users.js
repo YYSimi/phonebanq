@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import { PopulateLocationFromFacebook } from '../../lib/common.js'
+import { PopulateLocationFromFacebook, GetCongressionalInfo } from '../../lib/common.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
@@ -15,6 +15,26 @@ Meteor.methods({
         
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.state" : state} });
+    },
+    'users.setLatitude'(latitude) {
+        check(latitude, Number) // TODO:  Seriously, figure out when things should be strings/numbers/objects.
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+
+        Meteor.users.update({_id: this.userId}, { $set:
+            {"profile.latitude" : latitude}
+        })
+    },
+    'users.setLongitude'(longitude) {
+        check(longitude, Number) // TODO:  Seriously, figure out when things should be strings/numbers/objects.
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+
+        Meteor.users.update({_id: this.userId}, { $set:
+            {"profile.longitude" : longitude}
+        })
     },
     'users.setZipCode'(zipCode) {
         check(zipCode, String);
@@ -55,6 +75,7 @@ Meteor.methods({
         
         if (Meteor.isServer && locationDataSource === "facebook") {
             PopulateLocationFromFacebook(user.services.facebook.accessToken);
+            GetCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
         }
     },
     'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              
