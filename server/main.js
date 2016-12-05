@@ -19,6 +19,7 @@ Meteor.startup(() => {
 
     var fbLocalhostAppId = '332532203786554';
     var fbLocalhostSecret = '8b3e5e818c702c199a429e5c7e96311a';
+    var fIsProduction = process.env['PRODUCTION_MODE'];
 
     // If the environment gives override values (i.e. real values) for appID/secret, use those.
     // Otherwise, use appID/secret for localhost.
@@ -52,7 +53,6 @@ Meteor.startup(() => {
         }
     )
 
-
     UpdateAllUserTasks();
     var fnSetUpdateTimer = function () {
         var midnight = new Date();
@@ -61,13 +61,21 @@ Meteor.startup(() => {
         midnight.setSeconds(0);
         midnight.setMinutes(0);
         var timeUntilMidnight = (midnight.getTime() - new Date().getTime())
-        Meteor.setTimeout(
-            function() { 
-                UpdateAllUserTasks();
-                fnSetUpdateTimer() }, 
-//            timeUntilMidnight)
-                1000*10);
+        if (fIsProduction) {
+            Meteor.setTimeout(
+                function() { 
+                    UpdateAllUserTasks();
+                    fnSetUpdateTimer() }, 
+                    timeUntilMidnight);
         }
+        else {
+            Meteor.setTimeout(
+                function() { 
+                    UpdateAllUserTasks();
+                    fnSetUpdateTimer() }, 
+                    1000*10);
+        }
+    }
     fnSetUpdateTimer();
 });
 
