@@ -15,10 +15,6 @@ export function Task(tiny_description, brief_description, start_date, end_date,
     this.task_type = task_type;
     // TODO:  Implement some sort of issues hashtag?
     this.priority = priority;
-
-    Task.prototype.commit = function() {
-        console.log("Tasks work!")
-    };
 }
 
 export function PhoneTask(general_script, supporter_script, opposition_script, notes,
