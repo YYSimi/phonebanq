@@ -19,7 +19,7 @@ Meteor.startup(() => {
 
     var fbLocalhostAppId = '332532203786554';
     var fbLocalhostSecret = '8b3e5e818c702c199a429e5c7e96311a';
-    var fIsProduction = process.env['PRODUCTION_MODE'];
+    var fIsProduction = process.env['DEPLOYMENT_TYPE'] == "production";
 
     // If the environment gives override values (i.e. real values) for appID/secret, use those.
     // Otherwise, use appID/secret for localhost.
