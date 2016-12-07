@@ -25,6 +25,7 @@
     {{> Template.dynamic template=currentTaskType}}
     </div>
     <button type="submit" class="btn btn-primary js-newTask-submit"> Submit </button>
+    <button type="button" class="btn btn-info js-newTask-preview"> Preview </button>
   </form>
 </template>
 
@@ -35,17 +36,17 @@
 <template name="phoneTaskDetail">
   <div class="form-group">
     <label for="general-script"> General script </label>
-    <textarea class="form-control" id="general-script" rows="6"> </textarea>
+    <textarea class="form-control" id="general-script" rows="6"></textarea>
     <small id="general-script-help" class="form-text text-muted"> Fill this out if people will use the same call script when calling both supporters and opponents of this issue. </small>
   </div>
   <div class="form-group">
     <label for="supporter-script"> Supporter script </label>
-    <textarea class="form-control" id="general-script" rows="6"> </textarea>
+    <textarea class="form-control" id="general-script" rows="6"></textarea>
     <small id="general-script-help" class="form-text text-muted"> Fill this out if people will use a specific call script when calling supporters of this issue. </small>
   </div>
   <div class="form-group">
     <label for="opposition-script"> Opposition script </label>
-    <textarea class="form-control" id="opposition-script" rows="6"> </textarea>
+    <textarea class="form-control" id="opposition-script" rows="6"></textarea>
     <small id="opposition-script-help" class="form-text text-muted"> Fill this out if people will use a specific call script when calling opponents of this issue.  </small>
   </div>
   <div class="form-group row">
@@ -66,4 +67,10 @@
       </select>
     </div>
   </div>
+  {{#if fShouldRenderTaskPreview}}
+  <div class="well" id="phone-task-preview">
+    <p> Preview: </p>
+    {{> UserTaskDetail taskPreviewInfo}}
+  </div>
+  {{/if}}
 </template>
