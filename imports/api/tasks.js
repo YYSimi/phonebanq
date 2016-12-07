@@ -26,6 +26,7 @@ if (Meteor.isServer) {
     });
 }
 
+// TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
 Meteor.methods({
     // Create a new task for the given user
     // TODO:  Move these to a new "userTasks" class?
@@ -37,6 +38,38 @@ Meteor.methods({
             UpdateUserTasks(Meteor.userId());
             CreateRandomUserTask(Meteor.userId());
         }
+    },
+
+    // TODO:  Data validation!
+    // TODO:  _Definitely_ make task DB management a different API/class than userTask management.
+    'tasks.registerNewTask'(task, phoneTask){
+        check(task, Match.Any) //TODO:  More specificity/security!
+        check(phoneTask, Match.Any) //Todo:  More specificity/security!
+        var user = Meteor.user();
+        if (!user || !user.profile || !user.profile.permissions || 
+        !user.profile.permissions.registerNewTasks) {
+            throw new Meteor.Error('not-authorized',
+            "The logged-in user does not have permission to make new tasks.")
+        }
+
+        // TODO:  Make this work for task types other than phone!
+        // TODO:  Take out all manual references to phone task strings!
+        task.owner = this.userId;
+        task.task_type = "phone"
+        Tasks.insert(task, function(err, taskId) {
+            if (err) { console.log(err); }
+            else {
+                console.log(taskId);
+                phoneTask.parent_task_id = taskId;
+                PhoneTasks.insert(phoneTask, function(err, phoneTaskId) {
+                    if (err) { console.log(err) }
+                    else {
+                        Tasks.update(taskId, {$set : {task_detail_id : taskId}})
+                    }
+                });
+            }
+        })
+
     },
 
     'tasks.completeTask'(userTaskId) {

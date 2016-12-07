@@ -1,0 +1,69 @@
+<template name="newTask">
+  {{> authenticatedUserNewTask}}
+</template>
+
+<template name="authenticatedUserNewTask">
+  <form>
+    <div class="form-group">
+      <label for="tiny-description"> Tiny description </label>
+      <input class="form-control" type="text" id="tiny-description"/>
+      <small id="tiny-description-help" class="form-text text-muted">No more than 180 characters please.  This will appear in facebook notifications.</small>
+    </div>
+    <div class="form-group">
+      <label for="brief-description"> Brief description </label>
+      <textarea class="form-control" id="brief-description" rows="3"></textarea>
+      <small id="brief-description-help" class="form-text text-muted"> Brief task synopsis.  Can be any length.  Can be the same as the tiny description. </small>
+    </div>
+    <div class="form-group">
+      <!-- TODO:  Shrink this.  Task types don't need to take up the whole screen width.-->
+      <label for="task-type">Task Type</label>
+      <select class="form-control input-small" id="task-type">
+        <option selected disabled> Select task type </option>
+      </select>
+    </div>
+    <div id="task-detail">
+    {{> Template.dynamic template=currentTaskType}}
+    </div>
+    <button type="submit" class="btn btn-primary js-newTask-submit"> Submit </button>
+  </form>
+</template>
+
+<template name="taskDetail">
+
+</template>
+
+<template name="phoneTaskDetail">
+  <div class="form-group">
+    <label for="general-script"> General script </label>
+    <textarea class="form-control" id="general-script" rows="6"> </textarea>
+    <small id="general-script-help" class="form-text text-muted"> Fill this out if people will use the same call script when calling both supporters and opponents of this issue. </small>
+  </div>
+  <div class="form-group">
+    <label for="supporter-script"> Supporter script </label>
+    <textarea class="form-control" id="general-script" rows="6"> </textarea>
+    <small id="general-script-help" class="form-text text-muted"> Fill this out if people will use a specific call script when calling supporters of this issue. </small>
+  </div>
+  <div class="form-group">
+    <label for="opposition-script"> Opposition script </label>
+    <textarea class="form-control" id="opposition-script" rows="6"> </textarea>
+    <small id="opposition-script-help" class="form-text text-muted"> Fill this out if people will use a specific call script when calling opponents of this issue.  </small>
+  </div>
+  <div class="form-group row">
+    <label for="call-my-national-senators" class="col-xs-3 col-sm-2"> Call user's national senators? </label>
+    <div class="col-xs-3 col-sm-2 col-med-1">
+      <select class="form-control" id="call-my-national-senators">
+        <option selected disabled> </option>
+        <option value=true>Yes</option>
+        <option value=false>No</option>
+      </select>
+    </div>
+    <label for="call-my-national-representatives" class="col-xs-3 col-sm-2"> Call user's national representatives? </label>
+    <div class="col-xs-3 col-sm-2 col-med-1">
+      <select class="form-control" id="call-my-national-representatives">
+        <option selected disabled> </option>
+        <option>Yes</option>
+        <option>No</option>
+      </select>
+    </div>
+  </div>
+</template>

@@ -1,6 +1,11 @@
 <template name="myTasks">
+  {{#if user}}
   <h1> Available Tasks </h1>
   {{> UserTasks getUserTasks}}
+  {{else}}
+  <!-- TODO: Move the log-in message to a common place/use some form of registration? -->
+  <p> Please log in to access this page </p>
+  {{/if}}
 </template>
 
 <template name="UserTasks">

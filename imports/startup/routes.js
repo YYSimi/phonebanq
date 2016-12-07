@@ -9,6 +9,7 @@ import '../ui/userSettings.js'
 
 import '../ui/tasks/completedTasks.js'
 import '../ui/tasks/myTasks.js'
+import '../ui/tasks/newTask.js'
 import '../ui/tasks/phoneTask.js'
 
 Router.configure({
@@ -37,6 +38,10 @@ Router.route('/myTasks', {
 
 Router.route('/completedTasks', {
     name: 'completedTasks'
+});
+
+Router.route('/newTask', {
+    name: 'newTask'
 });
 
 Router.route('/', {
