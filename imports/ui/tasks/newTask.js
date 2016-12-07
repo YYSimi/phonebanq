@@ -10,6 +10,13 @@ import './newTask.html'
 // TODO: Is this really the best way to force an update on preview click? 
 var nPreviewClicks = new ReactiveVar(0);
 
+Template.newTask.helpers({
+    fHasNewTaskPermissions() {
+        var user = Meteor.user();
+        return user && user.profile && user.profile.permissions && user.profile.permissions.registerNewTasks;
+    }
+})
+
 Template.authenticatedUserNewTask.onCreated(function () {
     Meteor.subscribe('userTasks');
     Meteor.subscribe('tasks');

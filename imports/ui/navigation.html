@@ -7,6 +7,7 @@
           {{#if currentUser}} <li><a href="{{pathFor route='mySenators'}}">Find my Senators</a></li >{{/if}}
           {{#if currentUser}} <li><a href="{{pathFor route='myTasks'}}"> Show my task list </a></li> {{/if}}
           {{#if currentUser}} <li><a href="{{pathFor route='completedTasks'}}"> Show completed tasks </a></li> {{/if}}
+          {{#if fHasNewTaskPermissions}} <li><a href="{{pathFor route='newTask'}}"> Make a new task </a></li> {{/if}}
           <li><a href="{{pathFor route='about'}}"> About Phonebanq </a></li>
           {{#if currentUser}} <li><a href="{{pathFor route='userSettings'}}"> Settings </a></li> {{/if}}
         </ul>
