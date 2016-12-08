@@ -9,6 +9,7 @@ import './newTask.html'
 
 // TODO: Is this really the best way to force an update on preview click? 
 var nPreviewClicks = new ReactiveVar(0);
+var currentTaskType = new ReactiveVar("");
 
 Template.newTask.helpers({
     fHasNewTaskPermissions() {
@@ -24,9 +25,8 @@ Template.authenticatedUserNewTask.onCreated(function () {
 });
 
 Template.authenticatedUserNewTask.helpers({
-    currentTaskType() {
-        // TODO:  Make this update reactively based on the task type.
-        return "phoneTaskDetail";
+    currentTaskDetailTemplateName() {
+        return currentTaskType.get() + "NewTaskDetail";
     }
 })
 
@@ -69,10 +69,14 @@ Template.authenticatedUserNewTask.events({
 
     'click .js-newTask-preview'() {
         nPreviewClicks.set(nPreviewClicks.get()+1);
+    },
+
+    'change #task-type'() {
+        currentTaskType.set($("#task-type").val());
     }
 });
 
-Template.phoneTaskDetail.helpers({
+Template.phoneNewTaskDetail.helpers({
     fShouldRenderTaskPreview() {
         return nPreviewClicks.get();
     },

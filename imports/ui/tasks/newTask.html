@@ -26,7 +26,7 @@
       </select>
     </div>
     <div id="task-detail">
-    {{> Template.dynamic template=currentTaskType}}
+    {{> Template.dynamic template=currentTaskDetailTemplateName}}
     </div>
     <button type="submit" class="btn btn-primary js-newTask-submit"> Submit </button>
     <button type="button" class="btn btn-info js-newTask-preview"> Preview </button>
@@ -37,7 +37,7 @@
 
 </template>
 
-<template name="phoneTaskDetail">
+<template name="phoneNewTaskDetail">
   <div class="form-group">
     <label for="general-script"> General script </label>
     <textarea class="form-control" id="general-script" rows="6"></textarea>
