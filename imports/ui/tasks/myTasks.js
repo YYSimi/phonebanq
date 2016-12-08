@@ -2,6 +2,8 @@ import { Template } from 'meteor/templating';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
+import { FindTaskDetailFromTask } from '../../../lib/common.js'
+
 import './myTasks.html'
 import '../../api/tasks.js'
 
@@ -15,20 +17,22 @@ Template.myTasks.onCreated(function () {
 Template.myTasks.helpers({
     getUserTasks() {
         var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
+
         return userTasks.map(userTask => {
+            var task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id)) // TODO:  Handle error cases, function this out.
             var retval =  {
                 userTask: userTask,
-                task: Tasks.findOne(new Mongo.ObjectID(userTask.task_id))
+                task: task,
+                taskDetail: FindTaskDetailFromTask(task)
             }
 
-            switch(retval.task.task_type) {
-                case "phone":
-                    retval.taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(retval.task.task_detail_id));
-                    console.log(retval.taskDetail);
-                    break;
-                default:
-                    throw "Invalid task type";
-            }
+            // switch(retval.task.task_type) {
+            //     case "phone":
+            //         retval.taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(retval.task.task_detail_id));
+            //         break;
+            //     default:
+            //         throw "Invalid task type";
+            // }
 
             return retval;
         });

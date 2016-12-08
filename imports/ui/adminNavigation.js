@@ -1,15 +1,11 @@
 import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+  
+import './adminNavigation.html';
 
-import './mySenators.js'
-import './navigation.js'
-import './body.html';
-
-Template.main.helpers({
+Template.adminNav.helpers({
     fHasNewTaskPermissions() {
         var user = Meteor.user();
         // TODO: Move this check into a library call.  Code duplication!
         return user && user.profile && user.profile.permissions && user.profile.permissions.registerNewTasks;
     }
-
 })

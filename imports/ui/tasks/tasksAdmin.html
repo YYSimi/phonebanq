@@ -1,0 +1,21 @@
+<template name="tasksAdmin">
+  {{#if fHasNewTaskPermissions}}
+    {{> authenticatedTasksAdmin}}
+  {{else}}
+    <p> You need permission to access this page.  If you believe that you should have access, talk to the website maintainer to request access. </p>
+  {{/if}}
+</template>
+
+<template name="authenticatedTasksAdmin">
+  <ul class="list-group js-userTasks-list">
+    {{#each taskAndDetail in getOwnedTasks}}
+      <li class="list-group-item" id={{userTask.userTask._id}}>
+        {{> UserTaskDetail taskAndDetail}}
+      </li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="manageTask">
+  <p> It's a task! </p>
+</template>

@@ -2,6 +2,7 @@
 
 <template name="main">
   {{> nav}}
+   {{#if fHasNewTaskPermissions}} {{> adminNav}} {{/if}}
   <div class="container">
     {{> yield}}
   </div>

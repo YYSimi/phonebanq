@@ -68,9 +68,7 @@ Template.authenticatedUserNewTask.events({
     },
 
     'click .js-newTask-preview'() {
-        console.log("nPreviewClicks is currently " + nPreviewClicks.get())
         nPreviewClicks.set(nPreviewClicks.get()+1);
-        console.log("nPreviewClicks is now " + nPreviewClicks.get())
     }
 });
 

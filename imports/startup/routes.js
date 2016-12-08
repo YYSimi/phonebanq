@@ -3,6 +3,7 @@ import '../ui/home.js'
 import '../ui/mySenators.js'
 import '../ui/myRepresentatives.js'
 import '../ui/navigation.js'
+import '../ui/adminNavigation.js'
 import '../ui/about.js'
 
 import '../ui/userSettings.js'
@@ -10,6 +11,7 @@ import '../ui/userSettings.js'
 import '../ui/tasks/completedTasks.js'
 import '../ui/tasks/myTasks.js'
 import '../ui/tasks/newTask.js'
+import '../ui/tasks/tasksAdmin.js'
 import '../ui/tasks/phoneTask.js'
 
 Router.configure({
@@ -42,6 +44,10 @@ Router.route('/completedTasks', {
 
 Router.route('/newTask', {
     name: 'newTask'
+});
+
+Router.route('/tasksAdmin', {
+    name: 'tasksAdmin'
 });
 
 Router.route('/', {

@@ -64,7 +64,7 @@ Meteor.methods({
                 PhoneTasks.insert(phoneTask, function(err, phoneTaskId) {
                     if (err) { console.log(err) }
                     else {
-                        Tasks.update(taskId, {$set : {task_detail_id : taskId._str}})
+                        Tasks.update(taskId, {$set : {task_detail_id : phoneTaskId._str}})
                     }
                 });
             }
