@@ -35,3 +35,12 @@ Template.authenticatedTasksAdmin.helpers({
         return retval;
     }
 })
+
+Template.authenticatedTasksAdmin.events({
+    'click .js-task-disable'(evt) {
+        console.log(this);
+        console.log("disabling" + this.task._id)
+        Meteor.call('tasks.disableTask', this.task._id);
+        return false;
+    }
+});

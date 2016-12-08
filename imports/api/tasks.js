@@ -69,7 +69,16 @@ Meteor.methods({
                 });
             }
         })
+    },
 
+    'tasks.disableTask'(taskId) {
+        check(taskId, Match.Any) //TODO:  More specificity/security!
+        var user = Meteor.user();
+        task = Tasks.findOne(taskId);
+        if (task && task.owner == user._id) {
+            console.log("disabling task")
+            Tasks.update(taskId, {$set : { is_disabled : true}})
+        }
     },
 
     'tasks.completeTask'(userTaskId) {
@@ -98,7 +107,6 @@ Meteor.methods({
 
     'tasks.hideTaskForever'(userTaskId) {
         check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
-        console.log('uncompleting task ' + userTaskId );
         userTask = UserTasks.findOne(userTaskId);
         if (Meteor.userId() != userTask.user_id) {
             throw new Meteor.Error('not-autherized',
