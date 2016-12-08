@@ -47,7 +47,7 @@ Template.authenticatedUserNewTask.events({
             new Date(),
             PBTaskTypesEnum.phone,
             null,
-            5 //TODO:  pump priority into the form.
+            $("#task-priority").val()
         );
 
         // TODO:  Make this work for more than just phone taks.

@@ -18,9 +18,24 @@
       <textarea class="form-control" id="brief-description" rows="3"></textarea>
       <small id="brief-description-help" class="form-text text-muted">No more than 180 characters please.  This will appear in toast notifications (e.g. on facebook).</small>
     </div>
+    <div class="form-group row">
+    <label for="task-priority" class="col-xs-3 col-sm-2"> Task priority </label>
+      <div class="col-xs-3 col-sm-2 col-med-1">
+        <select class="form-control" id="task-priority">
+          <option selected disabled> </option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+    <small id="task-priority-help" class="form-text text-muted col-xs-6">Higher priority tasks are given before lower priority tasks.  All tasks lose 1 priority per day to make sure that new tasks are preferred over old ones.</small>
+    </div>
+
     <div class="form-group">
       <!-- TODO:  Shrink this.  Task types don't need to take up the whole screen width.-->
-      <label for="task-type">Task Type</label>
+      <label for="task-type">Task type</label>
       <select class="form-control input-small" id="task-type">
         <option selected disabled> Select task type </option>
       </select>
