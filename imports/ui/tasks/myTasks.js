@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
-import { FindTaskDetailFromTask } from '../../../lib/common.js'
+import { FindTaskDetailFromTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
 
 import './myTasks.html'
 import '../../api/tasks.js'
@@ -38,6 +38,12 @@ Template.myTasks.helpers({
         });
     }
 });
+
+Template.UserTask.helpers({
+    timeRemaining() {
+        return TimeDeltaToPrettyString(new Date(), this.userTask.lasts_until);
+    }
+})
 
 Template.UserTask.events({
     'click .js-task-success'() {
