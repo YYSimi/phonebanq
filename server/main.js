@@ -140,6 +140,7 @@ function OnFirstLogin(userId) {
 
 // TODO:  Make sure we've generated the app access token before sending this out.'
 function NotifyFacebookUser(user) {
+    console.log("notifying user");
     console.log(user);
     userFbInfo = user.services.facebook;
 
