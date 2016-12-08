@@ -72,9 +72,21 @@
     </div>
   </div>
   {{#if fShouldRenderTaskPreview}}
+  <label for="phone-task-preview"> Task preview: </label>
   <div class="well" id="phone-task-preview">
-    <p> Preview: </p>
     {{> UserTaskDetail taskPreviewInfo}}
   </div>
+  <div class="row">
+    <div class="col-xs-6 col-sm-4">
+    <label for="phone-toast-preview"> Notification area/toast preview: </label>
+    <div class="well well-sm" id="phone-toast-preview">
+      {{> toastPreview taskPreviewInfo}}
+    </div>
+    </div>
+  </div>
   {{/if}}
+</template>
+
+<template name="toastPreview">
+  <p> {{task.brief_description}} </p>
 </template>
