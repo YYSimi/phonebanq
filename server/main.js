@@ -150,7 +150,7 @@ Meteor.startup(() => {
     }
     fnSetMaintenanceTimer();
 
-    RunMaintenanceTasks(true); 
+    RunMaintenanceTasks(IsProductionMode()); 
 });
 
 Accounts.onLogin(function(loginAttempt) {
