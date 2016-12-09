@@ -86,6 +86,16 @@
       </select>
     </div>
   </div>
+  <div class="form-group">
+    <label for="call-custom-senators"> Call specific senators? </label>
+    <input class="form-control" type="text" id="call-custom-senators"/>
+    <small id="call-custom-senators-help" class="form-text text-muted"> Enter names of senators to call, separated by commas </small>
+  </div>
+  <div class="form-group">
+    <label for="call-custom-representatives"> Call specific representatives? </label>
+    <input class="form-control" type="text" id="call-custom-representatives"/>
+    <small id="call-custom-representatives-help" class="form-text text-muted"> Enter names of senators to call, separated by commas </small>
+  </div>
   {{#if fShouldRenderTaskPreview}}
   <label for="phone-task-preview"> Task preview: </label>
   <div class="well" id="phone-task-preview">
@@ -100,6 +110,27 @@
     </div>
   </div>
   {{/if}}
+</template>
+
+<template name="newCustomCaller">
+  <div class="form-group row">
+    <label for="custom-caller-name" class="col-xs-3 col-sm-2"> Name </label>
+    <div class="col-xs-3 col-sm-2 col-med-1">
+      <select class="form-control" id="custom-caller-name">
+        <option selected disabled> </option>
+        <option value=true>Yes</option>
+        <option value=false>No</option>
+      </select>
+    </div>
+    <label for="custom-caller-phone" class="col-xs-3 col-sm-2"> Phone number </label>
+    <div class="col-xs-3 col-sm-2 col-med-1">
+      <select class="form-control" id="custom-caller-phone">
+        <option selected disabled> </option>
+        <option value=true>Yes</option>
+        <option value=false>No</option>
+      </select>
+    </div>
+  </div>
 </template>
 
 <template name="toastPreview">
