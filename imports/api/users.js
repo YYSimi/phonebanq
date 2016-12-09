@@ -44,6 +44,8 @@ Meteor.methods({
 
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.zipCode" : zipCode} });
+
+        GetCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
     },
     'users.setStreet'(street) {
         check(street, String)
@@ -73,10 +75,12 @@ Meteor.methods({
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.locationDataSource" : locationDataSource } });
         
-        if (Meteor.isServer && locationDataSource === "facebook") {
-            PopulateLocationFromFacebook(user.services.facebook.accessToken);
-            GetCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
+        if (Meteor.isServer) {
+            if (locationDataSource === "facebook") {
+                PopulateLocationFromFacebook(user.services.facebook.accessToken);
+            }
         }
+        GetCongressionalInfo(user);        //TODO:  This should definitely be structured so it happens automatically on user location update.
     },
     'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              
         // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
