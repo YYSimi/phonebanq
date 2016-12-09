@@ -14,6 +14,18 @@ var fbAppInfo = function(){
     };
 }();
 
+function RunMaintenanceTasks() {
+    UpdateAllUserTasks();
+
+    // Drop the priority of all tasks by 1
+    // TODO:  Figure out how to enforce the constraint of priority \in [0, 5].
+    Tasks.find().forEach(function(task) {
+        if (task.priority > 0) {
+            Tasks.update(task._id, {$set : {priority: task.priority - 1} })
+        }
+    }) 
+}
+
 Meteor.startup(() => {
     Houston.add_collection(Meteor.users);
 
@@ -54,29 +66,24 @@ Meteor.startup(() => {
     )
 
     UpdateAllUserTasks();
-    var fnSetUpdateTimer = function () {
+    var fnSetMaintenanceTimer = function () {
         var midnight = new Date();
         midnight.setHours(24);
         midnight.setMinutes(0);
         midnight.setSeconds(0);
         midnight.setMinutes(0);
         var timeUntilMidnight = (midnight.getTime() - new Date().getTime())
-        if (fIsProduction) {
-            Meteor.setTimeout(
-                function() { 
-                    UpdateAllUserTasks();
-                    fnSetUpdateTimer() }, 
-                    timeUntilMidnight);
-        }
-        else {
-            Meteor.setTimeout(
-                function() { 
-                    UpdateAllUserTasks();
-                    fnSetUpdateTimer() }, 
-                    1000*10);
-        }
+        var periodicTaskDelta = 1000*10;
+        var timeToNextTask = fIsProduction ? timeUntilMidnight : periodicTaskDelta; 
+
+        Meteor.setTimeout(
+            function() { 
+                RunMaintenanceTasks();
+                fnSetMaintenanceTimer()
+            }, 
+            timeToNextTask);
     }
-    fnSetUpdateTimer();
+    fnSetMaintenanceTimer();
 });
 
 Accounts.onLogin(function(loginAttempt) {
