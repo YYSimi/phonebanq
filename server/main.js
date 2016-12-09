@@ -14,8 +14,18 @@ var fbAppInfo = function(){
     };
 }();
 
-function RunMaintenanceTasks() {
+function IsProductionMode() {
+    return (process.env['DEPLOYMENT_TYPE'] == "production")
+}
+
+function RunMaintenanceTasks(fRunExpensiveTasks) {
     UpdateAllUserTasks();
+
+    // RunMaintenanceTasks is called frequently for debug purposes.  Put any
+    // tasks that you don't want running multiple times per minute on pre-production servers here. 
+    if (fRunExpensiveTasks) {
+        UpdateCongressInfo();
+    }
 
     // Drop the priority of all tasks by 1
     // TODO:  Figure out how to enforce the constraint of priority \in [0, 5].
@@ -23,7 +33,63 @@ function RunMaintenanceTasks() {
         if (task.priority > 0) {
             Tasks.update(task._id, {$set : {priority: task.priority - 1} })
         }
-    }) 
+    })
+
+    // Update the congressperson tables
+    
+}
+
+function UpdateCongressInfo() {
+    var httpRequestStrBase = "https://congress.api.sunlightfoundation.com/legislators"
+    var nRecordsPerPage = 10;
+    var httpRequestStr = httpRequestStrBase + "?per_page=" + nRecordsPerPage;
+
+    var UpdateCongressInfoFromPage = function (page) {
+        HTTP.get(httpRequestStr + "&page=" + page,
+            function (error, response) {
+                if (error) {
+                    nTotalRecords = 0;
+                    console.log(error);  //TODO:  Figure out how to properly log and handle errors.
+                }
+                else {
+                    console.log("got response");
+                    console.log(response);
+
+                    response.data.results.forEach( function(elt) {
+                        console.log("Scanning congressperson " + elt.first_name + " " + elt.last_name);
+                        if (elt.chamber === "house") {
+                            var storedRepresentative = Representatives.findOne( {bioguide_id: elt.bioguide_id} );
+                            if (storedRepresentative) {
+                                Representatives.update(storedRepresentative._id, elt);
+                            } 
+                            else {
+                                Representatives.insert(elt);
+                            }
+                        }
+                        if (elt.chamber === "senate") {
+                            var storedSenator = Senators.findOne( {bioguide_id: elt.bioguide_id });
+                            if (storedSenator) {
+                                Senators.update(storedSenator._id, elt);
+                            }
+                            else {
+                                Senators.insert(elt);
+                            }
+                        }
+                    });
+
+                    var nTotalRecords = response.data.count;
+                    var nRecordsSoFar = nRecordsPerPage * page;
+                    console.log("total records: " + nTotalRecords);
+                    console.log("records so far: " + nRecordsSoFar);
+                    if (nRecordsSoFar < nTotalRecords) {
+                        console.log("getting next page!")
+                        UpdateCongressInfoFromPage(page+1);
+                    }
+                }
+            }
+        )
+    };
+    UpdateCongressInfoFromPage(1);
 }
 
 Meteor.startup(() => {
@@ -31,7 +97,6 @@ Meteor.startup(() => {
 
     var fbLocalhostAppId = '332532203786554';
     var fbLocalhostSecret = '8b3e5e818c702c199a429e5c7e96311a';
-    var fIsProduction = process.env['DEPLOYMENT_TYPE'] == "production";
 
     // If the environment gives override values (i.e. real values) for appID/secret, use those.
     // Otherwise, use appID/secret for localhost.
@@ -74,16 +139,18 @@ Meteor.startup(() => {
         midnight.setMinutes(0);
         var timeUntilMidnight = (midnight.getTime() - new Date().getTime())
         var periodicTaskDelta = 1000*10;
-        var timeToNextTask = fIsProduction ? timeUntilMidnight : periodicTaskDelta; 
+        var timeToNextTask = IsProductionMode() ? timeUntilMidnight : periodicTaskDelta; 
 
         Meteor.setTimeout(
             function() { 
-                RunMaintenanceTasks();
+                RunMaintenanceTasks(IsProductionMode()); // Run all maintenance tasks in production mode.  Don't run expensive tasks in debug mode.
                 fnSetMaintenanceTimer()
             }, 
             timeToNextTask);
     }
     fnSetMaintenanceTimer();
+
+    RunMaintenanceTasks(true); 
 });
 
 Accounts.onLogin(function(loginAttempt) {
