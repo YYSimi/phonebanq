@@ -4,6 +4,8 @@ import './userXpWidgets.html';
 
 // TODO:  Move the leveling system into its own file.
 
+// TODO:  Make the animations smooth at level boundaries -- right now, level ups just drain your XP bar.  Bad UX!
+
 var levelXpReqs = [0, 1, 5, 10, 20, 50] //levelXpReqs[i] is the _Total_ xp required to reach level i.
 
 function getXpReqForNextLevel() {
