@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import './userXpWidgets.html';
 
-var maxXp = 5 // TODO:  Add a leveling system
+// TODO:  Move the leveling system into its own file.
 
 var levelXpReqs = [0, 1, 5, 10, 20, 50] //levelXpReqs[i] is the _Total_ xp required to reach level i.
 
@@ -20,7 +20,9 @@ function getCurrentXp() {
     retval = 0;
     user = Meteor.user();
     if (user && user.profile && user.profile.progression && user.profile.progression.xp) {
-        retval = user.profile.progression.xp;
+        userXp = user.profile.progression.xp
+        if (userXp < 0) {userXp = 0;}
+        retval = userXp;
     }
     return retval;
 }
