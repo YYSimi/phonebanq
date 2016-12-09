@@ -22,6 +22,8 @@ Template.authenticatedUserNewTask.onCreated(function () {
     Meteor.subscribe('userTasks');
     Meteor.subscribe('tasks');
     Meteor.subscribe('phoneTasks');
+    Meteor.subscribe('senators');
+    Meteor.subscribe('representatives');
 });
 
 Template.authenticatedUserNewTask.helpers({
@@ -81,6 +83,7 @@ Template.phoneNewTaskDetail.helpers({
         return nPreviewClicks.get();
     },
     taskPreviewInfo() {
+        console.log("previewing task");
         if (nPreviewClicks.get() != 0) {
             return {
                 task: new Task(
@@ -106,5 +109,23 @@ Template.phoneNewTaskDetail.helpers({
                         null)
             }
         }
-    }
+    },
+    nationalSenators () {
+        console.log(Senators.find().fetch());
+        return Senators.find().fetch().map(function (it) { 
+            var retval = it.first_name + " " + it.last_name
+            return retval;
+        })
+    },
+    nationalRepresentatives () {
+        console.log(Representatives.find().fetch());
+        return Representatives.find().fetch().map(function (it) { 
+            var retval = it.first_name + " " + it.last_name
+            return retval;
+        })
+    },
 })
+
+Template.phoneNewTaskDetail.rendered = function() {
+    Meteor.typeahead.inject();
+}
