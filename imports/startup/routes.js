@@ -6,6 +6,7 @@ import '../ui/navigation.js'
 import '../ui/adminNavigation.js'
 import '../ui/about.js'
 
+import '../ui/userXpWidgets.js'
 import '../ui/userSettings.js'
 
 import '../ui/tasks/completedTasks.js'

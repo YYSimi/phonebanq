@@ -48,8 +48,7 @@ Meteor.methods({
         var user = Meteor.user();
         if (!user || !user.profile || !user.profile.permissions || 
         !user.profile.permissions.registerNewTasks) {
-            throw new Meteor.Error('not-authorized',
-            "The logged-in user does not have permission to make new tasks.")
+            throw new Meteor.Error('not-authorized', "The logged-in user does not have permission to make new tasks.")
         }
 
         // TODO:  Make this work for task types other than phone!
@@ -84,22 +83,61 @@ Meteor.methods({
     'tasks.completeTask'(userTaskId) {
         check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         console.log('completing task ' + userTaskId );
+       
         userTask = UserTasks.findOne(userTaskId);
-        if (Meteor.userId() != userTask.user_id) {
-            throw new Meteor.Error('not-autherized',
-            "The logged-in user does not own this task.");
+        var userId = Meteor.userId();
+        var user = Meteor.user();
+       
+        if (userId != userTask.user_id) {
+            throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
+
+        task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id));
+        if (!task) {
+            throw new Meteor.Error('bad-state', "The associated task does not exist")
+        }
+
+        if (!userTask.is_completed) {
+            var currentXp = 0;
+            if (user && user.profile && user.profile.progression && user.profile.progression.xp) {
+                currentXp = user.profile.progression.xp;
+            }
+            var taskXp = task.xp_value || 1;    //TODO:  Make a file that stores default values for DB not-fully-initialized DB elements.
+            var newXp = currentXp + taskXp;
+            Meteor.users.update(userId, {$set : {"profile.progression.xp" : newXp}})
+        }
+
         UserTasks.update(userTaskId, { $set: {is_completed : true, is_active:false } });
     },
 
     'tasks.cancelTask'(userTaskId) {
         check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         console.log('uncompleting task ' + userTaskId );
-        userTask = UserTasks.findOne(userTaskId);
-        if (Meteor.userId() != userTask.user_id) {
-            throw new Meteor.Error('not-autherized',
-            "The logged-in user does not own this task.");
+        
+        var userTask = UserTasks.findOne(userTaskId);
+        var user = Meteor.user();
+        var userId = Meteor.userId();
+        
+        if (userId != userTask.user_id) {
+            throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
+        
+        task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id));
+        if (!task) {
+            throw new Meteor.Error('bad-state', "The associated task does not exist")
+        }
+
+
+        if (userTask.is_completed) {
+            var currentXp = 0;
+            if (user && user.profile && user.profile.progression && user.profile.progression.xp) {
+                currentXp = user.profile.progression.xp;
+            }
+            var taskXp = task.xp_value || 1;    //TODO:  Make a file that stores default values for DB not-fully-initialized DB elements.
+            var newXp = currentXp - taskXp;
+            Meteor.users.update(userId, {$set : {"profile.progression.xp" : newXp}})
+        }
+
         UserTasks.remove(userTaskId);
     },
 
@@ -109,8 +147,7 @@ Meteor.methods({
         check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         userTask = UserTasks.findOne(userTaskId);
         if (Meteor.userId() != userTask.user_id) {
-            throw new Meteor.Error('not-autherized',
-            "The logged-in user does not own this task.");
+            throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
         
         UserTasks.update(

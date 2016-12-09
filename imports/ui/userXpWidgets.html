@@ -1,0 +1,8 @@
+<template name="userXpBar">
+  <div class="text-center" id="xpProgress"> {{currentLevelXp}} / {{xpReqForNextLevel}}</div>
+  <div class="progress">
+    <span class="progress-bar" style="width: {{currentLevelPercent}}%;">
+    </span>
+  </div>
+  <div class="text-center" id="currentLevel">Level {{currentLevel}}</div>
+</template>

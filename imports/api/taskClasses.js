@@ -7,7 +7,7 @@ PBTaskTypesEnum = {
 }
 
 export function Task(tiny_description, brief_description, start_date, end_date,
-              task_type, issues, priority) {
+              task_type, issues, priority, xp_value) {
     this.tiny_description = tiny_description;
     this.brief_description = brief_description;
     this.start_date = start_date;
@@ -15,6 +15,7 @@ export function Task(tiny_description, brief_description, start_date, end_date,
     this.task_type = task_type;
     // TODO:  Implement some sort of issues hashtag?
     this.priority = priority;
+    this.xp_value = xp_value;
 }
 
 export function PhoneTask(general_script, supporter_script, opposition_script, notes,
