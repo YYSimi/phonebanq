@@ -85,15 +85,15 @@
       </select>
     </div>
   </div>
-  <div class="form-group">
-    <label for="call-custom-senators"> Call specific senators? </label>
-    <input class="form-control" type="text" id="call-custom-senators"/>
-    <small id="call-custom-senators-help" class="form-text text-muted"> Enter names of senators to call, separated by commas </small>
+  <div class="form-group row">
+    <label for="call-custom-senators" class="select2 col-xs-3 col-sm-2"> Call specific senators? </label>
+    <select id="call-custom-senators" multiple="multiple" class="col-xs-6"></select>
+    <small id="call-custom-senators-help" class="form-text text-muted col-xs-3"> Enter names of senators to call </small>
   </div>
-  <div class="form-group">
-    <label for="call-custom-representatives"> Call specific representatives? </label>
-    <input class="form-control" type="text" id="call-custom-representatives"/>
-    <small id="call-custom-representatives-help" class="form-text text-muted"> Enter names of representatives to call, separated by commas </small>
+  <div class="form-group row">
+    <label for="call-custom-representatives" class="col-xs-3 col-sm-2"> Call specific representatives? </label>
+    <select id="call-custom-representatives" multiple="multiple" class="select2 col-xs-6"> </select>
+    <small id="call-custom-representatives-help" class="form-text text-muted col-xs-3"> Enter names of representatives to call </small>
   </div>
   {{#if fShouldRenderTaskPreview}}
   <label for="phone-task-preview"> Task preview: </label>
