@@ -10,21 +10,22 @@
   <form>
     <div class="form-group">
       <label for="tiny-description"> Tiny description </label>
-      <input class="form-control" type="text" id="tiny-description" placeholder="Enter a description"/>
+      <input class="form-control" type="text" id="tiny-description"/>
       <small id="tiny-description-help" class="form-text text-muted">No more than 100 characters please.  This will appear as the task's title.</small>
     </div>
     <div class="form-group">
       <label for="brief-description"> Brief description </label>
-      <textarea class="form-control" id="brief-description" rows="3" placeholder="Enter a slightly beefier description"></textarea>
+      <textarea class="form-control" id="brief-description" rows="3"></textarea>
       <small id="brief-description-help" class="form-text text-muted">No more than 180 characters please.  This will appear in toast notifications (e.g. on facebook).</small>
     </div>
     <div class="form-group row">
     <label for="task-priority" class="col-xs-3 col-sm-2"> Task priority </label>
       <div class="col-xs-3 col-sm-2 col-med-1">
         <select class="form-control" id="task-priority">
+          <option selected disabled> </option>
           <option>1</option>
           <option>2</option>
-          <option selected>3</option>
+          <option>3</option>
           <option>4</option>
           <option>5</option>
         </select>
@@ -87,13 +88,13 @@
   </div>
   <div class="form-group">
     <label for="call-custom-senators"> Call specific senators? </label>
-    <input class="form-control typeahead" type="text" id="call-custom-senators" placeholder="e.g. John McCain" autocomplete="off" spellcheck="off" data-source="nationalSenators"/>
+    <input class="form-control" type="text" id="call-custom-senators"/>
     <small id="call-custom-senators-help" class="form-text text-muted"> Enter names of senators to call, separated by commas </small>
   </div>
   <div class="form-group">
     <label for="call-custom-representatives"> Call specific representatives? </label>
-    <input class="form-control typeahead" type="text" id="call-custom-representatives" placeholder="e.g. Nancy Pelosi" autocomplete="off" spellcheck="off" data-source="nationalRepresentatives"/>
-    <small id="call-custom-representatives-help" class="form-text text-muted"> Enter names of representatives to call, separated by commas </small>
+    <input class="form-control" type="text" id="call-custom-representatives"/>
+    <small id="call-custom-representatives-help" class="form-text text-muted"> Enter names of senators to call, separated by commas </small>
   </div>
   {{#if fShouldRenderTaskPreview}}
   <label for="phone-task-preview"> Task preview: </label>
