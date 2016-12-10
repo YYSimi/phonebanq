@@ -15,12 +15,14 @@
   </p>
   {{/if}}
   <p>People to call: </p>
-  <!-- MAJOR TODO/BUG: This needs to only show up if call_my_national_xxx is set! -->
+  <!-- MAJOR TODO/BUG: This needs to only show up if call_my_national_xxx is set to true! Setting to false also results in calls right now -->
   {{#if call_my_national_senators}}
     {{> mySenators}}
   {{/if}}
+    {{> customSenators findCustomSenators}}
   {{#if call_my_national_representatives}}
     {{> myRepresentatives}}
   {{/if}}
+  {{> customRepresentatives findCustomRepresentatives}}
 
 </template>

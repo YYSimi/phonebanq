@@ -60,8 +60,8 @@ Template.authenticatedUserNewTask.events({
             null,
             $("#call-my-national-senators").val(),
             $("#call-my-national-representatives").val(),
-            null,
-            null,
+            $("#call-custom-senators").val(),
+            $("#call-custom-representatives").val(),
             null
         );
 
@@ -103,8 +103,8 @@ Template.phoneNewTaskDetail.helpers({
                         null,
                         $("#call-my-national-senators").val(),
                         $("#call-my-national-representatives").val(),
-                        null,
-                        null,
+                        $("#call-custom-senators").val(),
+                        $("#call-custom-representatives").val(),
                         null)
             }
         }
@@ -115,9 +115,9 @@ Template.phoneNewTaskDetail.onRendered(function() {
     $("#call-custom-senators").select2({placeholder: 'e.g John McCain'});
     $("#call-custom-representatives").select2({placeholder: 'e.g Jerrold Nadler'});
     Senators.find({}, {sort: {first_name:1} }).fetch().forEach( (senator) => {
-        $("#call-custom-senators").append("<option val=" + senator.bioguide_id + ">" + senator.first_name + " " + senator.last_name + " </option>");
+        $("#call-custom-senators").append("<option value=" + senator.bioguide_id + ">" + senator.first_name + " " + senator.last_name + " </option>");
     })
     Representatives.find({}, {sort: {first_name:1} }).fetch().forEach( (rep) => {
-        $("#call-custom-representatives").append("<option val=" + rep.bioguide_id + ">" + rep.first_name + " " + rep.last_name + " </option>");
+        $("#call-custom-representatives").append("<option value=" + rep.bioguide_id + ">" + rep.first_name + " " + rep.last_name + " </option>");
     })
 })

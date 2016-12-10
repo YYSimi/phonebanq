@@ -1,6 +1,16 @@
+<!-- TODO:  Consider getting rid of the ul tags here, and just returning list elements. -->
+
 <template name="myRepresentatives">
   <ul>
     {{#each representatives}}
+      <li> US Representative {{first_name}} {{last_name}} ({{party}}) from {{state_name}} district {{district}}: {{phone}}</li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="customRepresentatives">
+  <ul>
+    {{#each this}}
       <li> US Representative {{first_name}} {{last_name}} ({{party}}) from {{state_name}} district {{district}}: {{phone}}</li>
     {{/each}}
   </ul>
