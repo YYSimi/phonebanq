@@ -10,7 +10,7 @@ var fbAppInfo = function(){
     var fbAppAccessToken = '';
     
     return {
-        getAccesstoken() {return fbAppAccessToken},
+        getAccessToken() {return fbAppAccessToken},
         setAccessToken(token) {fbAppAccessToken = token}
     };
 }();
@@ -34,10 +34,7 @@ function RunMaintenanceTasks(fRunExpensiveTasks) {
         if (task.priority > 0) {
             Tasks.update(task._id, {$set : {priority: task.priority - 1} })
         }
-    })
-
-    // Update the congressperson tables
-    
+    })    
 }
 
 function UpdateCongressInfo() {
@@ -158,7 +155,6 @@ Accounts.onLogin(function(loginAttempt) {
     var services = null;
     if (!loginAttempt.user) { return; }
     
-    // TODO:  Are we calling this too often?
     GetCongressionalInfo(loginAttempt.user);
 
     services = loginAttempt.user.services;
@@ -167,19 +163,17 @@ Accounts.onLogin(function(loginAttempt) {
     if(services && services.facebook) {
         
         // TODO:  check for permissions
-        locationDataSource = Meteor.user().profile.locationDataSource
+        locationDataSource = loginAttempt.user.profile.locationDataSource
         if (!locationDataSource || locationDataSource == "" || locationDataSource == "facebook") {
             PopulateLocationFromFacebook(services.facebook.accessToken);
             GetCongressionalInfo(loginAttempt.user);
         }
     }
 
-    // TODO:  Figure out when "profile" gets populated
-    // TODO:  Figure out best practices for querying javascript objects that may be null.
-    if (!Meteor.user().profile || !Meteor.user().profile.fHasLoggedInBefore) {
-        OnFirstLogin(Meteor.userId());
+    if (!loginAttempt.user.profile || !loginAttempt.user.profile.fHasLoggedInBefore) {
+        OnFirstLogin(loginAttempt.user._id);
         Meteor.users.update(
-            { _id: Meteor.userId() },
+            { _id: loginAttempt.user._id },
             { $set: { "profile.fHasLoggedInBefore" : true } })
     }
 
@@ -204,7 +198,6 @@ function UpdateAllUserTasks(){
 
 function OnFirstLogin(userId) {
     console.log("running OnFirstLogin");
-    DisableExpiredUserTasks(userId);
     var nNewTasksCreated = PopulateUserTasks(userId);
     if (nNewTasksCreated > 0) {
         if (user.services && user.services.facebook) {
@@ -213,38 +206,40 @@ function OnFirstLogin(userId) {
     }
 }
 
-// TODO:  Make sure we've generated the app access token before sending this out.'
 function NotifyFacebookUser(user) {
-    console.log("notifying user");
-    console.log(user);
-    userFbInfo = user.services.facebook;
+    var accessToken = fbAppInfo.getAccessToken();
+    if (accessToken) {
+        console.log("notifying user");
+        console.log(user);
+        userFbInfo = user.services.facebook;
 
-    var latestUserTaskCursor = UserTasks.find({user_id: user._id, is_active:true}, {sort: {given_on : -1} });
-    if (latestUserTaskCursor.count() > 0) {
-        var latestUserTask = latestUserTaskCursor.fetch()[0];
-        latestTask = Tasks.findOne(new Mongo.ObjectID(latestUserTask.task_id));
+        var latestUserTaskCursor = UserTasks.find({user_id: user._id, is_active:true}, {sort: {given_on : -1} });
+        if (latestUserTaskCursor.count() > 0) {
+            var latestUserTask = latestUserTaskCursor.fetch()[0];
+            latestTask = Tasks.findOne(new Mongo.ObjectID(latestUserTask.task_id));
 
-        if (latestTask) {
-            var fbMaxMessageLength=180;
-            var notificationMessage = latestTask.brief_description;
-            if (notificationMessage.length > fbMaxMessageLength) {
-                notificationMessage = notificationMessage.substring(0, fbMaxMessageLength - 3) + '...'
+            if (latestTask) {
+                var fbMaxMessageLength=180;
+                var notificationMessage = latestTask.brief_description;
+                if (notificationMessage.length > fbMaxMessageLength) {
+                    notificationMessage = notificationMessage.substring(0, fbMaxMessageLength - 3) + '...'
+                }
+
+                httpRequestStr='https://graph.facebook.com/' +
+                    userFbInfo.id +  '/notifications' +
+                    "?access_token=" + fbAppInfo.getAccessToken() +
+                    "&href=/myTasks" +
+                    "&template=" + notificationMessage;
+
+                HTTP.post(httpRequestStr, {}, function (error, response) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    else {
+                        console.log(response);
+                    }
+                });
             }
-
-            httpRequestStr='https://graph.facebook.com/' +
-                userFbInfo.id +  '/notifications' +
-                "?access_token=" + fbAppInfo.getAccesstoken() +
-                "&href=/myTasks" +
-                "&template=" + notificationMessage;
-
-            HTTP.post(httpRequestStr, {}, function (error, response) {
-                if (error) {
-                    console.log(error);
-                }
-                else {
-                    console.log(response);
-                }
-            });
         }
     }
 }
