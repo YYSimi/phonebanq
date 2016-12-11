@@ -17,7 +17,7 @@ function IterateRandomStart(array, action) {
    
 };
 
-export function CreateRandomUserTask(userId) {
+function CreateRandomUserTask(userId) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;

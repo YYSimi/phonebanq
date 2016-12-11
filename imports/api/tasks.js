@@ -2,8 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 
-import { CreateRandomUserTask } from '../../lib/common.js'
-
 // Handle publication for tasks.  TODO:  Is this the correct file for this?
 
 if (Meteor.isServer) {
