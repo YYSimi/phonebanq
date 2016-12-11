@@ -2,6 +2,7 @@
 
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
 
 import { Task, PhoneTask } from '../../api/taskClasses.js'
 import { FindTaskDetailFromTask } from '../../../lib/common.js'
@@ -16,29 +17,39 @@ Template.tasksAdmin.helpers({
 });
 
 Template.authenticatedTasksAdmin.onCreated(function () {
-    Meteor.subscribe('adminTasksView');
+    Meteor.subscribe('adminTasks');
+
+    this.autorun(() => {
+        var taggedTaskDetailIds = Tasks.find().map( function(item) {
+            retval = { task_type: item.task_type, task_detail_id: item.task_detail_id };
+            return retval;
+        });
+        this.subscribe('taskDetails', taggedTaskDetailIds);
+    } );
 });
 
 Template.authenticatedTasksAdmin.helpers({
     getOwnedTasks() {
-        var tasks = Tasks.find({ owner: Meteor.userId()});
+        var tasks = Tasks.find();
 
         var retval = tasks.map(task => {
-            return {
-                task: task,
-                taskDetail: FindTaskDetailFromTask(task)
+            var taskDetail = FindTaskDetailFromTask(task)
+            var mapRetval = null;
+            if (taskDetail) { 
+                mapRetval = {
+                    task: task,
+                    taskDetail: taskDetail 
+                }
             }
-        })
+            return mapRetval;
+        }).filter( function(item) { return item != null} );
 
-        console.log(retval);
         return retval;
     }
 })
 
 Template.authenticatedTasksAdmin.events({
     'click .js-task-disable'(evt) {
-        console.log(this);
-        console.log("disabling" + this.task._id)
         Meteor.call('tasks.disableTask', this.task._id);
         return false;
     }

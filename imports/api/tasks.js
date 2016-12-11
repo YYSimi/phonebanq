@@ -4,8 +4,6 @@ import { Match, check } from 'meteor/check';
 
 // Handle publication for tasks.  TODO:  Is this the correct file for this?
 
-// TODO:  Major Bug!  Need to "reactively publish" data on the server.
-// See -- http://stackoverflow.com/questions/23772693/meteor-publish-subscribe-is-not-reactive
 
 if (Meteor.isServer) {
     Meteor.publish('userTasks', function() {
@@ -28,16 +26,20 @@ if (Meteor.isServer) {
     Meteor.publish('representatives', function() {
         return Representatives.find();
     });
-    Meteor.publish('adminTasksView', function() {
-        var tasks = Tasks.find({owner : this.userId});
-        var phoneTaskIds = tasks.map(function(item) { 
+    Meteor.publish('adminTasks', function() {
+        return Tasks.find({owner : this.userId});
+    } );
+    Meteor.publish('taskDetails', function( taggedTaskDetailIds ) {
+        check(taggedTaskDetailIds, Match.Any); //TODO:  Proper checking.
+        var phoneTaskIds = taggedTaskDetailIds.map(function(item) { 
             if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) }
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
+
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
-        return [tasks, phoneTasks];
-    })
+        return phoneTasks;
+    });
 }
 
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user

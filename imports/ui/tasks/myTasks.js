@@ -12,7 +12,6 @@ Template.myTasks.onCreated(function () {
     Meteor.subscribe('userTasks');
 
     this.autorun(() => {
-        console.log("subscribing to tasks")
         var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
         this.subscribe('tasksAndDetails', taskIds);
     } )
