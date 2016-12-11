@@ -71,20 +71,16 @@ export function CreateRandomUserTask(userId) {
 
 export function PopulateUserTasks(userId) {
     DisableExpiredUserTasks(userId);
-    nTasksCreated = 0;
-    taskCount = Meteor.users.findOne(userId).statistics.activeTasks;
-    if (taskCount == 1)  { //TODO:  Get rid of this ugly logic
-        if (CreateRandomUserTask(userId)) {
-            ++nTasksCreated;
+    var nTasksCreated = 0;
+    var nTasksMax = 2;
+    currentTaskCount = Meteor.users.findOne(userId).statistics.activeTasks;
+
+    // Attempt to create new tasks until we hit the task creation limit or task creation fails.
+    while (nTasksCreated + currentTaskCount < nTasksMax) {
+        if (!CreateRandomUserTask(userId)) {
+            break
         }
-    }
-    if (taskCount == 0) {
-        if (CreateRandomUserTask(userId)) {
-            ++nTasksCreated;
-            if (CreateRandomUserTask(userId)) {
-                ++nTasksCreated;
-            }
-        }
+        ++nTasksCreated;
     }
 
     return nTasksCreated;
