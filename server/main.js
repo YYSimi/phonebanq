@@ -3,7 +3,8 @@ import { HTTP } from 'meteor/http';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
-import { PopulateUserTasks, UpdateUserTasks, PopulateLocationFromFacebook, GetCongressionalInfo} from '../lib/common.js';
+import { PopulateLocationFromFacebook, GetCongressionalInfo} from '../lib/common.js';
+import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js'
 
 var fbAppInfo = function(){
     var fbAppAccessToken = '';
@@ -183,7 +184,7 @@ Accounts.onLogin(function(loginAttempt) {
     }
 
     // Update the user's task list.
-    UpdateUserTasks(loginAttempt.user._id);
+    DisableExpiredUserTasks(loginAttempt.user._id);
 })
 
 // Schedule a job to update the userTask database once per day.
@@ -191,7 +192,7 @@ function UpdateAllUserTasks(){
     console.log("updating all user tasks");
     Meteor.users.find().forEach(function(user) {
         console.log("updating user tasks for " + user._id);
-        UpdateUserTasks(user._id);
+        DisableExpiredUserTasks(user._id);
         var nNewTasksCreated = PopulateUserTasks(user._id);
         if (nNewTasksCreated > 0) {
             if (user.services && user.services.facebook) {
@@ -203,7 +204,7 @@ function UpdateAllUserTasks(){
 
 function OnFirstLogin(userId) {
     console.log("running OnFirstLogin");
-    UpdateUserTasks(userId);
+    DisableExpiredUserTasks(userId);
     var nNewTasksCreated = PopulateUserTasks(userId);
     if (nNewTasksCreated > 0) {
         if (user.services && user.services.facebook) {

@@ -81,12 +81,5 @@ Meteor.methods({
             }
         }
         GetCongressionalInfo(user);        //TODO:  This should definitely be structured so it happens automatically on user location update.
-    },
-    'users.updateTaskCount'() { // Caches how many tasks the user currently has active.                              
-        // TODO:  This logic is currently being done on both client and server.  Make it happen on only one of them.
-        UpdateTaskCount(Meteor.userId());
-    },
-    'users.getTaskCount'() {
-        return GetTaskCount(userId);
     }
 });

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 
-import { CreateRandomUserTask, UpdateUserTasks } from '../../lib/common.js'
+import { CreateRandomUserTask } from '../../lib/common.js'
 
 // Handle publication for tasks.  TODO:  Is this the correct file for this?
 
@@ -28,18 +28,6 @@ if (Meteor.isServer) {
 
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
 Meteor.methods({
-    // Create a new task for the given user
-    // TODO:  Move these to a new "userTasks" class?
-    'tasks.createRandom'() {
-        if (!Meteor.userId()) {
-            throw new Meteor.Error('not-autherized')
-        }
-        if (Meteor.isServer) {
-            UpdateUserTasks(Meteor.userId());
-            CreateRandomUserTask(Meteor.userId());
-        }
-    },
-
     // TODO:  Data validation!
     // TODO:  _Definitely_ make task DB management a different API/class than userTask management.
     'tasks.registerNewTask'(task, phoneTask){
@@ -97,6 +85,7 @@ Meteor.methods({
             throw new Meteor.Error('bad-state', "The associated task does not exist")
         }
 
+        // TODO:  Don't get the user object here.  Just atomically increment the XP value.
         if (!userTask.is_completed) {
             var currentXp = 0;
             if (user && user.profile && user.profile.progression && user.profile.progression.xp) {
@@ -127,7 +116,7 @@ Meteor.methods({
             throw new Meteor.Error('bad-state', "The associated task does not exist")
         }
 
-
+        // TODO:  Don't get the user object here.  Just atomically increment the XP value.
         if (userTask.is_completed) {
             var currentXp = 0;
             if (user && user.profile && user.profile.progression && user.profile.progression.xp) {
@@ -138,7 +127,13 @@ Meteor.methods({
             Meteor.users.update(userId, {$set : {"profile.progression.xp" : newXp}})
         }
 
+        // TODO:  Make class-like interface that pairs the remove and update call together.
         UserTasks.remove(userTaskId);
+
+        if (userTask.is_active) {
+            Users.update(userTask.usrId, {$inc: {"statistics.activeTasks": -1} });
+        }
+
     },
 
     // TODO:  Create a class-like interface for managing UserTasks, then have the Meteor methods call directly into the class.
@@ -150,11 +145,15 @@ Meteor.methods({
             throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
         
+        // TODO:  Really, create a class-like interface to pair these two calls together.
         UserTasks.update(
             { _id: userTaskId },
             { $set: { "is_active" : "false",  "never_show_again" : true} }
         );
 
-        UpdateUserTasks(userTaskId);
+        if (userTask.is_active) {
+            Users.update(userTask.usrId, {$inc: {"statistics.activeTasks": -1} });
+        }
+
     }
 })
