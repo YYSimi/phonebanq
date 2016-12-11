@@ -97,6 +97,11 @@ Meteor.methods({
         }
 
         UserTasks.update(userTaskId, { $set: {is_completed : true, is_active:false } });
+
+        if (userTask.is_active) {
+            Meteor.users.update(userId, {$inc: {"statistics.activeTasks": -1} });
+        }
+
     },
 
     'tasks.cancelTask'(userTaskId) {
@@ -131,7 +136,7 @@ Meteor.methods({
         UserTasks.remove(userTaskId);
 
         if (userTask.is_active) {
-            Users.update(userTask.usrId, {$inc: {"statistics.activeTasks": -1} });
+            Meteor.users.update(userId, {$inc: {"statistics.activeTasks": -1} });
         }
 
     },
@@ -141,7 +146,8 @@ Meteor.methods({
     'tasks.hideTaskForever'(userTaskId) {
         check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         userTask = UserTasks.findOne(userTaskId);
-        if (Meteor.userId() != userTask.user_id) {
+        var userId = Meteor.userId();
+        if (userId != userTask.user_id) {
             throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
         
@@ -152,7 +158,7 @@ Meteor.methods({
         );
 
         if (userTask.is_active) {
-            Users.update(userTask.usrId, {$inc: {"statistics.activeTasks": -1} });
+            Meteor.users.update(userId, {$inc: {"statistics.activeTasks": -1} });
         }
 
     }

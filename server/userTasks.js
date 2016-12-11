@@ -1,5 +1,3 @@
-import { UpdateTaskCount, GetTaskCount } from '../lib/common.js'
-
 //  Iterates over an array starting at a random index.
 //  Action should be a function that takes an array element and returns true to continue iteration, false to break.
 
@@ -23,12 +21,6 @@ export function CreateRandomUserTask(userId) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;
-    var nMaxActiveTasks = 4;
-    
-    UpdateTaskCount(userId)  //TODO:  Figure out when/where this should be updated.
-    if (GetTaskCount(userId) >= nMaxActiveTasks) {
-        return false;
-    }
     
     console.log("Creating random Tasks");
     var tasksCursor = Tasks.find( {is_disabled : { $ne: true } }, {sort : {priority:-1}});
@@ -71,7 +63,7 @@ export function CreateRandomUserTask(userId) {
         }
         console.log(userTask);
         UserTasks.insert(userTask);
-        UpdateTaskCount(userId);
+        Meteor.users.update(userId, {$inc: {"statistics.activeTasks":1}});
     }
     
     return fFoundTask;
@@ -101,6 +93,8 @@ export function PopulateUserTasks(userId) {
 export function DisableExpiredUserTasks(userId) {
     // Mark any expired active tasks as inactive
     var expiredTaskCutoffDate = new Date();
+    var nTasksMarkedInactive = 0;
+
     activeExpired = UserTasks.find({
         user_id: userId,
         is_active: true,
@@ -109,13 +103,14 @@ export function DisableExpiredUserTasks(userId) {
 
     activeExpired.forEach( function (item) {
         UserTasks.update(item._id, { $set: {is_active : false} });
+        --nTasksMarkedInactive;
     });
 
     // Purge old tasks that are inactive, non-completed, and non-"never show again"
     var oldTaskCutoffDate = new Date();
     var nTaskRetryDelayDays = 3;
     oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - nTaskRetryDelayDays);
-    UserTasks.remove({
+    var nTasksRemoved = UserTasks.remove({
         user_id: userId,
         is_completed: false,
         is_repeatable: false,
@@ -123,6 +118,5 @@ export function DisableExpiredUserTasks(userId) {
         lasts_until : { $lt : oldTaskCutoffDate }
     });
 
-    // Count how many tasks are now active, and update the user's task count.
-    UpdateTaskCount(userId);
+    Meteor.users.update(userId, {$inc: {"statistics.activeTasks" : 0 - nTasksRemoved - nTasksMarkedInactive}})
 }
