@@ -63,7 +63,6 @@ Template.userXpBar.helpers({
     },
 
     currentLevelPercent() {
-        console.log("clp = " + Math.floor(getCurrentXp()*100/ getXpReqForNextLevel()))
         return Math.floor(getXpIntoCurrentLevel()*100/ getXpReqForNextLevel());
     },
 
