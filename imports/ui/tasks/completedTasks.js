@@ -8,7 +8,13 @@ import '../../api/tasks.js'
 
 // TODO:  Is this the right place to do the subscription?
 Template.completedTasks.onCreated(function () {
-    Meteor.subscribe('userTasksView');
+    Meteor.subscribe('userTasks');
+
+    this.autorun(() => {
+        console.log("subscribing to tasks")
+        var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
+        this.subscribe('tasksAndDetails', taskIds);
+    } )
 });
 
 Template.completedTasks.helpers({

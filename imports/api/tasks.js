@@ -8,15 +8,11 @@ import { Match, check } from 'meteor/check';
 // See -- http://stackoverflow.com/questions/23772693/meteor-publish-subscribe-is-not-reactive
 
 if (Meteor.isServer) {
-    Meteor.publish('senators', function() {
-        return Senators.find();
+    Meteor.publish('userTasks', function() {
+        return UserTasks.find({user_id : this.userId});
     });
-    Meteor.publish('representatives', function() {
-        return Representatives.find();
-    });
-    Meteor.publish('userTasksView', function() {
-        var userTasks = UserTasks.find({user_id : this.userId});
-        var taskIds = userTasks.map( function(item) {return new Mongo.ObjectID(item.task_id);});
+    Meteor.publish('tasksAndDetails', function(taskIds) {
+        check(taskIds, Match.Any); //TODO:  Proper checking.
         var tasks = Tasks.find({ '_id': {$in: taskIds} });
         var phoneTaskIds = tasks.map(function(item) { 
             if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) }
@@ -24,7 +20,13 @@ if (Meteor.isServer) {
         } ).filter( function (elt) {return elt != null } );
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
-        return [userTasks, tasks, phoneTasks];
+        return [tasks, phoneTasks];
+    });
+    Meteor.publish('senators', function() {
+        return Senators.find();
+    });
+    Meteor.publish('representatives', function() {
+        return Representatives.find();
     });
     Meteor.publish('adminTasksView', function() {
         var tasks = Tasks.find({owner : this.userId});
