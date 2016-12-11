@@ -16,8 +16,7 @@ Template.tasksAdmin.helpers({
 });
 
 Template.authenticatedTasksAdmin.onCreated(function () {
-    Meteor.subscribe('tasks');
-    Meteor.subscribe('phoneTasks');
+    Meteor.subscribe('adminTasksView');
 });
 
 Template.authenticatedTasksAdmin.helpers({

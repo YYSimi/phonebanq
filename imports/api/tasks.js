@@ -7,17 +7,6 @@ import { CreateRandomUserTask } from '../../lib/common.js'
 // Handle publication for tasks.  TODO:  Is this the correct file for this?
 
 if (Meteor.isServer) {
-    Meteor.publish('userTasks', function userTasksPublication() {
-        return UserTasks.find({ user_id : this.userId });
-    });
-    // TODO:  Only publish tasks that are currently active for the user!
-    Meteor.publish('tasks', function() {
-        return Tasks.find();
-    });
-    // TODO:  Only publish tasks that are currently active for the user!
-    Meteor.publish('phoneTasks', function() {
-        return PhoneTasks.find();
-    });
     Meteor.publish('senators', function() {
         return Senators.find();
     });
@@ -35,6 +24,16 @@ if (Meteor.isServer) {
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
         return [userTasks, tasks, phoneTasks];
+    });
+    Meteor.publish('adminTasksView', function() {
+        var tasks = Tasks.find({owner : this.userId});
+        var phoneTaskIds = tasks.map(function(item) { 
+            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) }
+            else { return null; }
+        } ).filter( function (elt) {return elt != null } );
+        var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
+
+        return [tasks, phoneTasks];
     })
 }
 
