@@ -8,13 +8,17 @@ Template.authenticatedUserNewTask.onCreated(function () {
 
 Template.PhoneTask.helpers({
     findCustomSenators() {
-        return this.call_custom_senators.map( (bgId) => {
-            return Senators.findOne({bioguide_id : bgId});
-        })
+        if (this.call_custom_senators) {
+            return this.call_custom_senators.map( (bgId) => {
+                return Senators.findOne({bioguide_id : bgId});
+            })
+        }
     },
     findCustomRepresentatives() {
-        return this.call_custom_representatives.map( (bgId) => {
-            return Representatives.findOne({bioguide_id : bgId});
-        })
+        if (this.call_custom_representatives) {
+            return this.call_custom_representatives.map( (bgId) => {
+                return Representatives.findOne({bioguide_id : bgId});
+            })
+        }
     }
 })
