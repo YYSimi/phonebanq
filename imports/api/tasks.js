@@ -4,6 +4,9 @@ import { Match, check } from 'meteor/check';
 
 // Handle publication for tasks.  TODO:  Is this the correct file for this?
 
+// TODO:  Major Bug!  Need to "reactively publish" data on the server.
+// See -- http://stackoverflow.com/questions/23772693/meteor-publish-subscribe-is-not-reactive
+
 if (Meteor.isServer) {
     Meteor.publish('senators', function() {
         return Senators.find();

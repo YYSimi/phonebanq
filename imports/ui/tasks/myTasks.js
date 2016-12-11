@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
-import { FindTaskDetailFromTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
+import { FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
 
 import './myTasks.html'
 import '../../api/tasks.js'
@@ -14,26 +14,22 @@ Template.myTasks.onCreated(function () {
 
 Template.myTasks.helpers({
     getUserTasks() {
-        var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
-
+        var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true }); 
         return userTasks.map(userTask => {
-            var task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id)) // TODO:  Handle error cases, function this out.
-            var retval =  {
-                userTask: userTask,
-                task: task,
-                taskDetail: FindTaskDetailFromTask(task)
+            var mapRetval = null;
+            var task = FindTaskFromUserTask(userTask);
+            if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
+                var taskDetail = FindTaskDetailFromTask(task);
+                if (taskDetail) {  //Ditto for task detail
+                    mapRetval =  {
+                        userTask: userTask,
+                        task: task,
+                        taskDetail: taskDetail
+                    }
+                }
             }
-
-            // switch(retval.task.task_type) {
-            //     case "phone":
-            //         retval.taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(retval.task.task_detail_id));
-            //         break;
-            //     default:
-            //         throw "Invalid task type";
-            // }
-
-            return retval;
-        });
+            return mapRetval;
+        }).filter( function(elt) {return elt != null} );
     }
 });
 
