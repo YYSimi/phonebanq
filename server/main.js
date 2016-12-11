@@ -225,8 +225,11 @@ function NotifyFacebookUser(user) {
         latestTask = Tasks.findOne(new Mongo.ObjectID(latestUserTask.task_id));
 
         if (latestTask) {
-            //TODO:  Make sure that the notification message is not longer than 180 characters.
-            var notificationMessage = latestTask.brief_description + "."
+            var fbMaxMessageLength=180;
+            var notificationMessage = latestTask.brief_description;
+            if (notificationMessage.length > fbMaxMessageLength) {
+                notificationMessage = notificationMessage.substring(0, fbMaxMessageLength - 3) + '...'
+            }
 
             httpRequestStr='https://graph.facebook.com/' +
                 userFbInfo.id +  '/notifications' +
