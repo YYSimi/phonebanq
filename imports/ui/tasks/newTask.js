@@ -19,9 +19,6 @@ Template.newTask.helpers({
 })
 
 Template.authenticatedUserNewTask.onCreated(function () {
-    Meteor.subscribe('userTasks');
-    Meteor.subscribe('tasks');
-    Meteor.subscribe('phoneTasks');
     Meteor.subscribe('senators');
     Meteor.subscribe('representatives');
 });

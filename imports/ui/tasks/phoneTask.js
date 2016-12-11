@@ -1,7 +1,7 @@
 import './phoneTask.html'
 import '../../api/tasks.js'
 
-Template.authenticatedUserNewTask.onCreated(function () {
+Template.PhoneTask.onCreated(function () {
     Meteor.subscribe('senators');
     Meteor.subscribe('representatives');
 });

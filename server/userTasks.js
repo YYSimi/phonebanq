@@ -31,7 +31,6 @@ export function CreateRandomUserTask(userId) {
         IterateRandomStart(tasksCursor.fetch(), (task) => {
             var existingTask = UserTasks.findOne( { user_id : userId, task_id: task._id._str } );
             // If we found a valid task, break!
-            // TODO:  Never returns duplicates right now.  Need to filter based on preference/completion status/date as well.
             if (!existingTask) {
                 foundTask = task;
                 fFoundTask = true;
@@ -46,7 +45,7 @@ export function CreateRandomUserTask(userId) {
         console.log(fFoundTask);
 
         var today = new Date();
-        today.setUTCHours(0,0,0,0);   // TODO:  Consider moving off of UTC?
+        today.setUTCHours(0,0,0,0);
         var tomorrow = new Date(today);
         tomorrow.setUTCHours(23, 59, 59, 999)
         var userTask = {

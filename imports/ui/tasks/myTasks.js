@@ -9,9 +9,7 @@ import '../../api/tasks.js'
 
 // TODO:  Is this the right place to do the subscription?
 Template.myTasks.onCreated(function () {
-    Meteor.subscribe('userTasks');
-    Meteor.subscribe('tasks');
-    Meteor.subscribe('phoneTasks');
+    Meteor.subscribe('userTasksView');
 });
 
 Template.myTasks.helpers({
