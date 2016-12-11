@@ -3,7 +3,6 @@ import '../ui/home.js'
 import '../ui/mySenators.js'
 import '../ui/myRepresentatives.js'
 import '../ui/navigation.js'
-import '../ui/adminNavigation.js'
 import '../ui/about.js'
 
 import '../ui/userXpWidgets.js'
