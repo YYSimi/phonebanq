@@ -20,17 +20,11 @@ Template.myTasks.onCreated(function () {
 Template.myTasks.helpers({
     getUserTasks() {
         var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
-        console.log("found user tasks")
-        console.log(userTasks.fetch())
         return userTasks.map(userTask => {
             var mapRetval = null;
             var task = FindTaskFromUserTask(userTask);
-            console.log("found task")
-            console.log(task);
             if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
                 var taskDetail = FindTaskDetailFromTask(task);
-                console.log("found task detail")
-                console.log(taskDetail);
                 if (taskDetail) {  //Ditto for task detail
                     mapRetval =  {
                         userTask: userTask,
