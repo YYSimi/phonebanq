@@ -88,7 +88,8 @@ export function PopulateUserTasks(userId) {
 export function DisableExpiredUserTasks(userId) {
     // Mark any expired active tasks as inactive
     var expiredTaskCutoffDate = new Date();
-
+    var nTasksMarkedInactive = 0;
+    
     activeExpired = UserTasks.find({
         user_id: userId,
         is_active: true,
