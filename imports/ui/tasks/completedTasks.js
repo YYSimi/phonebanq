@@ -14,10 +14,12 @@ import '../../api/tasks.js'
 Template.completedTasks.onCreated(function () {
     console.log("Completed Opportunites OnCreated")
 
+    this.subscribe('overpublishedTasksAndDetails');
+
 //    this.autorun(() => {
 //        console.log("Completed Opportunites autorun")
-        var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
-        this.subscribe('tasksAndDetails', taskIds);
+//        var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
+//        this.subscribe('tasksAndDetails', taskIds);
 //    } )
 });
 
