@@ -153,16 +153,16 @@ Meteor.startup(() => {
 });
 
 Accounts.onLogin(function(loginAttempt) {
-    var services = null;
+    var loginSource = "local";
     if (!loginAttempt.user) { return; }
     
     GetCongressionalInfo(loginAttempt.user);
 
-    services = loginAttempt.user.services;
+    var services = loginAttempt.user.services;
 
     // Populate the User's location data
     if(services && services.facebook) {
-        
+        loginSource = "facebook";
         // TODO:  check for permissions
         locationDataSource = loginAttempt.user.profile.locationDataSource
         if (!locationDataSource || locationDataSource == "" || locationDataSource == "facebook") {
@@ -180,6 +180,8 @@ Accounts.onLogin(function(loginAttempt) {
 
     // Update the user's task list.
     DisableExpiredUserTasks(loginAttempt.user._id);
+
+    Meteor.users.update(loginAttempt.user._id, { $set: {"profile.loginSource": loginSource}} )
 })
 
 // This function is a maintenance task for a checkin that messed up the active task count in the DB.
