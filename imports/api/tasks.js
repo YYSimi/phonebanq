@@ -40,9 +40,6 @@ if (Meteor.isServer) {
 
         return phoneTasks;
     });
-    Meteor.publish('overpublishedTasksAndDetails', function() {
-        return [Tasks.find(), PhoneTasks.find()];
-    })
 }
 
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user

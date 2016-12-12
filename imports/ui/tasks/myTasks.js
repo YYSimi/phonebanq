@@ -7,7 +7,6 @@ import { FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString }
 import './myTasks.html'
 import '../../api/tasks.js'
 
-// TODO:  Is this the right place to do the subscription?
 Template.myTasks.onCreated(function () {
     this.autorun(() => {
         var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});

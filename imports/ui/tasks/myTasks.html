@@ -1,10 +1,12 @@
 <template name="myTasks">
   {{#if currentUser}}
-  <h1> Today's Opportunities for Action </h1>
-  {{> UserTasks getUserTasks}}
+    <h1> Today's Opportunities for Action </h1>
+    {{#if Template.subscriptionsReady}}
+      {{> UserTasks getUserTasks}}
+    {{/if}}
   {{else}}
-  <!-- TODO: Move the log-in message to a common place/use some form of registration? -->
-  <p> Please log in to access this page </p>
+    <!-- TODO: Move the log-in message to a common place/use some form of registration? -->
+    <p> Please log in to access this page </p>
   {{/if}}
 </template>
 
