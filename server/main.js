@@ -47,7 +47,7 @@ function UpdateCongressInfo() {
             function (error, response) {
                 if (error) {
                     nTotalRecords = 0;
-                    console.log(error);  //TODO:  Figure out how to properly log and handle errors.
+                    console.log(error);
                 }
                 else {
                     console.log("got response");

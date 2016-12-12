@@ -12,14 +12,13 @@ import '../../api/tasks.js'
 // TODO:  Is this the right place to do the subscription?
 // Major TODO:  Seriously, the loading times are awful with this subscription model.  Look into making it better.
 Template.completedTasks.onCreated(function () {
-    Meteor.subscribe('userTasks');
     console.log("Completed Opportunites OnCreated")
 
-    this.autorun(() => {
-        console.log("Completed Opportunites autorun")
+//    this.autorun(() => {
+//        console.log("Completed Opportunites autorun")
         var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
         this.subscribe('tasksAndDetails', taskIds);
-    } )
+//    } )
 });
 
 
