@@ -88,7 +88,6 @@ export function PopulateUserTasks(userId) {
 export function DisableExpiredUserTasks(userId) {
     // Mark any expired active tasks as inactive
     var expiredTaskCutoffDate = new Date();
-    var nTasksMarkedInactive = 0;
 
     activeExpired = UserTasks.find({
         user_id: userId,
@@ -98,20 +97,21 @@ export function DisableExpiredUserTasks(userId) {
 
     activeExpired.forEach( function (item) {
         UserTasks.update(item._id, { $set: {is_active : false} });
-        --nTasksMarkedInactive;
+        ++nTasksMarkedInactive;
     });
 
     // Purge old tasks that are inactive, non-completed, and non-"never show again"
     var oldTaskCutoffDate = new Date();
     var nTaskRetryDelayDays = 3;
     oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - nTaskRetryDelayDays);
-    var nTasksRemoved = UserTasks.remove({
+    UserTasks.remove({
         user_id: userId,
+        is_active: false,
         is_completed: false,
         is_repeatable: false,
         never_show_again: false,
         lasts_until : { $lt : oldTaskCutoffDate }
     });
 
-    Meteor.users.update(userId, {$inc: {"statistics.activeTasks" : 0 - nTasksRemoved - nTasksMarkedInactive}})
+    Meteor.users.update(userId, {$inc: {"statistics.activeTasks" : 0 - nTasksMarkedInactive}})
 }
