@@ -128,6 +128,7 @@ Meteor.startup(() => {
         }
     )
 
+    FixActiveUserTaskCount()
     UpdateAllUserTasks();
     var fnSetMaintenanceTimer = function () {
         var midnight = new Date();
@@ -180,6 +181,23 @@ Accounts.onLogin(function(loginAttempt) {
     // Update the user's task list.
     DisableExpiredUserTasks(loginAttempt.user._id);
 })
+
+// This function is a maintenance task for a checkin that messed up the active task count in the DB.
+// Keeping it here in case it happens again, but it A)  Should't be called anywhere in production 
+// and B)  Should be moved to a maintenance script that only deals with the DB.
+function FixActiveUserTaskCount() {
+    Meteor.users.find().forEach(function(user) {
+        console.log("Fixing user task count for user " + user._id);
+        nActiveTasks =  UserTasks.find({
+                            user_id: user._id,
+                            is_active: true
+                        }).count();
+        Meteor.users.update(
+            user._id,
+            { $set: {"statistics.activeTasks": nActiveTasks} } 
+        )
+    })
+}
 
 // Schedule a job to update the userTask database once per day.
 function UpdateAllUserTasks(){
