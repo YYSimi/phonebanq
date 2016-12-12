@@ -1,19 +1,16 @@
 <template name="PhoneTask">
   {{#if general_script}}
-  <p>
-    <b>Call script</b><br/>
-    {{general_script}}
-  </p>
-  {{else}}
-  <p>
-    <b>Supporter script</b><br/>
-    {{supporter_script}}
-  </p>
-  <p>
-    <b>Opposition script</b><br/>
-    {{opposition_script}}
-  </p>
+    <b>Sample call script:</b><br/>
+    <p>{{general_script}}</p>
+  {{else}}  
+    <b>Sample script for calling supporters of this issue:</b><br/>
+    <p>{{supporter_script}}</p>
+  
+    <b>Sample script for calling opponents of this issue:</b><br/>
+    <p>{{opposition_script}}</p>
   {{/if}}
+  <small class="text-muted">These scripts are just examples.  Feel free to use them as-is, to modify them, or to use your own.</small>
+  <hr/>
   <p>People to call: </p>
   {{#if call_my_national_senators}}
     {{> mySenators}}
@@ -23,5 +20,4 @@
     {{> myRepresentatives}}
   {{/if}}
   {{> customRepresentatives findCustomRepresentatives}}
-
 </template>

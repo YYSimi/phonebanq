@@ -13,7 +13,7 @@
 <template name="UserTasks">
   <ul class="list-group js-userTasks-list">
   {{#each userTask in this}}
-    <li class="list-group-item" id={{userTask.userTask._id}}>
+    <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
       {{> UserTask userTask}}
     </li>
   {{/each}}
@@ -21,18 +21,24 @@
 </template>
 
 <template name="UserTask">
-  <span class="pull-right">
-  <button class="btn btn-success js-task-success"> Mark as Complete </button>
-  <button class="btn btn-warning js-task-hide"> Not interested right now </button>
-  <button class="btn btn-danger js-task-hideForever"> Never show again </button>
-  </span>
-  {{> UserTaskDetail }}
-  <br/>
-  <p> Expires in {{timeRemaining}} </p>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="pull-right">
+        <button class="btn btn-success js-task-success"> Mark as Complete </button>
+        <button class="btn btn-warning js-task-hide"> Not interested right now </button>
+        <button class="btn btn-danger js-task-hideForever"> Never show again </button>
+      </span>
+      <h4> {{task.tiny_description}} </h4>
+    </div>
+    <div class="panel-body">
+      {{> UserTaskDetail }}
+      <hr/>
+      <p> Expires in {{timeRemaining}} </p>
+    </div>
+  </div>
 </template>
 
 <template name="UserTaskDetail">
-  <p> {{task.tiny_description}} </p>
   {{#if equals task.task_type "phone"}}
     {{> PhoneTask taskDetail}}
   {{/if}}

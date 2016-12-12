@@ -13,7 +13,7 @@
 <template name="UserTasksII">
   <ul class="list-group js-userTasks-list">
   {{#each userTask in this}}
-    <li class="list-group-item" id={{userTask.userTask._id}}>
+    <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
       {{> UserTaskII userTask}}
     </li>
   {{/each}}
@@ -21,8 +21,15 @@
 </template>
 
 <template name="UserTaskII">
-  <span class="pull-right">
-  <button class="btn btn-warning js-task-unsuccess"> Mark as incomplete </button>
-  </span>
-  {{> UserTaskDetail }}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="pull-right">
+        <button class="btn btn-warning js-task-unsuccess"> Mark as incomplete </button>
+      </span>
+      <h4> {{task.tiny_description}} </h4>
+    </div>
+    <div class="panel-body">
+      {{> UserTaskDetail }}
+    </div>
+  </div>
 </template>
