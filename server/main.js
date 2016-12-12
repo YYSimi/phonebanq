@@ -3,7 +3,7 @@ import { HTTP } from 'meteor/http';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
-import { PopulateLocationFromFacebook, GetCongressionalInfo} from '../lib/common.js';
+import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js'
 
 var fbAppInfo = function(){
@@ -155,8 +155,7 @@ Meteor.startup(() => {
 Accounts.onLogin(function(loginAttempt) {
     var loginSource = "local";
     if (!loginAttempt.user) { return; }
-    
-    GetCongressionalInfo(loginAttempt.user);
+    UpdateCongressionalInfo(loginAttempt.user);
 
     var services = loginAttempt.user.services;
 
@@ -167,7 +166,7 @@ Accounts.onLogin(function(loginAttempt) {
         locationDataSource = loginAttempt.user.profile.locationDataSource
         if (!locationDataSource || locationDataSource == "" || locationDataSource == "facebook") {
             PopulateLocationFromFacebook(services.facebook.accessToken);
-            GetCongressionalInfo(loginAttempt.user);
+            UpdateCongressionalInfo(loginAttempt.user);
         }
     }
 

@@ -15,7 +15,6 @@ Template.completedTasks.onCreated(function () {
     } )
 });
 
-
 Template.completedTasks.helpers({
     getUserTasks() {
         var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: true, is_active: false });

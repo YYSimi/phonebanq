@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import { PopulateLocationFromFacebook, GetCongressionalInfo } from '../../lib/common.js'
+import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo } from '../../lib/common.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
@@ -25,6 +25,14 @@ Meteor.methods({
         Meteor.users.update({_id: this.userId}, { $set:
             {"profile.city" : city}
         })
+    },
+    'users.GeocodeLatLong'(){
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+        if (Meteor.isServer) {
+            UpdateUserLatLong(Meteor.user())
+        }
     },
     'users.setLatitude'(latitude) {
         check(latitude, Number)
@@ -55,7 +63,7 @@ Meteor.methods({
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.zipCode" : zipCode} });
 
-        GetCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
+        UpdateCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
     },
     'users.setStreet'(street) {
         check(street, String)
@@ -90,6 +98,6 @@ Meteor.methods({
                 PopulateLocationFromFacebook(user.services.facebook.accessToken);
             }
         }
-        GetCongressionalInfo(user);        //TODO:  This should definitely be structured so it happens automatically on user location update.
+        UpdateCongressionalInfo(user);        //TODO:  This should definitely be structured so it happens automatically on user location update.
     }
 });

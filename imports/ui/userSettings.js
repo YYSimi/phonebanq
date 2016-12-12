@@ -26,6 +26,7 @@ Template.loggedInUserSettings.events({
         if (city) {
             Meteor.call('users.setCity', city);
         }
+        Meteor.call('users.GeocodeLatLong');
     },
     'click .js-userSettings-useFacebookCheckbox'(event) {
         Meteor.call('users.setLocationDataSource', event.target.checked ? "facebook" : "manual" );
