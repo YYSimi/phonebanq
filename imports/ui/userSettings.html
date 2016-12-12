@@ -8,13 +8,21 @@
 
 <template name="loggedInUserSettings">
   <div class="form-group row">
-    <label for="select-user-state" class="col-xs-2 col-form-label"> State of Residence </label>
+    <label for="user-city" class="col-xs-2 col-form-label"> City </label>
+    <div class="col-xs-4">
+      <input class="form-control" type="text" value="{{profile.city}}" id="user-city" readonly="{{isLocationFromFacebook}}"/>
+    </div>
+
+    <label for="select-user-state" class="col-xs-2 col-sm-1 col-form-label"> State </label>
     <div class="col-xs-2">
       <select class="select2" id="select-user-state" disabled="{{isLocationFromFacebook}}">
-        <option disabled selected val="na"> Select State </option>
+        <option disabled value="na"> Select State </option>
         {{> selectStates}}
       </select>
     </div>
+
+  </div>
+  <div class="form-group row">
     <label for="user-zip" class="col-xs-2 col-form-label"> Zip Code </label>
     <div class="col-xs-2">
       <input class="form-control" type="text" value="{{profile.zipCode}}" id="user-zip" readonly="{{isLocationFromFacebook}}"/>

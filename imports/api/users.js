@@ -16,6 +16,16 @@ Meteor.methods({
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.state" : state} });
     },
+    'users.setCity'(city) {
+        check(city, String)
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+
+        Meteor.users.update({_id: this.userId}, { $set:
+            {"profile.city" : city}
+        })
+    },
     'users.setLatitude'(latitude) {
         check(latitude, Number)
         if (!this.userId) {
