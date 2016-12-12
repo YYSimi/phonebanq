@@ -14,6 +14,7 @@ export function Task(tiny_description, brief_description, start_date, end_date,
     this.end_date = end_date;
     this.task_type = task_type;
     // TODO:  Implement some sort of issues hashtag?
+    this.issues = issues;
     this.priority = priority;
     this.xp_value = xp_value;
 }

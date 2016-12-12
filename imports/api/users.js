@@ -17,7 +17,7 @@ Meteor.methods({
             {"profile.state" : state} });
     },
     'users.setLatitude'(latitude) {
-        check(latitude, Number) // TODO:  Seriously, figure out when things should be strings/numbers/objects.
+        check(latitude, Number)
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
@@ -27,7 +27,7 @@ Meteor.methods({
         })
     },
     'users.setLongitude'(longitude) {
-        check(longitude, Number) // TODO:  Seriously, figure out when things should be strings/numbers/objects.
+        check(longitude, Number)
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }

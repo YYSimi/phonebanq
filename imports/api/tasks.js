@@ -10,10 +10,10 @@ if (Meteor.isServer) {
         return UserTasks.find({user_id : this.userId});
     });
     Meteor.publish('tasksAndDetails', function(taskIds) {
-        check(taskIds, Match.Any); //TODO:  Proper checking.
+        check(taskIds, [Mongo.ObjectID]);
         var tasks = Tasks.find({ '_id': {$in: taskIds} });
         var phoneTaskIds = tasks.map(function(item) { 
-            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) }
+            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
@@ -30,7 +30,7 @@ if (Meteor.isServer) {
         return Tasks.find({owner : this.userId});
     } );
     Meteor.publish('taskDetails', function( taggedTaskDetailIds ) {
-        check(taggedTaskDetailIds, Match.Any); //TODO:  Proper checking.
+        check(taggedTaskDetailIds, [{task_type: String, task_detail_id: String}]);
         var phoneTaskIds = taggedTaskDetailIds.map(function(item) { 
             if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) }
             else { return null; }
@@ -47,8 +47,33 @@ Meteor.methods({
     // TODO:  Data validation!
     // TODO:  _Definitely_ make task DB management a different API/class than userTask management.
     'tasks.registerNewTask'(task, phoneTask){
-        check(task, Match.Any) //TODO:  More specificity/security!
-        check(phoneTask, Match.Any) //Todo:  More specificity/security!
+        console.log(task);
+        // TODO:  If constructor-based matching after Meteor.call starts working in future versions of meteor, use that instead.
+        check(task,
+        {
+            tiny_description: String,
+            brief_description: String,
+            start_date: Date,
+            end_date: Date,
+            task_type: String,
+            issues: [String],
+            priority: Number,
+            xp_value: Number,
+        });
+
+        check(phoneTask,
+        {
+            general_script: Match.Maybe(String),
+            supporter_script: Match.Maybe(String),
+            opposition_script: Match.Maybe(String),
+            notes: String,
+            call_my_national_senators: Boolean,
+            call_my_national_representatives: Boolean,
+            call_custom_senators: [String],
+            call_custom_representatives: [String],
+            call_custom: [String],
+        });
+
         var user = Meteor.user();
         if (!user || !user.profile || !user.profile.permissions || 
         !user.profile.permissions.registerNewTasks) {
@@ -75,7 +100,7 @@ Meteor.methods({
     },
 
     'tasks.disableTask'(taskId) {
-        check(taskId, Match.Any) //TODO:  More specificity/security!
+        check(taskId, Mongo.ObjectID)
         var user = Meteor.user();
         task = Tasks.findOne(taskId);
         if (task && task.owner == user._id) {
@@ -85,7 +110,7 @@ Meteor.methods({
     },
 
     'tasks.completeTask'(userTaskId) {
-        check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
+        check(userTaskId, Mongo.ObjectID); // TODO:  Figure out MongoId vs String relationship in collections.
         console.log('completing task ' + userTaskId );
        
         userTask = UserTasks.findOne(userTaskId);
@@ -121,7 +146,7 @@ Meteor.methods({
     },
 
     'tasks.cancelTask'(userTaskId) {
-        check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
+        check(userTaskId, Mongo.ObjectID); // TODO:  Figure out MongoId vs String relationship in collections.
         console.log('uncompleting task ' + userTaskId );
         
         var userTask = UserTasks.findOne(userTaskId);
@@ -160,7 +185,7 @@ Meteor.methods({
     // TODO:  Create a class-like interface for managing UserTasks, then have the Meteor methods call directly into the class.
 
     'tasks.hideTaskForever'(userTaskId) {
-        check(userTaskId, Match.Any); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
+        check(userTaskId, Mongo.ObjectID); // TODO:  Be more specific about the kind of object.  Figure out MongoId vs String relationship in collections.
         userTask = UserTasks.findOne(userTaskId);
         var userId = Meteor.userId();
         if (userId != userTask.user_id) {

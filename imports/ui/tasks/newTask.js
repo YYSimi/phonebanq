@@ -45,8 +45,9 @@ Template.authenticatedUserNewTask.events({
             new Date(), // TODO: handle start/end dates properly.
             new Date(),
             PBTaskTypesEnum.phone,
-            null,
-            $("#task-priority").val()
+            [],
+            parseInt($("#task-priority").val()),
+            1   // TODO:  Pipe XP Values in.
         );
 
         // TODO:  Make this work for more than just phone taks.
@@ -54,13 +55,15 @@ Template.authenticatedUserNewTask.events({
             $("#general-script").val(),
             $("#supporter-script").val(),
             $("#opposition-script").val(),
-            null,
+            "",
             $("#call-my-national-senators").val()  === "true",
             $("#call-my-national-representatives").val()  === "true",
-            $("#call-custom-senators").val(),
-            $("#call-custom-representatives").val(),
-            null
+            $("#call-custom-senators").val() || [],
+            $("#call-custom-representatives").val() || [],
+            []
         );
+
+        console.log(task);
 
         Meteor.call('tasks.registerNewTask', task, phoneTask);
         return false;
@@ -88,21 +91,22 @@ Template.phoneNewTaskDetail.helpers({
                     new Date(), // TODO: handle start/end dates properly.
                     new Date(),
                     PBTaskTypesEnum.phone,
-                    null,
-                    5 //TODO:  pump priority into the form.
-                    ),
+                    [],
+                    parseInt($("#task-priority").val()),
+                    1   // TODO:  Pipe XP Values in.
+                ),
                 taskDetail: 
                     // TODO:  Make this work for more than just phone taks.
                     new PhoneTask(
                         $("#general-script").val(),
                         $("#supporter-script").val(),
                         $("#opposition-script").val(),
-                        null,
+                        "",
                         $("#call-my-national-senators").val() === "true", //val _always_ returns strings or arrays, apparently?
                         $("#call-my-national-representatives").val() === "true",
-                        $("#call-custom-senators").val(),
-                        $("#call-custom-representatives").val(),
-                        null)
+                        $("#call-custom-senators").val() || [],
+                        $("#call-custom-representatives").val() || [],
+                        [])
             }
         }
     }
