@@ -41,6 +41,7 @@ function UpdateCongressInfo() {
     var httpRequestStrBase = "https://congress.api.sunlightfoundation.com/legislators"
     var nRecordsPerPage = 10;
     var httpRequestStr = httpRequestStrBase + "?per_page=" + nRecordsPerPage;
+    httpRequestStr = encodeURI(httpRequestStr);
 
     var UpdateCongressInfoFromPage = function (page) {
         HTTP.get(httpRequestStr + "&page=" + page,
@@ -249,7 +250,8 @@ function NotifyFacebookUser(user) {
                     "?access_token=" + fbAppInfo.getAccessToken() +
                     "&href=/myTasks" +
                     "&template=" + notificationMessage;
-
+                    httpRequestStr = encodeURI(httpRequestStr);
+                
                 HTTP.post(httpRequestStr, {}, function (error, response) {
                     if (error) {
                         console.log(error);
