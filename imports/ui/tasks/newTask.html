@@ -97,8 +97,14 @@
   </div>
   {{#if fShouldRenderTaskPreview}}
   <label for="phone-task-preview"> Task preview: </label>
-  <div class="well" id="phone-task-preview">
-    {{> UserTaskDetail taskPreviewInfo}}
+
+  <div class="panel panel-default" id="phone-task-preview">
+    <div class="panel-heading">
+      <h4> {{taskPreviewInfo.task.tiny_description}} </h4>
+    </div>
+    <div class="panel-body">
+      {{> UserTaskDetail taskPreviewInfo}}
+    </div>
   </div>
   <div class="row">
     <div class="col-xs-6 col-sm-4">
