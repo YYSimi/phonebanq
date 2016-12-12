@@ -98,6 +98,5 @@ Meteor.methods({
                 PopulateLocationFromFacebook(user.services.facebook.accessToken);
             }
         }
-        UpdateCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
     }
 });
