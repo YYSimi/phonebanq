@@ -104,7 +104,7 @@ export function DisableExpiredUserTasks(userId) {
     // Purge old tasks that are inactive, non-completed, and non-"never show again"
     var oldTaskCutoffDate = new Date();
     var nTaskRetryDelayDays = 3;
-    oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDay() - nTaskRetryDelayDays);
+    oldTaskCutoffDate.setDate(oldTaskCutoffDate.getDate()-nTaskRetryDelayDays);
     UserTasks.remove({
         user_id: userId,
         is_active: false,
