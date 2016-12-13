@@ -1,7 +1,5 @@
 import '../ui/body.js'
 import '../ui/home.js'
-import '../ui/mySenators.js'
-import '../ui/myRepresentatives.js'
 import '../ui/navigation.js'
 import '../ui/about.js'
 
@@ -20,14 +18,6 @@ Router.configure({
 
 Router.route('/about', {
     name: 'about'
-});
-
-Router.route('/mySenators', {
-    name: 'mySenators'
-});
-
-Router.route('/myRepresentatives', {
-    name: 'myRepresentatives'
 });
 
 Router.route('/userSettings', {

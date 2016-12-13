@@ -12,12 +12,26 @@
   <small class="text-muted">These scripts are just examples.  Feel free to use them as-is, to modify them, or to use your own.</small>
   <hr/>
   <p>People to call: </p>
-  {{#if call_my_national_senators}}
-    {{> mySenators}}
-  {{/if}}
-    {{> customSenators findCustomSenators}}
-  {{#if call_my_national_representatives}}
-    {{> myRepresentatives}}
-  {{/if}}
-  {{> customRepresentatives findCustomRepresentatives}}
+  <ul>
+    {{#if call_my_national_senators}}
+      {{> nationalSenatorsPhoneContactList findMySenators}}
+    {{/if}}
+      {{> nationalSenatorsPhoneContactList findCustomSenators}}
+    {{#if call_my_national_representatives}}
+      {{> nationalRepresentativesPhoneContactList findMyRepresentatives}}
+    {{/if}}
+      {{> nationalRepresentativesPhoneContactList findCustomRepresentatives}}
+  </ul>
+</template>
+
+<template name="nationalSenatorsPhoneContactList">
+    {{#each this}}
+      <li> US Senator {{first_name}} {{last_name}} ({{party}}) from {{state_name}}: {{phone}}</li>
+    {{/each}}
+</template>
+
+<template name="nationalRepresentativesPhoneContactList">
+    {{#each this}}
+      <li> US Representative {{first_name}} {{last_name}} ({{party}}) from {{state_name}} district {{district}}: {{phone}}</li>
+    {{/each}}
 </template>
