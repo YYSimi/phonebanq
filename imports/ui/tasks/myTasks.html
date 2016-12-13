@@ -3,6 +3,8 @@
     <h1> Today's Opportunities for Action </h1>
     {{#if Template.subscriptionsReady}}
       {{> UserTasks getUserTasks}}
+    {{else}}
+      {{> loader}}
     {{/if}}
   {{else}}
     <!-- TODO: Move the log-in message to a common place/use some form of registration? -->

@@ -3,6 +3,8 @@
     <h1> Actions Taken </h1>
     {{#if Template.subscriptionsReady}}
       {{> UserTasksII getUserTasks}}
+    {{else}}
+      {{> loader}}
     {{/if}}
   {{else}}
     <!-- TODO: Move the log-in message to a common place/use some form of registration? -->
