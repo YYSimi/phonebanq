@@ -1,8 +1,12 @@
 <template name="tasksAdmin">
-  {{#if fHasNewTaskPermissions}}
-    {{> authenticatedTasksAdmin}}
+  {{#if currentUser}}
+    {{#if fHasNewTaskPermissions}}
+      {{> authenticatedTasksAdmin}}
+    {{else}}
+      {{> permissionsRequired}}
+    {{/if}}
   {{else}}
-    <p> You need permission to access this page.  If you believe that you should have access, talk to the website maintainer to request access. </p>
+    {{> loginRequired }}
   {{/if}}
 </template>
 
