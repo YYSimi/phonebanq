@@ -1,0 +1,20 @@
+<template name="anonymousTasks">
+  {{#if currentUser}}
+    {{> myTasks}}
+  {{else}}
+    {{> anonymousTasksActual }}
+  {{/if}}
+</template>
+
+<template name="anonymousTasksActual">
+  <ul class="list-group js-userTasks-list">
+    {{#each taskAndDetail in getTopTasks}}
+      <li class="list-group-item" style="border: none">
+        {{> UserTask context=taskAndDetail buttonsTemplate="noTaskButtons"}}
+      </li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="noTaskButtons">
+</template>
