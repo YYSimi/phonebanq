@@ -10,13 +10,18 @@
   <p> Welcome to Phonebanq.  Please create an account and then update your settings to reflect your current location.  If you log-in using facebook, we'll automatically fill that in for you and send you once daily reminders when we send out new calls to action.  (TODO:  Let you customize how often we send those)</p>
   <p> Without an account, you can browse our most important calls to action.  Log-in so that we can provide information local to your location (e.g. who your senators/representatives are, as well as local events that you may be interested in) </p>
   <hr />
-  <ul class="list-group js-userTasks-list">
-    {{#each taskAndDetail in getTopTasks}}
-      <li class="list-group-item" style="border: none">
-        {{> UserTask context=taskAndDetail buttonsTemplate="noTaskButtons"}}
-      </li>
-    {{/each}}
-  </ul>
+  {{#if Template.subscriptionsReady}}
+    <ul class="list-group js-userTasks-list">
+      {{#each taskAndDetail in getTopTasks}}
+        <li class="list-group-item" style="border: none">
+          {{> UserTask context=taskAndDetail buttonsTemplate="noTaskButtons"}}
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    {{> loader}}
+  {{/if}}
+
 </template>
 
 <template name="noTaskButtons">
