@@ -41,7 +41,7 @@ if (Meteor.isServer) {
         return phoneTasks;
     });
     Meteor.publish('topTasks', function() {
-        var topTasks = Tasks.find({}, {sort: {priority: -1}, limit:4})
+        var topTasks = Tasks.find({is_disabled: {$ne: true}}, {sort: {priority: -1}, limit:4})
         
        //TODO:  Function-out this task-detial-list-from-task stuf. 
        var phoneTaskIds = topTasks.map(function(item) { 
