@@ -7,6 +7,7 @@ import '../ui/userXpWidgets.js'
 import '../ui/userSettings.js'
 
 import '../ui/tasks/completedTasks.js'
+import '../ui/tasks/anonymousTasks.js'
 import '../ui/tasks/myTasks.js'
 import '../ui/tasks/newTask.js'
 import '../ui/tasks/tasksAdmin.js'

@@ -40,6 +40,18 @@ if (Meteor.isServer) {
 
         return phoneTasks;
     });
+    Meteor.publish('topTasks', function() {
+        var topTasks = Tasks.find() //TODO:  Sort tasks by priority and limit to top $n$ once you have a web connection again.
+        
+       //TODO:  Function-out this task-detial-list-from-task stuf. 
+       var phoneTaskIds = topTasks.map(function(item) { 
+            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
+            else { return null; }
+        } ).filter( function (elt) {return elt != null } );
+        var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
+
+        return [topTasks, phoneTasks];
+    })
 }
 
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
