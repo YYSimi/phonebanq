@@ -18,9 +18,11 @@
             </li>
           {{/if}}
         </ul>
+        {{#if currentUser}}
         <div class="navbar-text navbar-right">
           {{> loginButtons}}
         </div>
+        {{/if}}
       </div>
     </div>
   </nav>

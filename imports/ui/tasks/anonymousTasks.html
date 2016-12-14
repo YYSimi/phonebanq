@@ -35,14 +35,67 @@
 
 <template name="createAccount">
   <div class="well well-sm">
-    <p> Create an account </p>
-    <p> TODO:  Implement account creation here.  Account creation can be done via the "signin" button at the top right for the moment. </p>
+    {{> loginButtons}}
+    <br/>
+    <br/>
+    <small class="text-muted"> TODO:  Implement account creation here.  Account creation can be done via the "signin" button above for the moment. </small>
   </div>
 </template>
 
 <template name="provideLocation">
   <div class="well well-sm">
     <p> Tell us where you are </p>
-    <p> TODO:  Implement geolocation here.  Geolocate by logging in for now.</p>
+    {{> setLocation}}
+    <br/>
+    <small class="text-muted"> TODO:  Implement geolocation by city/state.  Zip doesn't always work.</small>
+  </div>
+</template>
+
+<!-- TODO:  Eliminate code duplication between this and userSettings. -->
+<template name="setLocation">
+  <div class="form-group row" hidden>
+    <label for="user-city" class="col-xs-2 col-form-label"> City </label>
+    <div class="col-xs-10">
+      <input class="form-control" type="text" placeholder="Enter city" id="user-city" readonly="{{isLocationFromFacebook}}"/>
+    </div>
+  </div>
+
+  <div class="form-group row" hidden>
+    <label for="select-user-state" class="col-xs-3 col-sm-2 col-form-label"> State </label>
+    <div class="col-xs-9 col-sm-10">
+      <!-- TODO:  Enable select2 here or standardize on no-select2. -->
+      <select class="form-control" id="select-user-state" disabled="{{isLocationFromFacebook}}">
+        <option disabled value="na"> Select State </option>
+        {{> selectStates}}
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="user-zip" class="col-xs-2 col-form-label"> Zip Code </label>
+    <div class="col-xs-10">
+      <input class="form-control" type="text" placeholder="Enter zip code" id="user-zip" readonly="{{isLocationFromFacebook}}"/>
+    </div>
+  </div>
+  
+  <button type="submit" class="btn btn-primary js-location-submit"> Submit </button>
+</template>
+
+<!-- TODO:  Put this someplace better. Finish implementation.-->
+<template name="loginPane">
+  <div id="login-buttons">
+    <div class="login-text-and-button">
+      <div class="login-button single-login-button " id="login-buttons-facebook">
+        <div class="login-image" id="login-buttons-image-facebook"></div>
+        <span id="sign-in-facebook" class="text-besides-image sign-in-text-facebook">Sign in with Facebook</span>
+      </div>
+      <br>
+    </div>
+    <div class="login-text-and-button">
+      <div class="login-button single-login-button " id="login-buttons-google">
+        <div class="login-image" id="login-buttons-image-google"></div>
+        <span id="sign-in-google" class="text-besides-image sign-in-text-google">Sign in with Google</span> 
+      </div>
+    </div>
   </div>
 </template>

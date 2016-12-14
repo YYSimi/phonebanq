@@ -4,8 +4,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 
-import { Task, PhoneTask } from '../../api/taskClasses.js'
-import { FindTaskDetailFromTask } from '../../../lib/common.js'
+import { FindTaskDetailFromTask, getCongressionalInfoByZip } from '../../../lib/common.js'
 
 import './anonymousTasks.html'
 
@@ -32,4 +31,26 @@ Template.anonymousTasksActual.helpers({
         return retval;
 
     }
+})
+
+Template.setLocation.events({
+    'click .js-location-submit'() {
+        var zip = $('#user-zip').val();
+        console.log("zip code is " + zip);
+        if (zip) {
+            getCongressionalInfoByZip(zip, function(error, congresspeople) {
+                if (error) {
+                    console.log(error);
+                }
+                else {
+                    Session.set("congresspeople", congresspeople);
+                }
+            })
+        }
+    }
+})
+
+Template.setLocation.onRendered(function () {
+    //TODO:  Enable select2 on this dropdown.
+//    $("#select-user-state").select2({placeholder: 'Select State'});
 })
