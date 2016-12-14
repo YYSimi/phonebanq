@@ -156,7 +156,6 @@ Meteor.startup(() => {
 Accounts.onLogin(function(loginAttempt) {
     var loginSource = "local";
     if (!loginAttempt.user) { return; }
-    UpdateCongressionalInfo(loginAttempt.user);
 
     var services = loginAttempt.user.services;
 
@@ -167,9 +166,11 @@ Accounts.onLogin(function(loginAttempt) {
         locationDataSource = loginAttempt.user.profile.locationDataSource
         if (!locationDataSource || locationDataSource == "" || locationDataSource == "facebook") {
             PopulateLocationFromFacebook(services.facebook.accessToken);
-            UpdateCongressionalInfo(loginAttempt.user);
         }
     }
+
+    UpdateCongressionalInfo(loginAttempt.user);
+
 
     if (!loginAttempt.user.profile || !loginAttempt.user.profile.fHasLoggedInBefore) {
         OnFirstLogin(loginAttempt.user._id);

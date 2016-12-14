@@ -9,6 +9,11 @@
 <template name="anonymousTasksActual">
   <p> Welcome to Phonebanq.  Please create an account and then update your settings to reflect your current location.  If you log-in using facebook, we'll automatically fill that in for you and send you once daily reminders when we send out new calls to action.  (TODO:  Let you customize how often we send those)</p>
   <p> Without an account, you can browse our most important calls to action.  Log-in so that we can provide information local to your location (e.g. who your senators/representatives are, as well as local events that you may be interested in) </p>
+  <div class="row">
+    <div class="col-xs-5"> {{> createAccount}} </div>
+    <div class="col-xs-2"> <p class="text-center"> -or- </p> </div>
+    <div class="col-xs-5"> {{> provideLocation}} </div>
+  </div>
   <hr />
   {{#if Template.subscriptionsReady}}
     <ul class="list-group js-userTasks-list">
@@ -26,4 +31,18 @@
 </template>
 
 <template name="noTaskButtons">
+</template>
+
+<template name="createAccount">
+  <div class="well well-sm">
+    <p> Create an account </p>
+    <p> TODO:  Implement account creation here.  Account creation can be done via the "signin" button at the top right for the moment. </p>
+  </div>
+</template>
+
+<template name="provideLocation">
+  <div class="well well-sm">
+    <p> Tell us where you are </p>
+    <p> TODO:  Implement geolocation here.  Geolocate by logging in for now.</p>
+  </div>
 </template>
