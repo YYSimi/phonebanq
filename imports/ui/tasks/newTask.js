@@ -58,8 +58,8 @@ Template.authenticatedUserNewTask.events({
             "",
             $("#call-my-national-senators").val()  === "true",
             $("#call-my-national-representatives").val()  === "true",
-            $("#call-custom-senators").val() || [],
-            $("#call-custom-representatives").val() || [],
+            $("#call-custom-senators").val(),
+            $("#call-custom-representatives").val(),
             []
         );
 
@@ -104,8 +104,8 @@ Template.phoneNewTaskDetail.helpers({
                         "",
                         $("#call-my-national-senators").val() === "true", //val _always_ returns strings or arrays, apparently?
                         $("#call-my-national-representatives").val() === "true",
-                        $("#call-custom-senators").val() || [],
-                        $("#call-custom-representatives").val() || [],
+                        $("#call-custom-senators").val(),
+                        $("#call-custom-representatives").val(),
                         [])
             }
         }

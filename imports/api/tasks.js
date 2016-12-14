@@ -41,7 +41,7 @@ if (Meteor.isServer) {
         return phoneTasks;
     });
     Meteor.publish('topTasks', function() {
-        var topTasks = Tasks.find() //TODO:  Sort tasks by priority and limit to top $n$ once you have a web connection again.
+        var topTasks = Tasks.find({}, {sort: {priority: -1}, limit:4})
         
        //TODO:  Function-out this task-detial-list-from-task stuf. 
        var phoneTaskIds = topTasks.map(function(item) { 
