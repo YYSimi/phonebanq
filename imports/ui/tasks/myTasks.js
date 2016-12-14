@@ -37,7 +37,10 @@ Template.myTasks.helpers({
 
 Template.UserTask.helpers({
     timeRemaining() {
-        return TimeDeltaToPrettyString(new Date(), this.userTask.lasts_until);
+        return TimeDeltaToPrettyString(new Date(), this.context.userTask.lasts_until);
+    },
+    taskButtonsTemplateName() {
+        return this.buttonsTemplate;
     }
 })
 

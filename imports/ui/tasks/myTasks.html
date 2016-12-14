@@ -15,7 +15,7 @@
   <ul class="list-group js-userTasks-list">
   {{#each userTask in this}}
     <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
-      {{> UserTask userTask}}
+      {{> UserTask context=userTask buttonsTemplate="ActiveTaskButtons"}}
     </li>
   {{/each}}
   </ul>
@@ -24,19 +24,23 @@
 <template name="UserTask">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <span class="pull-right">
-        <button class="btn btn-success js-task-success"> Mark as Complete </button>
-        <button class="btn btn-warning js-task-hide"> Not interested right now </button>
-        <button class="btn btn-danger js-task-hideForever"> Never show again </button>
-      </span>
-      <h4> {{task.tiny_description}} </h4>
+      {{> Template.dynamic template=taskButtonsTemplateName}}
+      <h4> {{context.task.tiny_description}} </h4>
     </div>
     <div class="panel-body">
-      {{> UserTaskDetail }}
+      {{> UserTaskDetail context}}
       <hr/>
-      <p> Expires in {{timeRemaining}} </p>
+      <p> Expires in {{timeRemaining context}} </p>
     </div>
   </div>
+</template>
+
+<template name="ActiveTaskButtons">
+  <span class="pull-right">
+    <button class="btn btn-success js-task-success"> Mark as Complete </button>
+    <button class="btn btn-warning js-task-hide"> Not interested right now </button>
+    <button class="btn btn-danger js-task-hideForever"> Never show again </button>
+  </span>
 </template>
 
 <template name="UserTaskDetail">
