@@ -36,6 +36,9 @@ Template.myTasks.helpers({
 });
 
 Template.UserTask.helpers({
+    hasTimeRemaining() {
+      return this.context && this.context.userTask && this.context.userTask.lasts_until ? true : false;
+    },
     timeRemaining() {
         return TimeDeltaToPrettyString(new Date(), this.context.userTask.lasts_until);
     },
@@ -44,7 +47,7 @@ Template.UserTask.helpers({
     }
 })
 
-Template.UserTask.events({
+Template.ActiveTaskButtons.events({
     'click .js-task-success'() {
         
         //TODO:  re-enable animations.  They're not working properly at the moment.

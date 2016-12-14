@@ -48,7 +48,7 @@ Template.authenticatedTasksAdmin.helpers({
     }
 })
 
-Template.authenticatedTasksAdmin.events({
+Template.manageTaskButtons.events({
     'click .js-task-disable'(evt) {
         Meteor.call('tasks.disableTask', this.task._id);
         return false;

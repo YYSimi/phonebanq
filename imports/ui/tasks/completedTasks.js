@@ -36,7 +36,7 @@ Template.completedTasks.helpers({
     }
 });
 
-Template.authenticatedUserCompletedTasks.events({
+Template.completedTaskButtons.events({
     'click .js-task-unsuccess'() {
         
         //TODO:  re-enable animations.  They're not working properly at the moment.

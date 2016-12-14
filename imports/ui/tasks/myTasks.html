@@ -24,13 +24,15 @@
 <template name="UserTask">
   <div class="panel panel-default">
     <div class="panel-heading">
-      {{> Template.dynamic template=taskButtonsTemplateName}}
+      {{> Template.dynamic template=taskButtonsTemplateName data=context}}
       <h4> {{context.task.tiny_description}} </h4>
     </div>
     <div class="panel-body">
       {{> UserTaskDetail context}}
       <hr/>
-      <p> Expires in {{timeRemaining context}} </p>
+      {{#if hasTimeRemaining}}
+        <p> Expires in {{timeRemaining context}} </p>
+      {{/if}}
     </div>
   </div>
 </template>
