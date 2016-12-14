@@ -29,8 +29,8 @@
     </div>
     <div class="panel-body">
       {{> UserTaskDetail context}}
-      <hr/>
       {{#if hasTimeRemaining}}
+      <hr/>
         <p> Expires in {{timeRemaining context}} </p>
       {{/if}}
     </div>
