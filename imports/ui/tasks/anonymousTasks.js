@@ -38,14 +38,17 @@ Template.setLocation.events({
         var zip = $('#user-zip').val();
         console.log("zip code is " + zip);
         if (zip) {
-            getCongressionalInfoByZip(zip, function(error, congresspeople) {
-                if (error) {
-                    console.log(error);
+            Meteor.call('util.getCongressionalInfoByZip',
+                zip,
+                function(err, result) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        Session.set("congresspeople", result);
+                    }
                 }
-                else {
-                    Session.set("congresspeople", congresspeople);
-                }
-            })
+            );
         }
     }
 })

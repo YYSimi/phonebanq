@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo } from '../../lib/common.js'
+import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo, getCongressionalInfoByZip } from '../../lib/common.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
@@ -98,5 +98,12 @@ Meteor.methods({
                 PopulateLocationFromFacebook(user.services.facebook.accessToken);
             }
         }
+    },
+    //TODO:  Move this elsewhere.  Make sure this is the right way to avoid CORS.
+    'util.getCongressionalInfoByZip'(zipCode){
+        check(zipCode, String);
+        var congInfoSync = Meteor.wrapAsync(getCongressionalInfoByZip, zipCode)
+        var result = congInfoSync(zipCode);
+        return result;
     }
 });
