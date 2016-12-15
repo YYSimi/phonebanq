@@ -45,10 +45,10 @@ Template.authenticatedUserNewTask.events({
         var taskType = currentTaskType.get();
 
         // TODO:  This is super janky!  Structure this better!
-        if ($("#task-instructions")) {
+        if ($("#task-instructions")[0]) {
             $("#task-instructions").val(JSON.stringify(quillInstructions.getContents()))
         }
-        if ($("#task-notes")) {
+        if ($("#task-notes")[0]) {
             $("#task-notes").val(JSON.stringify(quillNotes.getContents()))
         }
 
