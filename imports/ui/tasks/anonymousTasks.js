@@ -14,7 +14,7 @@ Template.anonymousTasksActual.onCreated(function () {
 
 Template.anonymousTasksActual.helpers({
     getTopTasks() {
-        var tasks = Tasks.find();
+        var tasks = Tasks.find({}, {sort: {priority: -1}});
 
         var retval = tasks.map(task => {
             var taskDetail = FindTaskDetailFromTask(task)
