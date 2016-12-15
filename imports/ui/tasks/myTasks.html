@@ -49,4 +49,7 @@
   {{#if equals task.task_type "phone"}}
     {{> PhoneTask taskDetail}}
   {{/if}}
+  {{#if equals task.task_type "freeform"}}
+    {{> FreeformTask taskDetail}}
+  {{/if}}
 </template>

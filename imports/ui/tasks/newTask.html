@@ -51,8 +51,17 @@
   </form>
 </template>
 
-<template name="taskDetail">
-
+<template name="freeformNewTaskDetail">
+  <div class="form-group">
+    <label for="task-instructions"> Task Instructions </label>
+    <textarea class="form-control" id="task-instructions" rows="6"></textarea>
+    <small id="task-instructions-help" class="form-text text-muted"> Let people know what you'd like them to do. </small>
+  </div>
+  <div class="form-group">
+    <label for="task-notes"> Notes </label>
+    <textarea class="form-control" id="task-notes" rows="6"></textarea>
+    <small id="task-notes-help" class="form-text text-muted"> If there's anything else people should know about, put it here.  </small>
+  </div>
 </template>
 
 <template name="phoneNewTaskDetail">
@@ -99,6 +108,8 @@
     <select id="call-custom-representatives" multiple="multiple" class="select2 col-xs-6"> </select>
     <small id="call-custom-representatives-help" class="form-text text-muted col-xs-3"> Enter names of representatives to call </small>
   </div>
+
+  <!-- TODO:  Make this work for non-phone tasks -->
   {{#if fShouldRenderTaskPreview}}
   <label for="phone-task-preview"> Task preview: </label>
 

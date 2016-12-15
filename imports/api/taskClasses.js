@@ -2,8 +2,9 @@ PBissuesEnum = {
 
 }
 
-PBTaskTypesEnum = {
-    phone: "phone"
+export var PBTaskTypesEnum = {
+    phone: "phone",
+    freeform: "freeform"
 }
 
 export function Task(tiny_description, brief_description, start_date, end_date,
@@ -34,4 +35,9 @@ export function PhoneTask(general_script, supporter_script, opposition_script, n
     this.call_custom_senators = call_custom_senators || [];
     this.call_custom_representatives = call_custom_representatives || [];
     this.call_custom = call_custom || [];
+}
+
+export function FreeformTask(instructions, notes) {
+    this.instructions = instructions;
+    this.notes = notes;
 }

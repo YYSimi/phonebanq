@@ -3,7 +3,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { Task, PhoneTask } from '../../api/taskClasses.js'
+import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js'
 
 import './newTask.html'
 
@@ -39,33 +39,48 @@ Template.authenticatedUserNewTask.onRendered(function() {
 Template.authenticatedUserNewTask.events({
     'submit form'(evt) {
         evt.preventDefault();
+        var taskType = currentTaskType.get();
+
         var task = new Task(
             $("#tiny-description").val(),
             $("#brief-description").val(),
             new Date(), // TODO: handle start/end dates properly.
             new Date(),
-            PBTaskTypesEnum.phone,
+            taskType,
             [],
             parseInt($("#task-priority").val()),
             1   // TODO:  Pipe XP Values in.
         );
 
-        // TODO:  Make this work for more than just phone taks.
-        var phoneTask = new PhoneTask(
-            $("#general-script").val(),
-            $("#supporter-script").val(),
-            $("#opposition-script").val(),
-            "",
-            $("#call-my-national-senators").val()  === "true",
-            $("#call-my-national-representatives").val()  === "true",
-            $("#call-custom-senators").val(),
-            $("#call-custom-representatives").val(),
-            []
-        );
+        var taskDetail = {};
+
+        switch(taskType) {
+            case (PBTaskTypesEnum.phone):
+                taskDetail = new PhoneTask(
+                    $("#general-script").val(),
+                    $("#supporter-script").val(),
+                    $("#opposition-script").val(),
+                    "",
+                    $("#call-my-national-senators").val()  === "true",
+                    $("#call-my-national-representatives").val()  === "true",
+                    $("#call-custom-senators").val(),
+                    $("#call-custom-representatives").val(),
+                    []
+                );
+                break;
+            case (PBTaskTypesEnum.freeform):
+                taskDetail = new FreeformTask(
+                    $("#task-instructions").val(),
+                    $("#task-notes").val()
+                );
+                break;
+            default:
+                throw "invalid task type"
+        }
 
         console.log(task);
 
-        Meteor.call('tasks.registerNewTask', task, phoneTask);
+        Meteor.call('tasks.registerNewTask', task, taskDetail);
         return false;
     },
 
@@ -84,8 +99,11 @@ Template.phoneNewTaskDetail.helpers({
     },
     taskPreviewInfo() {
         if (nPreviewClicks.get() != 0) {
-            return {
-                task: new Task(
+            var task = {};
+            var taskDetail = {};
+            var taskType = currentTaskType.get();
+
+            task = new Task(
                     $("#tiny-description").val(),
                     $("#brief-description").val(),
                     new Date(), // TODO: handle start/end dates properly.
@@ -94,19 +112,35 @@ Template.phoneNewTaskDetail.helpers({
                     [],
                     parseInt($("#task-priority").val()),
                     1   // TODO:  Pipe XP Values in.
-                ),
-                taskDetail: 
-                    // TODO:  Make this work for more than just phone taks.
-                    new PhoneTask(
+                )
+
+            switch(taskType) {
+                case (PBTaskTypesEnum.phone):
+                    taskDetail = new PhoneTask(
                         $("#general-script").val(),
                         $("#supporter-script").val(),
                         $("#opposition-script").val(),
                         "",
-                        $("#call-my-national-senators").val() === "true", //val _always_ returns strings or arrays, apparently?
-                        $("#call-my-national-representatives").val() === "true",
+                        $("#call-my-national-senators").val()  === "true",
+                        $("#call-my-national-representatives").val()  === "true",
                         $("#call-custom-senators").val(),
                         $("#call-custom-representatives").val(),
-                        [])
+                        []
+                    );
+                    break;
+                case (PBTaskTypesEnum.freeform):
+                    taskDetail = new FreeformTask(
+                        $("#task-instructions").val(),
+                        $("#task-notes").val()
+                    );
+                    break;
+                default:
+                    throw "invalid task type"
+            }
+            
+            return {
+                task: task,
+                taskDetail: taskDetail
             }
         }
     }

@@ -12,6 +12,7 @@ import '../ui/tasks/myTasks.js'
 import '../ui/tasks/newTask.js'
 import '../ui/tasks/tasksAdmin.js'
 import '../ui/tasks/phoneTask.js'
+import '../ui/tasks/freeformTask.js'
 
 Router.configure({
    layoutTemplate: 'main' 
