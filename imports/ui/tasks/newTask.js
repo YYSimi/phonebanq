@@ -11,6 +11,9 @@ import './newTask.html'
 var nPreviewClicks = new ReactiveVar(0);
 var currentTaskType = new ReactiveVar("");
 
+var quillInstructions;
+var quillNotes;
+
 Template.newTask.helpers({
     fHasNewTaskPermissions() {
         var user = Meteor.user();
@@ -41,6 +44,14 @@ Template.authenticatedUserNewTask.events({
         evt.preventDefault();
         var taskType = currentTaskType.get();
 
+        // TODO:  This is super janky!  Structure this better!
+        if ($("#task-instructions")) {
+            $("#task-instructions").val(JSON.stringify(quillInstructions.getContents()))
+        }
+        if ($("#task-notes")) {
+            $("#task-notes").val(JSON.stringify(quillNotes.getContents()))
+        }
+
         var task = new Task(
             $("#tiny-description").val(),
             $("#brief-description").val(),
@@ -60,7 +71,7 @@ Template.authenticatedUserNewTask.events({
                     $("#general-script").val(),
                     $("#supporter-script").val(),
                     $("#opposition-script").val(),
-                    "",
+                    $("#task-notes").val(),
                     $("#call-my-national-senators").val()  === "true",
                     $("#call-my-national-representatives").val()  === "true",
                     $("#call-custom-senators").val(),
@@ -79,6 +90,7 @@ Template.authenticatedUserNewTask.events({
         }
 
         console.log(task);
+        console.log(taskDetail);
 
         Meteor.call('tasks.registerNewTask', task, taskDetail);
         return false;
@@ -155,4 +167,18 @@ Template.phoneNewTaskDetail.onRendered(function() {
     Representatives.find({}, {sort: {first_name:1} }).fetch().forEach( (rep) => {
         $("#call-custom-representatives").append("<option value=" + rep.bioguide_id + ">" + rep.first_name + " " + rep.last_name + " </option>");
     })
+
+    quillNotes = new Quill('#task-notes', {
+        theme: 'snow'
+    })
+})
+
+Template.freeformNewTaskDetail.onRendered(function() {
+    quillNotes = new Quill('#task-notes', {
+        theme: 'snow'
+    })
+
+    quillInstructions = new Quill('#task-instructions', {
+        theme: 'snow'
+    });
 })

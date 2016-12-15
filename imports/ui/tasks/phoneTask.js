@@ -6,6 +6,22 @@ Template.PhoneTask.onCreated(function () {
     Meteor.subscribe('representatives');
 });
 
+Template.PhoneTask.onRendered(function() {
+    // TODO:  This seems janky.  Make sure this pattern is correct.
+    if (this.find('.task-notes-display')) {
+        var quill = new Quill(this.find('.task-notes-display'), {
+            theme: 'snow',
+            readOnly: true,
+            modules: {
+                toolbar: false
+            }
+        });        
+        var delta = JSON.parse(this.data.notes);
+
+        quill.setContents(delta);
+    }
+})
+
 Template.PhoneTask.helpers({
     findCustomSenators() {
         if (this.call_custom_senators) {

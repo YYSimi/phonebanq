@@ -1,4 +1,8 @@
 <template name="PhoneTask">
+  {{#if notes}}
+    <b> What's going on: </b>
+    <div class="task-notes-display"></div>
+  {{/if}}
   {{#if general_script}}
     <b>Sample call script:</b><br/>
     <p>{{general_script}}</p>
