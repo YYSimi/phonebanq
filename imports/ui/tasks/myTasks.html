@@ -21,6 +21,7 @@
   </ul>
 </template>
 
+<!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
 <template name="UserTask">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -29,10 +30,11 @@
     </div>
     <div class="panel-body">
       {{> UserTaskDetail context}}
-      {{#if hasTimeRemaining}}
       <hr/>
+      {{#if hasTimeRemaining}}
         <p> Expires in {{timeRemaining context}} </p>
       {{/if}}
+        <p> Completed by {{context.task.statistics.completion_count}} {{userPluralizedString}} so far.</p>
     </div>
   </div>
 </template>

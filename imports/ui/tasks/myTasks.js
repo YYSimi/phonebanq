@@ -44,6 +44,10 @@ Template.UserTask.helpers({
     },
     taskButtonsTemplateName() {
         return this.buttonsTemplate;
+    },
+    userPluralizedString() {
+        var bHasExactlyOneCompletion = this.context && this.context.task && this.context.task.statistics && (this.context.task.statistics.completion_count === 1)
+        return bHasExactlyOneCompletion ? "user" : "users";
     }
 })
 
