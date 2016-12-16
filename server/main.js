@@ -29,9 +29,9 @@ function RunMaintenanceTasks(fRunExpensiveTasks) {
     }
 
     // Drop the priority of all tasks by 1
-    // TODO:  Figure out how to enforce the constraint of priority \in [0, 5].
+    // TODO:  Figure out how to enforce the constraint of priority \in [1, 5].
     Tasks.find().forEach(function(task) {
-        if (task.priority > 0) {
+        if (task.priority > 1) {
             Tasks.update(task._id, {$set : {priority: task.priority - 1} })
         }
     })    
@@ -129,7 +129,8 @@ Meteor.startup(() => {
         }
     )
 
-    FixActiveUserTaskCount()
+    FixActiveUserTaskCount();
+    FixTaskCompletionCount();
     UpdateAllUserTasks();
     var fnSetMaintenanceTimer = function () {
         var midnight = new Date();
@@ -199,6 +200,18 @@ function FixActiveUserTaskCount() {
             user._id,
             { $set: {"statistics.activeTasks": nActiveTasks} } 
         )
+    })
+}
+
+// Another maintenance script, this time to make sure task completion counts are correct
+function FixTaskCompletionCount() {
+    // Set all completion counters to 0
+    Tasks.find().forEach(function(task) {
+        Tasks.update(task._id, {$set: {"statistics.completion_count": 0} })   
+    });
+    // Increment appropriate completion counter by 1 for each completed user task
+    UserTasks.find({is_completed: true}).forEach(function(userTask) {
+        Tasks.update(new Mongo.ObjectID(userTask.task_id), {$inc: {"statistics.completion_count": 1}})
     })
 }
 

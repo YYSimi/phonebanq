@@ -211,6 +211,7 @@ Meteor.methods({
 
         if (userTask.is_active) {
             Meteor.users.update(userId, {$inc: {"statistics.activeTasks": -1} });
+            Tasks.update(task._id, {$inc: {"statistics.completion_count": 1}})
         }
 
     },
@@ -272,12 +273,16 @@ Meteor.methods({
             var newXp = currentXp - taskXp;
             Meteor.users.update(userId, {$set : {"profile.progression.xp" : newXp}})
 
-           if (!userTask.is_active) {
+            // TODO:  All of this should really be transactional.
+            if (!userTask.is_active) {
+                if (userTask.is_completed) {
+                    Tasks.update(task._id, {$inc: {"statistics.completion_count": -1}})
+                }
+                Meteor.users.update(userId, {$inc: {"statistics.activeTasks": 1} });
                 UserTasks.update(
                     { _id: userTaskId },
                     { $set: { "is_active" : true, "is_completed": false} }
                 );
-                Meteor.users.update(userId, {$inc: {"statistics.activeTasks": 1} });
             }
 
         }
