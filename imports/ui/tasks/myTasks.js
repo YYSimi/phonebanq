@@ -5,7 +5,6 @@ import { Meteor } from 'meteor/meteor';
 import { FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
 
 import './myTasks.html'
-import '../../api/tasks.js'
 
 Template.myTasks.onCreated(function () {
     this.autorun(() => {

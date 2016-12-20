@@ -3,6 +3,7 @@ import { HTTP } from 'meteor/http';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
+import '../imports/api/util.js';
 import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js'
 

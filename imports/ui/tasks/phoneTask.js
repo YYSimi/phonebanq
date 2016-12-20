@@ -1,5 +1,4 @@
 import './phoneTask.html'
-import '../../api/tasks.js'
 
 Template.PhoneTask.onCreated(function () {
     Meteor.subscribe('senators');

@@ -4,7 +4,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 
-import { FindTaskDetailFromTask, getCongressionalInfoByZip } from '../../../lib/common.js'
+import { FindTaskDetailFromTask } from '../../../lib/common.js'
 
 import './anonymousTasks.html'
 

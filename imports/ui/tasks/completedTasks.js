@@ -6,7 +6,6 @@ import { FindTaskDetailFromTask, FindTaskFromUserTask } from '../../../lib/commo
 
 
 import './completedTasks.html'
-import '../../api/tasks.js'
 
 Template.completedTasks.onCreated(function () {
     this.autorun(() => {

@@ -1,5 +1,4 @@
 import './freeformTask.html'
-import '../../api/tasks.js'
 
 Template.FreeformTask.onRendered(function() {
     var quill = new Quill(this.find('.instructions'), {
