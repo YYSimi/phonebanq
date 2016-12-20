@@ -36,8 +36,28 @@ Template.anonymousTasksActual.helpers({
 Template.setLocation.events({
     'click .js-location-submit'() {
         var zip = $('#user-zip').val();
+        var city = $('#user-city').val();
+        var state = $('#user-state').val();
+        var street = $('#user-street').val();
         console.log("zip code is " + zip);
-        if (zip) {
+        if (street && city && state) {
+            // TODO:  Implement street-level geolocation
+        }
+        else if (city && state) {
+            Meteor.call('util.getCongressionalInfoByCity',
+                city,
+                state,
+                function(err, result) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        Session.set("congresspeople", result);
+                    }
+                }
+            );
+        }
+        else if (zip) {
             Meteor.call('util.getCongressionalInfoByZip',
                 zip,
                 function(err, result) {
@@ -51,9 +71,4 @@ Template.setLocation.events({
             );
         }
     }
-})
-
-Template.setLocation.onRendered(function () {
-    //TODO:  Enable select2 on this dropdown.
-//    $("#select-user-state").select2({placeholder: 'Select State'});
 })

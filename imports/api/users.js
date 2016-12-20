@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo, getCongressionalInfoByZip } from '../../lib/common.js'
+import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo, getCongressionalInfoByZip, getCongressionalInfoByLatLong, findLatLongFromCityState } from '../../lib/common.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
@@ -102,8 +102,21 @@ Meteor.methods({
     //TODO:  Move this elsewhere.  Make sure this is the right way to avoid CORS.
     'util.getCongressionalInfoByZip'(zipCode){
         check(zipCode, String);
-        var congInfoSync = Meteor.wrapAsync(getCongressionalInfoByZip, zipCode)
+        var congInfoSync = Meteor.wrapAsync(getCongressionalInfoByZip)
         var result = congInfoSync(zipCode);
         return result;
+    },
+    'util.getCongressionalInfoByCity'(city, state){
+        check(city, String);
+        check(state, String);
+
+        var latLongSync = Meteor.wrapAsync(findLatLongFromCityState)
+        var loc = latLongSync(city, state);
+        var congInfoSync = Meteor.wrapAsync(getCongressionalInfoByLatLong, loc.latitude, loc.longitude);
+        var result = congInfoSync(loc.latitude, loc.longitude); // TODO:  Looks like argument duplication to me.  Take a look at this.
+        return result;
+    },
+    'util.getCongressionalInfoByAddress'(street, city, state){
+        throw "Not Yet Implemented";
     }
 });

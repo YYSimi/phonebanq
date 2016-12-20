@@ -247,7 +247,9 @@ function NotifyFacebookUser(user) {
         console.log(user);
         userFbInfo = user.services.facebook;
 
-        var latestUserTaskCursor = UserTasks.find({user_id: user._id, is_active:true}, {sort: {given_on : -1} });
+        // TODO:  This isn't always displaying the "most important" task given today.
+        var latestUserTaskCursor = UserTasks.find({user_id: user._id, is_active:true}, {sort: {given_on : -1, priority:-1,} });
+        
         if (latestUserTaskCursor.count() > 0) {
             var latestUserTask = latestUserTaskCursor.fetch()[0];
             latestTask = Tasks.findOne(new Mongo.ObjectID(latestUserTask.task_id));
