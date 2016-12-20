@@ -5,6 +5,7 @@ import '../imports/api/users.js';
 import '../imports/api/tasks.js';
 import '../imports/api/util.js';
 import '../imports/api/userTasks.js';
+import '../imports/api/userGroups.js';
 
 import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js';

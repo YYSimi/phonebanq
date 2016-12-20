@@ -89,7 +89,6 @@ Meteor.methods({
     // TODO:  Data validation!
     // TODO:  _Definitely_ make task DB management a different API/class than userTask management.
     'tasks.registerNewTask'(task, taskDetail){
-        console.log(task);
         // TODO:  If constructor-based matching after Meteor.call starts working in future versions of meteor, use that instead.
         check(task,
         {

@@ -8,7 +8,7 @@ export var PBTaskTypesEnum = {
 }
 
 export function Task(tiny_description, brief_description, start_date, end_date,
-              task_type, issues, priority, xp_value) {
+              task_type, issues, priority, xp_value, group) {
     this.tiny_description = tiny_description || "";
     this.brief_description = brief_description || "";
     this.start_date = start_date || new Date();
@@ -21,6 +21,7 @@ export function Task(tiny_description, brief_description, start_date, end_date,
     this.issues = issues || [];
     this.priority = priority || 3;
     this.xp_value = xp_value || 1;
+    this.group = group || 0;
 }
 
 export function PhoneTask(general_script, supporter_script, opposition_script, notes,
