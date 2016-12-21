@@ -159,25 +159,24 @@ Meteor.startup(() => {
 });
 
 Accounts.onCreateUser(function (options, user) {
-    if (!user.username) {
-        username = generateUsername(user);
-        Meteor.users.update(user._id, {$set: {username: username}})
-    }
-})
+    if (!user.profile) {user.profile = {};}
+    user.profile.loginSource = findLoginSource(user);
+    user.username = generateUsername(user);
+    return user;
+});
 
 Accounts.onLogin(function(loginAttempt) {
-    var loginSource = "local";
     if (!loginAttempt.user) { return; }
+    var loginSource = findLoginSource(loginAttempt.user);
 
     var user = loginAttempt.user;
     var services = loginAttempt.user.services;
 
     // Populate the User's location data
-    if(services && services.facebook) {
-        loginSource = "facebook";
+    if(loginSource === "facebook") {
         // TODO:  check for permissions
         locationDataSource = loginAttempt.user.profile.locationDataSource
-        if (!locationDataSource || locationDataSource == "" || locationDataSource == "facebook") {
+        if (!locationDataSource || locationDataSource === "" || locationDataSource === "facebook") {
             PopulateLocationFromFacebook(services.facebook.accessToken);
         }
     }
@@ -191,7 +190,7 @@ Accounts.onLogin(function(loginAttempt) {
     UpdateCongressionalInfo(loginAttempt.user);
 
     if (!loginAttempt.user.profile || !loginAttempt.user.profile.fHasLoggedInBefore) {
-        OnFirstLogin(loginAttempt.user._id);
+        OnFirstLogin(loginAttempt.user);
         Meteor.users.update(
             { _id: loginAttempt.user._id },
             { $set: { "profile.fHasLoggedInBefore" : true } })
@@ -203,13 +202,21 @@ Accounts.onLogin(function(loginAttempt) {
     Meteor.users.update(loginAttempt.user._id, { $set: {"profile.loginSource": loginSource}} )
 })
 
+function findLoginSource(user) {
+    var retval = "local"
+    if (user.services && user.services.facebook) {
+        retval = "facebook";
+    }
+    return retval;
+}
+
 function generateUsername(user) {
     var loginSource = user.profile.loginSource;
     var username = "";
 
-    // User already has a name.  Just return it.
+    // User already has a name.  Just make it lowercase and return.
     if (user.username) {
-        return username;
+        return user.username.toLowerCase();
     }
 
     // Need to generate a name for the user, since they're using an external login source.
@@ -290,9 +297,9 @@ function UpdateAllUserTasks(){
     })
 }
 
-function OnFirstLogin(userId) {
+function OnFirstLogin(user) {
     console.log("running OnFirstLogin");
-    var nNewTasksCreated = PopulateUserTasks(userId);
+    var nNewTasksCreated = PopulateUserTasks(user._id);
     if (nNewTasksCreated > 0) {
         if (user.services && user.services.facebook) {
             NotifyFacebookUser(user);
