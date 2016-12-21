@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Match, check } from 'meteor/check';
 
 import { getCongressionalInfoByZip, getCongressionalInfoByLatLong, findLatLongFromCityState } from '../../lib/common.js'
 
