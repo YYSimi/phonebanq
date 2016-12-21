@@ -2,11 +2,11 @@
   <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="{{pathFor route='home'}}"> Phonebanq </a>
+        <a class="navbar-brand" href="{{pathFor route='home'}}"> {{> appName}} </a>
         <ul class="nav navbar-nav">
           {{#if currentUser}} <li><a href="{{pathFor route='myTasks'}}"> Today's opportunities </a></li> {{/if}}
           {{#if currentUser}} <li><a href="{{pathFor route='completedTasks'}}"> Show completed opportunities </a></li> {{/if}}
-          <li><a href="{{pathFor route='about'}}"> About Phonebanq </a></li>
+          <li><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li>
           {{#if currentUser}} <li><a href="{{pathFor route='userSettings'}}"> Settings </a></li> {{/if}}
           {{#if fHasNewTaskPermissions}}
             <li class="dropdown">
