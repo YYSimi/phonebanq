@@ -4,6 +4,7 @@ import '../ui/navigation.js'
 import '../ui/about.js'
 import '../ui/stringAssets.js'
 
+import '../ui/findUserWidgets.js'
 import '../ui/userXpWidgets.js'
 import '../ui/userSettings.js'
 
@@ -14,6 +15,8 @@ import '../ui/tasks/newTask.js'
 import '../ui/tasks/tasksAdmin.js'
 import '../ui/tasks/phoneTask.js'
 import '../ui/tasks/freeformTask.js'
+
+import '../ui/groupsAdmin.js'
 
 Router.configure({
    layoutTemplate: 'main' 
@@ -41,6 +44,10 @@ Router.route('/newTask', {
 
 Router.route('/tasksAdmin', {
     name: 'tasksAdmin'
+});
+
+Router.route('/groupsAdmin', {
+    name: 'groupsAdmin'
 });
 
 Router.route('/', {

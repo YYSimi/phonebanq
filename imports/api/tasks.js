@@ -81,6 +81,17 @@ if (Meteor.isServer) {
         var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
 
         return [topTasks, phoneTasks, freeformTasks];
+    });
+    // MAJOR TODO:  Before leaving alpha, decide who should have access to this function! 
+    Meteor.publish('findUsers', function(name) {
+        check(name, String);
+        var regexStr = '/^' + name + '/';
+        var retCursor = Meteor.users.find( {$or: [{"services.facebook.name": regexStr}, 
+                                                  {"emails.0.address": regexStr}]
+                        })
+        console.log(regexStr);
+        console.log(retCursor.fetch());
+        return;
     })
 }
 

@@ -158,10 +158,18 @@ Meteor.startup(() => {
     RunMaintenanceTasks(IsProductionMode()); 
 });
 
+Accounts.onCreateUser(function (options, user) {
+    if (!user.username) {
+        username = generateUsername(user);
+        Meteor.users.update(user._id, {$set: {username: username}})
+    }
+})
+
 Accounts.onLogin(function(loginAttempt) {
     var loginSource = "local";
     if (!loginAttempt.user) { return; }
 
+    var user = loginAttempt.user;
     var services = loginAttempt.user.services;
 
     // Populate the User's location data
@@ -174,8 +182,13 @@ Accounts.onLogin(function(loginAttempt) {
         }
     }
 
-    UpdateCongressionalInfo(loginAttempt.user);
+    // Generate a username if needed
+    // TODO:  Remove this code once we go into beta.
+    if (!user.username) {
+        Meteor.users.update(user._id, {$set: {username: generateUsername(user) } } );
+    }
 
+    UpdateCongressionalInfo(loginAttempt.user);
 
     if (!loginAttempt.user.profile || !loginAttempt.user.profile.fHasLoggedInBefore) {
         OnFirstLogin(loginAttempt.user._id);
@@ -189,6 +202,49 @@ Accounts.onLogin(function(loginAttempt) {
 
     Meteor.users.update(loginAttempt.user._id, { $set: {"profile.loginSource": loginSource}} )
 })
+
+function generateUsername(user) {
+    var loginSource = user.profile.loginSource;
+    var username = "";
+
+    // User already has a name.  Just return it.
+    if (user.username) {
+        return username;
+    }
+
+    // Need to generate a name for the user, since they're using an external login source.
+    switch (loginSource) {
+        case "facebook":
+            if (user.services && user.services.facebook && user.services.facebook.name) {
+                username = user.services.facebook.name.toLowerCase().trim().replace(" ", "");
+            }
+            else {
+                throw "Attempted to generate username for invalid facebook user"
+            }
+            console.log("FB UN: " + username);
+            break;
+        case "local":
+            if (user.emails && user.emails[0] && users.emails[0].address) {
+                username = user.emails[0].address;
+            }
+            else {
+                throw "Attempted to generate username for invalid local user"
+            }
+            console.log("local UN: " + username);
+            break;
+        default:
+            throw "Attempted to generate a username without specifying a loginsource";
+    }
+
+    count = Meteor.users.find({"profile.username": username}).count();
+    if (count === 0) {
+        return username;
+    }
+    else {
+        return username + (count + 1);
+    }
+    
+}
 
 // This function is a maintenance task for a checkin that messed up the active task count in the DB.
 // Keeping it here in case it happens again, but it A)  Should't be called anywhere in production 
