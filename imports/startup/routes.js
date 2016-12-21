@@ -4,7 +4,6 @@ import '../ui/navigation.js'
 import '../ui/about.js'
 import '../ui/stringAssets.js'
 
-import '../ui/findUserWidgets.js'
 import '../ui/userXpWidgets.js'
 import '../ui/userSettings.js'
 
