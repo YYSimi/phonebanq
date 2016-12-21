@@ -15,8 +15,6 @@ import '../ui/tasks/tasksAdmin.js'
 import '../ui/tasks/phoneTask.js'
 import '../ui/tasks/freeformTask.js'
 
-import '../ui/groupsAdmin.js'
-
 Router.configure({
    layoutTemplate: 'main' 
 });
