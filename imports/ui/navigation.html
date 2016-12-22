@@ -14,6 +14,7 @@
                 <ul class="dropdown-menu">
                   {{#if fHasNewTaskPermissions}} <li><a href="{{pathFor route='newTask'}}"> Make a new task </a></li> {{/if}}
                   {{#if fHasNewTaskPermissions}} <li><a href="{{pathFor route='tasksAdmin'}}"> Manage tasks </a></li> {{/if}}
+                  {{#if fHasManageGroupsPermissions}} <li><a href="{{pathFor route='groupsAdmin'}}"> Manage Groups </a> </li> {{/if}}
                 </ul>
             </li>
           {{/if}}

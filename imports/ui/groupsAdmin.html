@@ -1,6 +1,10 @@
 <template name="groupsAdmin">
   {{#if currentUser}}
-    {{>authenticatedGroupsAdmin}}
+    {{#if fHasManageGroupsPermissions}}
+      {{> authenticatedGroupsAdmin}}
+    {{else}}
+      {{> permissionsRequired}}
+    {{/if}}
   {{else}}
     {{> loginRequired }}
   {{/if}}
@@ -53,9 +57,15 @@
 </template>
 
 <template name="manageGroups">
-    <p> This is the manage groups template </p>
+    <ul class="list-group">
+      {{#each group in allGroups}}
+        <li class="list-group-item"> {{>groupInfo group}} </li>
+      {{/each}}
+    </ul>
 </template>
 
 <template name="groupInfo">
-
+  <div>
+    {{name}}
+  </div>
 </template>

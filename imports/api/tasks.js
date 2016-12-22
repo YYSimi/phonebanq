@@ -63,7 +63,7 @@ if (Meteor.isServer) {
         return [phoneTasks, freeformTasks];
     });
     Meteor.publish('topTasks', function() {
-        var topTasks = Tasks.find({is_disabled: {$ne: true}}, {sort: {priority: -1}, limit:4})
+        var topTasks = Tasks.find({is_disabled: {$ne: true}}, { limit:4})
         
        //TODO:  Function-out this task-detial-list-from-task stuff. 
         // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
@@ -89,9 +89,12 @@ if (Meteor.isServer) {
             return null;
         }
         var regexStr = '^' + name.toLowerCase();
-        var retCursor = Meteor.users.find( {username: {$regex: regexStr} } );
+        var retCursor = Meteor.users.find( {username: {$regex: regexStr} }, { limit: 8 } );
         return retCursor;
     });
+    Meteor.publish('userGroups', function () {
+        return UserGroups.find();
+    })
 }
 
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
