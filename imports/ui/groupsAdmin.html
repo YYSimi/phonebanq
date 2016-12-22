@@ -1,0 +1,55 @@
+<template name="groupsAdmin">
+  {{#if currentUser}}
+    {{>authenticatedGroupsAdmin}}
+  {{else}}
+    {{> loginRequired }}
+  {{/if}}
+</template>
+
+<template name="authenticatedGroupsAdmin">
+    {{> createGroup}}
+    <hr/>
+    {{> manageGroups}}
+</template>
+
+<template name="createGroup">
+  <form>
+    <div class="form-group row">
+      <label for="group-name" class="col-xs-2"> Group Name </label>
+      <div class="col-xs-10">
+        <input class="form-control" type="text" id="group-name" placeholder="Enter a group name"/>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="group-owner" class="col-xs-2"> Owner </label>
+      <div class="col-xs-10">
+        {{> selectUser}}
+        <small id="group-owner-help" class="form-text text-muted"> The username of the owner for the group.  Group owners can create and remove administrators and deputies, as well as perform admin/deputy duties. </small>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="group-owner" class="col-xs-2"> Administrators </label>
+      <div class="col-xs-10">
+        {{> selectUsers}}
+        <small id="group-owner-help" class="form-text text-muted"> The username of the administrators for the group.  Administrators can create and remove deputies, and can also manage all tasks for the group. </small>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="group-deputies" class="col-xs-2"> Deputies </label>
+      <div class="col-xs-10">
+        {{> selectUsers}}
+        <small id="group-owner-help" class="form-text text-muted"> The username of any deputies for the group.  Deputies can create tasks for the group, and can edit only tasks that they created. </small>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary js-newTask-submit"> Submit </button>
+  </form>
+</template>
+
+<template name="manageGroups">
+    <p> This is the manage groups template </p>
+</template>
+
+<template name="groupInfo">
+
+</template>
