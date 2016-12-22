@@ -83,16 +83,15 @@ if (Meteor.isServer) {
         return [topTasks, phoneTasks, freeformTasks];
     });
     // MAJOR TODO:  Before leaving alpha, decide who should have access to this function! 
-    Meteor.publish('findUsers', function(name) {
+    Meteor.publish('findUsersByRegex', function(name) {
         check(name, String);
-        var regexStr = '/^' + name + '/';
-        var retCursor = Meteor.users.find( {$or: [{"services.facebook.name": regexStr}, 
-                                                  {"emails.0.address": regexStr}]
-                        })
-        console.log(regexStr);
-        console.log(retCursor.fetch());
-        return;
-    })
+        if (name === "") {
+            return null;
+        }
+        var regexStr = '^' + name.toLowerCase();
+        var retCursor = Meteor.users.find( {username: {$regex: regexStr} } );
+        return retCursor;
+    });
 }
 
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
