@@ -15,7 +15,7 @@ Template.manageGroups.onCreated(function () {
 
 Template.manageGroups.helpers({
     allGroups() {
-        return UserGroups.find();
+        return UserGroups.find({}, {sort: {name: 1} });
     }
 });
 
@@ -35,3 +35,17 @@ Template.createGroup.events({
         return false;
     }
 });
+
+Template.manageGroups.helpers({
+    generateButtonId(group) {
+        console.log(group);
+        return "edit-group-btn-" + group._id;
+    }
+})
+
+Template.manageGroups.events({
+    'click .js-edit-group'(evt){
+        console.log("click!");
+        console.log(evt);
+    }
+})

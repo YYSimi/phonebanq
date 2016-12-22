@@ -9,7 +9,8 @@ Template.FreeformTask.onRendered(function() {
         }
     });
     
-    var delta = JSON.parse(this.data.instructions);
-
-    quill.setContents(delta);
+    if (this.data.instructions) {
+        var delta = JSON.parse(this.data.instructions);
+        quill.setContents(delta);
+    }
 })

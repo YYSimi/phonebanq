@@ -59,13 +59,17 @@
 <template name="manageGroups">
     <ul class="list-group">
       {{#each group in allGroups}}
-        <li class="list-group-item"> {{>groupInfo group}} </li>
+        <li class="list-group-item"> 
+          <button class="btn glyphicon glyphicon-pencil js-edit-group" data-toggle="tooltip" data-placement="top" title="Edit group" id="group-edit-button-{{group._id._str}}"></button>
+          <button class="btn glyphicon glyphicon-eye-open js-view-group" data-toggle="tooltip" data-placement="top" title="View group tasks" id="group-view-button-{{group._id._str}}"></button>
+          {{>groupInfo group}} 
+        </li>
       {{/each}}
     </ul>
 </template>
 
 <template name="groupInfo">
-  <div>
+  <span>
     {{name}}
-  </div>
+  </span>
 </template>

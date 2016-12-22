@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 
+import { UserGroupRankEnum } from './userGroupClasses.js'
+
 Meteor.methods({
     'userGoups.create'(userGroup){
         check(userGroup, {
@@ -10,6 +12,11 @@ Meteor.methods({
             admin_ids: [String],
             deputy_ids: [String]
         });
+
+        var length_minimum = 3
+        if (!userGroup.name || !userGroup.name.length || userGroup.name.length < length_minimum ) {
+            throw new Meteor.Error('invalid-argument', "The group name specified is missing or too short.");
+        }
 
         var user = Meteor.user();
         if (!user || !user.profile || !user.profile.permissions || 
@@ -28,7 +35,7 @@ Meteor.methods({
                 return false;
             }
             return true;
-        })
+        });
 
         userGroup.deputy_ids = userGroup.deputy_ids.filter(function(id) {
             var deputy = Meteor.users.findOne(id);
@@ -36,9 +43,23 @@ Meteor.methods({
                 return false;
             }
             return true;
-        })
+        });
 
-        UserGroups.insert(userGroup);
+        var groupId = UserGroups.insert(userGroup);
+        var ownerGroupMembership = {group_id: groupId, rank: UserGroupRankEnum.owner };
+        var adminGroupMembership = {group_id: groupId, rank: UserGroupRankEnum.admin };
+        var deputyGroupMembership = {group_id: groupId, rank: UserGroupRankEnum.deputy };
+
+        Meteor.users.update(userGroup.owner_id, {$push: {'profile.groups' : ownerGroupMembership } });
+
+        userGroup.admin_ids.forEach(function(id) {
+            Meteor.users.update(id, {$push: {'profile.groups' : adminGroupMembership } });
+        });
+
+        userGroup.deputy_ids.forEach(function(id) {
+            Meteor.users.update(id, {$push: {'profile.groups' : deputyGroupMembership } });
+        });
+
     },
     'userGoups.edit'(userGroupId, newUserGroup){
         check(userGroupId, String);
@@ -78,6 +99,7 @@ Meteor.methods({
             if (!deputy) {
                 return false;
             }
+            deputy.update
             return true;
         });
 
