@@ -89,7 +89,13 @@ if (Meteor.isServer) {
             return null;
         }
         var regexStr = '^' + name.toLowerCase();
-        var retCursor = Meteor.users.find( {username: {$regex: regexStr} }, { limit: 8 } );
+        var retCursor = Meteor.users.find( {username: {$regex: regexStr} }, { limit: 8, fields: {username: 1} } );
+        return retCursor;
+    });
+    // MAJOR TODO:  Before leaving alpha, decide who should have access to this function! 
+    Meteor.publish('findUsersByIds', function(ids) {
+        check(ids, [String]);
+        var retCursor = Meteor.users.find( {'_id': {$in: ids}}, { fields: {username: 1} } );
         return retCursor;
     });
     Meteor.publish('userGroups', function () {

@@ -1,7 +1,9 @@
 <template name="selectUser">
   <div>
     <select class="select-single-user form-control"> 
-      <option selected disabled>Select User</option>
+      {{#if this.username}}
+        <option id='{{this._id}}' selected> {{this.username}} </option>
+      {{/if}}
     </select>
   </div>
 </template>
@@ -9,6 +11,9 @@
 <template name="selectUsers">
   <div>
     <select class="select-multiple-users form-control" multiple="multiple">
+      {{#each user in this}}
+        <option id='{{user._id}}' selected> {{user.username}} </option>
+      {{/each}}
     </select>
   </div>
 </template>

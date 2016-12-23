@@ -11,24 +11,34 @@
 </template>
 
 <template name="authenticatedGroupsAdmin">
-    {{> createGroup}}
-    <hr/>
+    {{> manageNewGroup}}
+    <hr>
     {{> manageGroups}}
 </template>
 
-<template name="createGroup">
+<template name="manageNewGroup">
+  <div>
+    <button class="btn glyphicon glyphicon-plus js-new-group" data-toggle="tooltip" data-placement="top" title="Create a new group" id="new-group-button"></button>
+    <span> Create a new group</span>
+    <div style="display:none;" class="new-group-menu"> 
+      {{>updateGroup}}
+    </div>
+  </div>
+</template>
+
+<template name="updateGroup">
   <form>
     <div class="form-group row">
       <label for="group-name" class="col-xs-2"> Group Name </label>
       <div class="col-xs-10">
-        <input class="form-control" type="text" id="group-name" placeholder="Enter a group name"/>
+        <input class="form-control" type="text" id="group-name" placeholder="Enter a group name" value="{{this.name}}"/>
       </div>
     </div>
     <div class="form-group row">
       <label for="group-owner" class="col-xs-2"> Owner </label>
       <div class="col-xs-10">
         <div id="group-owner">
-          {{> selectUser}}
+          {{> selectUser getOwner}}
         </div>
         <small id="group-owner-help" class="form-text text-muted"> The username of the owner for the group.  Group owners can create and remove administrators and deputies, as well as perform admin/deputy duties. </small>
       </div>
@@ -37,7 +47,7 @@
       <label for="group-administrators" class="col-xs-2"> Administrators </label>
       <div class="col-xs-10">
         <div id="group-administrators">
-          {{> selectUsers}}
+          {{> selectUsers getAdmins}}
         </div>
         <small id="group-administrators-help" class="form-text text-muted"> The username of the administrators for the group.  Administrators can create and remove deputies, and can also manage all tasks for the group. </small>
       </div>
@@ -46,7 +56,7 @@
       <label for="group-deputies" class="col-xs-2"> Deputies </label>
       <div class="col-xs-10">
         <div id="group-deputies">
-          {{> selectUsers}}
+          {{> selectUsers getDeputies}}
         </div>
         <small id="group-deputies-help" class="form-text text-muted"> The username of any deputies for the group.  Deputies can create tasks for the group, and can edit only tasks that they created. </small>
       </div>
@@ -57,15 +67,19 @@
 </template>
 
 <template name="manageGroups">
+    <p> Manage an existing group </p>
     <ul class="list-group">
       {{#each group in allGroups}}
         <li class="list-group-item"> 
-          <button class="btn glyphicon glyphicon-pencil js-edit-group" data-toggle="tooltip" data-placement="top" title="Edit group" id="group-edit-button-{{group._id._str}}"></button>
-          <button class="btn glyphicon glyphicon-eye-open js-view-group" data-toggle="tooltip" data-placement="top" title="View group tasks" id="group-view-button-{{group._id._str}}"></button>
-          {{>groupInfo group}} 
+          <button class="btn glyphicon glyphicon-pencil js-edit-group" data-toggle="tooltip" data-placement="top" title="Edit group" id="group-edit-button-{{group._id._str}}" data-group-id="{{group._id._str}}"></button>
+          <button class="btn glyphicon glyphicon-eye-open js-view-group" data-toggle="tooltip" data-placement="top" title="View group tasks" id="group-view-button-{{group._id._str}}" data-group-id="{{group._id._str}}"></button>
+          {{>groupInfo group}}
         </li>
       {{/each}}
     </ul>
+    {{#if fHasGroup}}
+      {{> updateGroup getGroup}}
+    {{/if}}
 </template>
 
 <template name="groupInfo">

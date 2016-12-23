@@ -5,7 +5,7 @@ import { Match, check } from 'meteor/check';
 import { UserGroupRankEnum } from './userGroupClasses.js'
 
 Meteor.methods({
-    'userGoups.create'(userGroup){
+    'userGroups.create'(userGroup){
         check(userGroup, {
             name: String,
             owner_id: String,
@@ -61,7 +61,7 @@ Meteor.methods({
         });
 
     },
-    'userGoups.edit'(userGroupId, newUserGroup){
+    'userGroups.edit'(userGroupId, newUserGroup){
         check(userGroupId, String);
         check(newUserGroup, {
             name: String,
