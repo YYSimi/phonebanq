@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
-import { FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
+import { abbrState, FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
 
 import './myTasks.html'
 
@@ -14,25 +14,44 @@ Template.myTasks.onCreated(function () {
     } )
 });
 
-Template.myTasks.helpers({
-    getUserTasks(groupName) {
-        var group = UserGroups.findOne({name: groupName});
-        var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
-        return userTasks.map(userTask => {
-            var mapRetval = null;
-            var task = FindTaskFromUserTask(userTask);
-            if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
-                var taskDetail = FindTaskDetailFromTask(task);
-                if (taskDetail) {  //Ditto for task detail
-                    mapRetval =  {
-                        userTask: userTask,
-                        task: task,
-                        taskDetail: taskDetail
-                    }
+// This is global so that we can use it as a helper.
+// TODO:  Find a better way to do this.
+function getUserTasks(groupName) {
+    var group = null;
+    if (groupName) {
+        group = UserGroups.findOne({name: groupName});
+        if (!group) {
+            return [];
+        }
+    }
+
+    var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
+    return userTasks.map(userTask => {
+        var mapRetval = null;
+        var task = FindTaskFromUserTask(userTask);
+        if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
+            var taskDetail = FindTaskDetailFromTask(task);
+            if (taskDetail) {  //Ditto for task detail
+                mapRetval =  {
+                    userTask: userTask,
+                    task: task,
+                    taskDetail: taskDetail
                 }
             }
-            return mapRetval;
-        }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
+        }
+        return mapRetval;
+    }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
+}
+
+Template.myTasks.helpers({
+    getUserStateTasks(){
+        state = Meteor.user().profile.state;
+        if (state) {
+            return getUserTasks(abbrState(state, "name"));
+        }
+    },
+    getUserTasks(groupName) {
+        return getUserTasks(groupName);
     }
 });
 
