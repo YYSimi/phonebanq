@@ -3,7 +3,8 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js'
+import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js';
+import { hasEditPermissionsByRank } from '../../api/userGroupClasses.js';
 
 import './newTask.html'
 
@@ -37,6 +38,22 @@ Template.authenticatedUserNewTask.onRendered(function() {
     {
         $("#task-type").append("<option> " + taskType + " </option>");
     }
+
+    user = Meteor.user();
+    Meteor.subscribe('userGroups', function() {
+        // TODO:  Sort alphabetically.
+        user.profile.groups.forEach(function (groupInfo){
+            if (hasEditPermissionsByRank(groupInfo.rank)) {
+                console.log("group ID is");
+                console.log(groupInfo.group_id);
+                var group = UserGroups.findOne(groupInfo.group_id);
+                if (group) {
+                    $("#task-group").append("<option value=" + group._id + ">" + group.name + "</option>" ); 
+                }
+            } 
+        })
+    })
+
 })
 
 Template.authenticatedUserNewTask.events({
@@ -60,7 +77,8 @@ Template.authenticatedUserNewTask.events({
             taskType,
             [],
             parseInt($("#task-priority").val()),
-            1   // TODO:  Pipe XP Values in.
+            1,   // TODO:  Pipe XP Values in.
+            $("#task-group").val()
         );
 
         var taskDetail = {};
@@ -123,7 +141,8 @@ Template.phoneNewTaskDetail.helpers({
                     PBTaskTypesEnum.phone,
                     [],
                     parseInt($("#task-priority").val()),
-                    1   // TODO:  Pipe XP Values in.
+                    1,   // TODO:  Pipe XP Values in.
+                    $("#task-group").val()
                 )
 
             switch(taskType) {

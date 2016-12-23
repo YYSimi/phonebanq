@@ -2,7 +2,10 @@
   {{#if currentUser}}
     <h1> Today's Opportunities for Action </h1>
     {{#if Template.subscriptionsReady}}
-      {{> UserTasks getUserTasks}}
+    <p> National Tasks: </p>
+      {{> UserTasks getUserTasks "National"}}
+    <p> State Tasks: </p>
+      {{> UserTasks getUserTasks "Florida"}}
     {{else}}
       {{> loader}}
     {{/if}}

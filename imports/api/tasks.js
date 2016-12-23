@@ -119,6 +119,7 @@ Meteor.methods({
             issues: [String],
             priority: Number,
             xp_value: Number,
+            group: String
         });
 
         // TODO:  All of this ugly switch stuff needs to become object-oriented.

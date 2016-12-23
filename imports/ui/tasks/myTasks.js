@@ -7,6 +7,7 @@ import { FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString }
 import './myTasks.html'
 
 Template.myTasks.onCreated(function () {
+    this.subscribe('userGroups');
     this.autorun(() => {
         var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
         this.subscribe('tasksAndDetails', taskIds);
@@ -14,7 +15,8 @@ Template.myTasks.onCreated(function () {
 });
 
 Template.myTasks.helpers({
-    getUserTasks() {
+    getUserTasks(groupName) {
+        var group = UserGroups.findOne({name: groupName});
         var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
         return userTasks.map(userTask => {
             var mapRetval = null;
@@ -30,7 +32,7 @@ Template.myTasks.helpers({
                 }
             }
             return mapRetval;
-        }).filter( function(elt) {return elt != null} );
+        }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
     }
 });
 
