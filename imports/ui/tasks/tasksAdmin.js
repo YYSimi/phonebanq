@@ -54,3 +54,7 @@ Template.manageTaskButtons.events({
         return false;
     }
 });
+
+Template.manageTaskButtons.onRendered(function() {
+    this.$('[data-toggle="tooltip"]').tooltip();
+})

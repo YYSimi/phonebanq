@@ -49,3 +49,7 @@ Template.manageGroups.events({
         console.log(evt);
     }
 })
+
+Template.manageGroups.onRendered(function() {
+    this.$('[data-toggle="tooltip"]').tooltip();
+})
