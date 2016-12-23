@@ -2,7 +2,7 @@
   <div>
     <select class="select-single-user form-control"> 
       {{#if this.username}}
-        <option id='{{this._id}}' selected> {{this.username}} </option>
+        <option value='{{this._id}}' selected> {{this.username}} </option>
       {{/if}}
     </select>
   </div>
@@ -12,7 +12,7 @@
   <div>
     <select class="select-multiple-users form-control" multiple="multiple">
       {{#each user in this}}
-        <option id='{{user._id}}' selected> {{user.username}} </option>
+        <option value='{{user._id}}' selected> {{user.username}} </option>
       {{/each}}
     </select>
   </div>

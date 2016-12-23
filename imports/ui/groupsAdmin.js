@@ -29,6 +29,10 @@ Template.manageNewGroup.events({
     }
 })
 
+Template.manageNewGroup.onRendered(function () {
+    this.$('[data-toggle="tooltip"]').tooltip();
+})
+
 Template.updateGroup.helpers({
     getOwner() {
         return Meteor.users.findOne(this.owner_id);
@@ -49,18 +53,21 @@ Template.updateGroup.helpers({
 })
 
 Template.updateGroup.events({
-    'submit form'(evt) {
+    'submit form'(evt, template) {
         evt.preventDefault();
-        var name = $('#group-name').val();
-        var owner = $('#group-owner').find('.select-single-user').val();
-        var admins = $('#group-administrators').find('.select-multiple-users').val();
-        var deputies = $('#group-deputies').find('.select-multiple-users').val();
+        var name = template.$('.group-name').val();
+        var owner = template.$('.group-owner').find('.select-single-user').val();
+        var admins = template.$('.group-administrators').find('.select-multiple-users').val();
+        var deputies = template.$('.group-deputies').find('.select-multiple-users').val();
 
         var group = new UserGroup(name, owner, admins, deputies);
-        console.log("Group creation submitted for group");
-        console.log(group);
 
-        Meteor.call('userGroups.create', group);
+        if (template && template.data && template.data._id) {
+            Meteor.call('userGroups.update', template.data._id._str, group);
+        }
+        else {
+            Meteor.call('userGroups.create', group);
+        }
         return false;
     }
 });
@@ -91,7 +98,7 @@ Template.manageGroups.events({
         var groupId = evt.currentTarget.attributes['data-group-id'].value;
         var group = UserGroups.findOne(new Mongo.ObjectID(groupId));
         if (group) {
-            console.log(group);
+            template.$('.edit-group-menu').show(200);
             var memberIds = [group.owner_id];
             memberIds = memberIds.concat(group.admin_ids).concat(group.deputy_ids);
             template.memberUserIds.set(memberIds);
@@ -105,5 +112,5 @@ Template.manageGroups.events({
 })
 
 Template.manageGroups.onRendered(function() {
-    this.$('[data-toggle="tooltip"]').tooltip();
+    this.$('[data-toggle="tooltip"]').tooltip(); //TODO:  This only _sometimes_ works.  Not sure why.  Maybe tooltip() hasn't loaded yet?
 })
