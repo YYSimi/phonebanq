@@ -9,6 +9,7 @@ import '../imports/api/userGroups.js';
 
 import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js';
+import { indexCallbacks } from '../lib/collections.js';
 
 var fbAppInfo = function(){
     var fbAppAccessToken = '';
@@ -96,6 +97,7 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
+    indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
 
     var fbLocalhostAppId = '332532203786554';
