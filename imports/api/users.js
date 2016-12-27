@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
 import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo } from '../../lib/common.js'
+import { PopulateStateUserTasks } from '../../server/userTasks.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
@@ -13,6 +14,14 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         }
         
+        // TODO:  This should automatically happen whenever something that looks like a state change
+        // occurs.  Need to model user locations properly so that we don't scatter these PopulateUserTasks
+        // cals all over the codebase.  Also note that users can get extra tasks now by competing tasks and
+        // then changing their state registration.  Need to improve our task model so we have better timestamp
+        // information on when our next tasks should show up.
+        if (Meteor.isServer) {
+            PopulateStateUserTasks(this.userId);
+        }
         Meteor.users.update({ _id: this.userId}, { $set:
             {"profile.state" : state} });
     },

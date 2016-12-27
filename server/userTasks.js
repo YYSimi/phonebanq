@@ -74,12 +74,20 @@ function CreateRandomUserTask(userId, group) {
 
 
 export function PopulateUserTasks(userId) {
-  //  PopulateUserTasksForGroup(userId, getNationalGroup());
+    PopulateNationalUserTasks(userId);
+    PopulateStateUserTasks(userId)
+}
+
+export function PopulateNationalUserTasks(userId) {
+    PopulateUserTasksForGroup(userId, getNationalGroup());
+}
+
+export function PopulateStateUserTasks(userId) {
     user = Meteor.users.findOne(userId);
-    console.log(user);
     if (user && user.profile && user.profile.state) {
         PopulateUserTasksForGroup(userId, getStateGroupByStateAbbr(user.profile.state));
     }
+
 }
 
 function PopulateUserTasksForGroup(userId, group) {
