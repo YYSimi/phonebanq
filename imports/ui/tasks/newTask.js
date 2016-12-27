@@ -30,6 +30,60 @@ Template.authenticatedUserNewTask.onCreated(function () {
 Template.authenticatedUserNewTask.helpers({
     currentTaskDetailTemplateName() {
         return currentTaskType.get() + "NewTaskDetail";
+    },
+    fShouldRenderTaskPreview() {
+        return nPreviewClicks.get();
+    },
+    taskPreviewInfo() {
+        if (nPreviewClicks.get() != 0) {
+            var task = {};
+            var taskDetail = {};
+            var taskType = currentTaskType.get();
+            console.log("current task type is " + currentTaskType.get());
+
+            // TODO:  Make quills behave properly for previews.
+
+            task = new Task(
+                    $("#tiny-description").val(),
+                    $("#brief-description").val(),
+                    new Date(), // TODO: handle start/end dates properly.
+                    new Date(),
+                    taskType,
+                    [],
+                    parseInt($("#task-priority").val()),
+                    1,   // TODO:  Pipe XP Values in.
+                    $("#task-group").val()
+                )
+
+            switch(taskType) {
+                case (PBTaskTypesEnum.phone):
+                    taskDetail = new PhoneTask(
+                        $("#general-script").val(),
+                        $("#supporter-script").val(),
+                        $("#opposition-script").val(),
+                        "",
+                        $("#call-my-national-senators").val()  === "true",
+                        $("#call-my-national-representatives").val()  === "true",
+                        $("#call-custom-senators").val(),
+                        $("#call-custom-representatives").val(),
+                        []
+                    );
+                    break;
+                case (PBTaskTypesEnum.freeform):
+                    taskDetail = new FreeformTask(
+                        $("#task-instructions").val(),
+                        $("#task-notes").val()
+                    );
+                    break;
+                default:
+                    throw "invalid task type"
+            }
+            
+            return {
+                task: task,
+                taskDetail: taskDetail
+            }
+        }
     }
 })
 
@@ -122,60 +176,6 @@ Template.authenticatedUserNewTask.events({
         currentTaskType.set($("#task-type").val());
     }
 });
-
-Template.phoneNewTaskDetail.helpers({
-    fShouldRenderTaskPreview() {
-        return nPreviewClicks.get();
-    },
-    taskPreviewInfo() {
-        if (nPreviewClicks.get() != 0) {
-            var task = {};
-            var taskDetail = {};
-            var taskType = currentTaskType.get();
-
-            task = new Task(
-                    $("#tiny-description").val(),
-                    $("#brief-description").val(),
-                    new Date(), // TODO: handle start/end dates properly.
-                    new Date(),
-                    PBTaskTypesEnum.phone,
-                    [],
-                    parseInt($("#task-priority").val()),
-                    1,   // TODO:  Pipe XP Values in.
-                    $("#task-group").val()
-                )
-
-            switch(taskType) {
-                case (PBTaskTypesEnum.phone):
-                    taskDetail = new PhoneTask(
-                        $("#general-script").val(),
-                        $("#supporter-script").val(),
-                        $("#opposition-script").val(),
-                        "",
-                        $("#call-my-national-senators").val()  === "true",
-                        $("#call-my-national-representatives").val()  === "true",
-                        $("#call-custom-senators").val(),
-                        $("#call-custom-representatives").val(),
-                        []
-                    );
-                    break;
-                case (PBTaskTypesEnum.freeform):
-                    taskDetail = new FreeformTask(
-                        $("#task-instructions").val(),
-                        $("#task-notes").val()
-                    );
-                    break;
-                default:
-                    throw "invalid task type"
-            }
-            
-            return {
-                task: task,
-                taskDetail: taskDetail
-            }
-        }
-    }
-})
 
 Template.phoneNewTaskDetail.onRendered(function() {
     $("#call-custom-senators").select2({placeholder: 'e.g John McCain'});

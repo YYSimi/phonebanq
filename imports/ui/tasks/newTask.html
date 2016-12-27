@@ -60,6 +60,27 @@
     <button type="submit" class="btn btn-primary js-newTask-submit"> Submit </button>
     <button type="button" class="btn btn-info js-newTask-preview"> Preview </button>
   </form>
+  {{#if fShouldRenderTaskPreview}}
+  <label for="task-preview"> Task preview: </label>
+
+  <div class="panel panel-default" id="task-preview">
+    <div class="panel-heading">
+      <h4> {{taskPreviewInfo.task.tiny_description}} </h4>
+    </div>
+    <div class="panel-body">
+      {{> UserTaskDetail taskPreviewInfo}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6 col-sm-4">
+    <label for="phone-toast-preview"> Notification area/toast preview: </label>
+    <div class="well well-sm" id="phone-toast-preview">
+      {{> toastPreview taskPreviewInfo}}
+    </div>
+    </div>
+  </div>
+  {{/if}}
+
 </template>
 
 <template name="freeformNewTaskDetail">
@@ -125,28 +146,6 @@
     <select id="call-custom-representatives" multiple="multiple" class="select2 col-xs-6"> </select>
     <small id="call-custom-representatives-help" class="form-text text-muted col-xs-3"> Enter names of representatives to call </small>
   </div>
-
-  <!-- TODO:  Make this work for non-phone tasks -->
-  {{#if fShouldRenderTaskPreview}}
-  <label for="phone-task-preview"> Task preview: </label>
-
-  <div class="panel panel-default" id="phone-task-preview">
-    <div class="panel-heading">
-      <h4> {{taskPreviewInfo.task.tiny_description}} </h4>
-    </div>
-    <div class="panel-body">
-      {{> UserTaskDetail taskPreviewInfo}}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-6 col-sm-4">
-    <label for="phone-toast-preview"> Notification area/toast preview: </label>
-    <div class="well well-sm" id="phone-toast-preview">
-      {{> toastPreview taskPreviewInfo}}
-    </div>
-    </div>
-  </div>
-  {{/if}}
 </template>
 
 <template name="newCustomCaller">
