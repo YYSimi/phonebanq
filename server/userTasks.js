@@ -1,3 +1,5 @@
+import { getStateGroupByStateAbbr, getNationalGroup } from '../lib/common.js';
+
 //  Iterates over an array starting at a random index.
 //  Action should be a function that takes an array element and returns true to continue iteration, false to break.
 
@@ -17,13 +19,14 @@ function IterateRandomStart(array, action) {
    
 };
 
-function CreateRandomUserTask(userId) {
+function CreateRandomUserTask(userId, group) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;
-    
-    console.log("Creating random Tasks");
-    var tasksCursor = Tasks.find( {is_disabled : { $ne: true } }, {sort : {priority:-1}});
+        
+    //TODO:  Standardize storing groupId as MongoID!
+    var tasksCursor = Tasks.find( {is_disabled : { $ne: true }, group: group._id._str },
+                                  {sort : {priority:-1}});
 
     if (tasksCursor.count() > 0) {
         // TODO:  Don't use an array.  .fetch() will have awful performance characteristics when your DB gets large.
@@ -58,7 +61,8 @@ function CreateRandomUserTask(userId) {
             is_active : true,
             is_completed: false,
             is_repeatable: false,
-            never_show_again: false
+            never_show_again: false,
+            group_id: groupId
         }
         console.log(userTask);
         UserTasks.insert(userTask);
@@ -68,15 +72,30 @@ function CreateRandomUserTask(userId) {
     return fFoundTask;
 };
 
+
 export function PopulateUserTasks(userId) {
+  //  PopulateUserTasksForGroup(userId, getNationalGroup());
+    user = Meteor.users.findOne(userId);
+    console.log(user);
+    if (user && user.profile && user.profile.state) {
+        PopulateUserTasksForGroup(userId, getStateGroupByStateAbbr(user.profile.state));
+    }
+}
+
+function PopulateUserTasksForGroup(userId, group) {
+    if (!group) {
+        console.log("Invalid group specified"); // TODO:  Look up server-side error handling!
+        return;
+    }
+    console.log("Populating " + group.name + " (" + group._id + ")" + " tasks for user " + userId);
     DisableExpiredUserTasks(userId);
     var nTasksCreated = 0;
     var nTasksMax = 2;
-    currentTaskCount = Meteor.users.findOne(userId).statistics.activeTasks;
+    currentTaskCount = UserTasks.find({user_id: userId, is_active: true, group_id: group._id}).count();
 
     // Attempt to create new tasks until we hit the task creation limit or task creation fails.
     while (nTasksCreated + currentTaskCount < nTasksMax) {
-        if (!CreateRandomUserTask(userId)) {
+        if (!CreateRandomUserTask(userId, group)) {
             break
         }
         ++nTasksCreated;
@@ -84,6 +103,7 @@ export function PopulateUserTasks(userId) {
 
     return nTasksCreated;
 }
+
 
 export function DisableExpiredUserTasks(userId) {
     // Mark any expired active tasks as inactive

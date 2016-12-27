@@ -44,6 +44,10 @@ function getUserTasks(groupName) {
 }
 
 Template.myTasks.helpers({
+    getUserStateName(){
+        state = Meteor.user().profile.state;
+        return abbrState(state, "name");
+    },
     getUserStateTasks(){
         state = Meteor.user().profile.state;
         if (state) {
