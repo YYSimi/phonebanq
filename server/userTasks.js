@@ -62,7 +62,7 @@ function CreateRandomUserTask(userId, group) {
             is_completed: false,
             is_repeatable: false,
             never_show_again: false,
-            group_id: groupId
+            group_id: group
         }
         console.log(userTask);
         UserTasks.insert(userTask);
