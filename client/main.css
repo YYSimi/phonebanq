@@ -8,3 +8,7 @@
   padding: 15px;
   width: auto;
 }
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #F2EEEE;
+    color: #888888;
+}

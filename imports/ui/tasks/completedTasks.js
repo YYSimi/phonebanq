@@ -14,18 +14,6 @@ Template.completedTasks.onCreated(function () {
     } )
 });
 
-// TODO:  Figure out how to move the nav link highlighting to a central place and avoid copypasta
-Template.completedTasks.onRendered(() =>{
-    console.log(this.location.pathname);
-    $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
-});
-
-Template.completedTasks.onDestroyed(() =>{
-    console.log(this.location.pathname);
-    $('a[href="' + this.location.pathname + '"]').parents('li,ul').removeClass('active');
-});
-
-
 Template.completedTasks.helpers({
     getUserTasks() {
         var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: true, is_active: false });
