@@ -2,6 +2,18 @@ import { Template } from 'meteor/templating';
   
 import './userSettings.html';
 
+// TODO:  Figure out how to move the nav link highlighting to a central place and avoid copypasta
+Template.userSettings.onRendered(() =>{
+    console.log(this.location.pathname);
+    $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
+});
+
+Template.userSettings.onDestroyed(() =>{
+    console.log(this.location.pathname);
+    $('a[href="' + this.location.pathname + '"]').parents('li,ul').removeClass('active');
+});
+
+
 Template.loggedInUserSettings.helpers({
     isLocationFromFacebook() {
         return this.profile && this.profile.locationDataSource === "facebook";

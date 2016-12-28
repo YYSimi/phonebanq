@@ -14,6 +14,18 @@ Template.myTasks.onCreated(function () {
     } )
 });
 
+// TODO:  Figure out how to move the nav link highlighting to a central place and avoid copypasta
+Template.myTasks.onRendered(() =>{
+    console.log(this.location.pathname);
+    $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
+});
+
+Template.myTasks.onDestroyed(() =>{
+    console.log(this.location.pathname);
+    $('a[href="' + this.location.pathname + '"]').parents('li,ul').removeClass('active');
+});
+
+
 // This is global so that we can use it as a helper.
 // TODO:  Find a better way to do this.
 function getUserTasks(groupName) {

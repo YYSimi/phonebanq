@@ -1,12 +1,12 @@
 <template name="nav">
-  <nav class="navbar navbar-default" role="navigation">
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="{{pathFor route='home'}}"> {{> appName}} </a>
+        <a class="navbar-brand" href="{{pathFor route='home'}}"> <img src="./favicon/165-leaf-32px.png"/> </a>
         <ul class="nav navbar-nav">
-          {{#if currentUser}} <li><a href="{{pathFor route='myTasks'}}"> Today's opportunities </a></li> {{/if}}
-          {{#if currentUser}} <li><a href="{{pathFor route='completedTasks'}}"> Show completed opportunities </a></li> {{/if}}
-          <li><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li>
+          {{#if currentUser}} <li class="navlink navlink-myTasks"><a href="{{pathFor route='myTasks'}}"> Today's opportunities </a></li> {{/if}}
+          {{#if currentUser}} <li class="navlink navlink-completedTasks"><a href="{{pathFor route='completedTasks'}}"> Show completed opportunities </a></li> {{/if}}
+          <li class="navlink navlink-about"><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li>
           {{#if currentUser}} <li><a href="{{pathFor route='userSettings'}}"> Settings </a></li> {{/if}}
           {{#if fHasNewTaskPermissions}}
             <li class="dropdown">
