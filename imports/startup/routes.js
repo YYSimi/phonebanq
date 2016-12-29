@@ -69,7 +69,8 @@ Router.route('/groupsAdmin', {
 });
 
 Router.route('/', {
-    name: 'welcome',
+    name: 'home',
+    template: 'welcome',
     layoutTemplate: 'mainNoContainer'
 
 })
