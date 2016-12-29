@@ -1,0 +1,60 @@
+<template name="welcome">
+  <!-- Carousel
+  ================================================== -->
+  <div id="myCarousel" class="carousel slide breakout" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <!-- TODO:  Find more quotes 
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+      -->
+    </ol>
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Enter the Arena</h1>
+            <p> It is not the critic who counts; not the man who points out how the strong man stumbles, or where the doer of deeds could have done them better. The credit belongs to the man who is actually in the arena, whose face is marred by dust and sweat and blood; who strives valiantly; [...] who knows great enthusiasms, the great devotions; who spends himself in a worthy cause; who at the best knows in the end the triumph of high achievement</p>
+            <p> - Teddy Roosevelt</p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Action Quells Fear</h1>
+            <p>I have learned over the years that when one's mind is made up, this diminishes fear; knowing what must be done does away with fear.</p>
+            <p> - Rosa Parks </p>
+            <!-- TODO:  Add some nice links Here
+              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+            -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TODO:  More quotes!
+      <div class="item">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>One more for good measure.</h1>
+            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+          </div>
+        </div>
+      </div>
+      -->
+    </div>
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div><!-- /.carousel -->
+  <br/>
+  <div class="container">
+    {{> anonymousTasks}}
+  </div>
+</template>
