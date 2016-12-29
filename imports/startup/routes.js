@@ -79,12 +79,3 @@ Router.route('/welcome', {
     name: 'welcome',
     layoutTemplate: 'mainNoContainer'
 })
-
-Router.onRun(function () {
-    $('a[href="' + '/' + Router.current().route.getName() + '"]').parents('li,ul').addClass('active');
-    this.next();
-})
-
-Router.onStop(function() {
-    $('a[href="' + '/' + Router.current().route.getName()  + '"]').parents('li,ul').removeClass('active');
-})

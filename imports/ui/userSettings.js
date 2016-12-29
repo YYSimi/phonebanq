@@ -36,7 +36,7 @@ Template.loggedInUserSettings.events({
 Template.loggedInUserSettings.onRendered(function () {
     Tracker.autorun( function() {
         var user = Meteor.user();
-        if (user.profile) {
+        if (user && user.profile) {
             if (user.profile.state) {
                 $("#select-user-state").val(user.profile.state).trigger("change");
             }

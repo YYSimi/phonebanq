@@ -15,8 +15,6 @@ Template.anonymousTasksActual.onCreated(function () {
 
 Template.anonymousTasksActual.helpers({
     fShouldShowTasks() {
-        console.log("congresspeople is ")
-        console.log(Session.get("congresspeople"));
         return !!Session.get("congresspeople");
     },
     getTopTasks() {
