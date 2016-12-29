@@ -15,17 +15,19 @@
     <div class="col-xs-5"> {{> provideLocation}} </div>
   </div>
   <hr />
-  {{#if Template.subscriptionsReady}}
-    <ul class="list-group js-userTasks-list">
-      {{#each taskAndDetail in getTopTasks}}
-        <li class="list-group-item" style="border: none">
-          {{> UserTask context=taskAndDetail buttonsTemplate="noTaskButtons"}}
-        </li>
-      {{/each}}
-    </ul>
-  {{else}}
-  <!-- TODO:  This never displays for some reason.  Subscriptions always seem ready, even when we're waiting. -->
-    {{> loader}}
+  {{#if fShouldShowTasks}}
+    {{#if Template.subscriptionsReady}}
+      <ul class="list-group js-userTasks-list">
+        {{#each taskAndDetail in getTopTasks}}
+          <li class="list-group-item" style="border: none">
+            {{> UserTask context=taskAndDetail buttonsTemplate="noTaskButtons"}}
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+    <!-- TODO:  This never displays for some reason.  Subscriptions always seem ready, even when we're waiting. -->
+      {{> loader}}
+    {{/if}}
   {{/if}}
 
 </template>
@@ -86,7 +88,10 @@
     </div>
   </div>
   
-  <button type="submit" class="btn btn-primary js-location-submit"> Submit </button>
+  <button type="submit" class="btn btn-primary js-location-submit"> Give me something to do! </button>
+  {{#if fShouldRenderStatusText}}
+    <p>{{renderStatusText}}</p>
+  {{/if}}
 </template>
 
 <!-- TODO:  Put this someplace better. Finish implementation.-->
