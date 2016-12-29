@@ -1,6 +1,7 @@
 import '../ui/body.js'
 import '../ui/home.js'
 import '../ui/navigation.js'
+import '../ui/welcome.js'
 import '../ui/about.js'
 import '../ui/stringAssets.js'
 
@@ -19,39 +20,63 @@ import '../ui/tasks/freeformTask.js'
 import '../ui/groupsAdmin.js';
 
 Router.configure({
-   layoutTemplate: 'main' 
+   layoutTemplate: 'main'
 });
 
+Router.configure({
+    layoutTemplate: 'mainNoContainer'
+})
+
 Router.route('/about', {
-    name: 'about'
+    name: 'about',
+    layoutTemplate: 'main'
 });
 
 Router.route('/userSettings', {
-    name: 'userSettings'
+    name: 'userSettings',
+    layoutTemplate: 'main'
+
 });
 
 Router.route('/myTasks', {
-    name: 'myTasks'
+    name: 'myTasks',
+    layoutTemplate: 'main'
+
 });
 
 Router.route('/completedTasks', {
-    name: 'completedTasks'
+    name: 'completedTasks',
+    layoutTemplate: 'main'
+
 });
 
 Router.route('/newTask', {
-    name: 'newTask'
+    name: 'newTask',
+    layoutTemplate: 'main'
+
 });
 
 Router.route('/tasksAdmin', {
-    name: 'tasksAdmin'
+    name: 'tasksAdmin',
+    layoutTemplate: 'main'
+
 });
 
 Router.route('/groupsAdmin', {
-    name: 'groupsAdmin'
+    name: 'groupsAdmin',
+    layoutTemplate: 'main'
+
 });
 
 Router.route('/', {
-    name: 'home'
+    name: 'welcome',
+    layoutTemplate: 'mainNoContainer'
+
+})
+
+Router.route('/welcome', {
+    name: 'welcome',
+    layoutTemplate: 'mainNoContainer'
 })
 
 Router.onRun(function () {
