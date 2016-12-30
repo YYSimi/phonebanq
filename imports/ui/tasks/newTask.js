@@ -98,8 +98,6 @@ Template.authenticatedUserNewTask.onRendered(function() {
         // TODO:  Sort alphabetically.
         user.profile.groups.forEach(function (groupInfo){
             if (hasEditPermissionsByRank(groupInfo.rank)) {
-                console.log("group ID is");
-                console.log(groupInfo.group_id);
                 var group = UserGroups.findOne(groupInfo.group_id);
                 if (group) {
                     $("#task-group").append("<option value=" + group._id + ">" + group.name + "</option>" ); 
@@ -107,6 +105,8 @@ Template.authenticatedUserNewTask.onRendered(function() {
             } 
         })
     })
+
+    Template.instance().$("#new-task").validate();
 
 })
 

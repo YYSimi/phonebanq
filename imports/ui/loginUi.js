@@ -4,10 +4,6 @@ function trimInput(val) {
     return val.replace(/^\s*|\s*$/g, "");
 }
 
-function isValidPassword(userPassword) {
-    return val.length >= 6 ? true : false;
-}
-
 Template.login.onCreated(function () {
     
 })

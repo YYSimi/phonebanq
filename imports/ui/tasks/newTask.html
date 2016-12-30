@@ -11,23 +11,23 @@
 </template>
 
 <template name="authenticatedUserNewTask">  
-  <form>
+  <form id="new-task">
     <div class="form-group">
       <label for="tiny-description"> Tiny description </label>
-      <input class="form-control" type="text" id="tiny-description" placeholder="Enter a description"/>
+      <input name="tiny-description" class="form-control required" type="text" id="tiny-description" placeholder="Enter a description"/>
       <small id="tiny-description-help" class="form-text text-muted">No more than 100 characters please.  This will appear as the task's title.</small>
     </div>
     <div class="form-group">
       <label for="brief-description"> Brief description </label>
-      <textarea class="form-control" id="brief-description" rows="3" placeholder="Enter a slightly longer description"></textarea>
+      <textarea name="brief-description" class="form-control required" id="brief-description" rows="3" placeholder="Enter a slightly longer description"></textarea>
       <small id="brief-description-help" class="form-text text-muted">No more than 180 characters please.  This will appear in toast notifications (e.g. on facebook).</small>
     </div>
 
     <div class="form-group row">
       <label for="task-group" class="col-xs-3 col-sm-2">Task group</label>
       <div class="col-xs-6 col-sm-4 col-m-2">
-        <select class="form-control input-small" id="task-group">
-          <option selected disabled> Select task group </option>
+        <select name="task-group" class="form-control input-small required" id="task-group">
+          <option value="" selected disabled> Select task group </option>
         </select>
       </div>
     </div>
@@ -49,8 +49,8 @@
     <div class="form-group row">
       <label for="task-type" class="col-xs-3 col-sm-2">Task type</label>
       <div class="col-xs-6 col-sm-4 col-m-2">
-        <select class="form-control input-small" id="task-type">
-          <option selected disabled> Select task type </option>
+        <select class="form-control input-small required" id="task-type">
+          <option value="" selected disabled> Select task type </option>
         </select>
       </div>
     </div>
@@ -121,16 +121,16 @@
   <div class="form-group row">
     <label for="call-my-national-senators" class="col-xs-3 col-sm-2"> Call user's national senators? </label>
     <div class="col-xs-3 col-sm-2 col-med-1">
-      <select class="form-control" id="call-my-national-senators">
-        <option selected disabled> </option>
+      <select name="call-my-national-senators" class="form-control required" id="call-my-national-senators">
+        <option value="" selected disabled> </option>
         <option value=true>Yes</option>
         <option value=false>No</option>
       </select>
     </div>
     <label for="call-my-national-representatives" class="col-xs-3 col-sm-2"> Call user's national representatives? </label>
     <div class="col-xs-3 col-sm-2 col-med-1">
-      <select class="form-control" id="call-my-national-representatives">
-        <option selected disabled> </option>
+      <select name="call-my-national-representatives" class="form-control required" id="call-my-national-representatives">
+        <option value="" selected disabled> </option>
         <option value=true>Yes</option>
         <option value=false>No</option>
       </select>
