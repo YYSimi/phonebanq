@@ -3,7 +3,8 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="{{pathFor route='welcome'}}"> <img src="/assets/favicon/165-leaf-32px.png"/> </a>
-        <ul class="nav navbar-nav">
+      </div>
+        <ul class="nav navbar-nav navbar-left">
           {{#if currentUser}} <li class="navlink navlink-myTasks {{#if fIsThisRouteActive 'myTasks'}} active {{/if}}"><a href="{{pathFor route='myTasks'}}"> Today's opportunities </a></li> {{/if}}
           {{#if currentUser}} <li class="navlink navlink-completedTasks {{#if fIsThisRouteActive 'completedTasks'}} active {{/if}}"><a href="{{pathFor route='completedTasks'}}"> Show completed opportunities </a></li> {{/if}}
           <li class="navlink navlink-about {{#if fIsThisRouteActive 'about'}} active {{/if}}"><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li>
@@ -19,12 +20,9 @@
             </li>
           {{/if}}
         </ul>
-        {{#if currentUser}}
-        <div class="navbar-text navbar-right">
-          {{> loginButtons}}
-        </div>
-        {{/if}}
-      </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="navbar-text">  {{> loginButtons align="right"}} </li>
+        </ul>
     </div>
   </nav>
 </template>

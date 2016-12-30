@@ -4,10 +4,11 @@ function trimInput(val) {
     return val.replace(/^\s*|\s*$/g, "");
 }
 
-function isValidPassword(userPassword) {
-    return val.length >= 6 ? true : false;
-}
+Template.login.onRendered(function () {
+    Template.instance().$("#login-form").validate();
+})
 
+//TODO:  Fill out implementation.
 Template.login.events({
     'submit #login-form' : function(e, t){
         e.preventDefault();
@@ -32,24 +33,24 @@ Template.login.events({
     }
 });
 
+Template.register.onRendered(function() {
+    //TODO:  Figure out why this call fails.
+    //Template.instance().$("#register-form").validate();
+})
+
 Template.register.events({
     'submit #register-form' : function(e, t) {
         e.preventDefault();
         var email = trimInput(t.find('#account-email').value);
         var password = t.find('#account-password').value;
 
-        // Trim and validate the input
-        if (isValidPassword(password)) {
-            Accounts.createUser({email: email, password : password}, function(err){
-                if (err) {
-                // Inform the user that account creation failed
-                } else {
-                // Success. Account has been created and the user
-                // has logged in successfully. 
-                }
-            });
-        }
+        Accounts.createUser({email: email, password : password}, function(err){
+            if (err) {
+                console.log(err);
+            } else {
+            }
+        });
 
         return false;
-        }
+    }
 });

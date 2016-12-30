@@ -233,7 +233,7 @@ function generateUsername(user) {
             console.log("FB UN: " + username);
             break;
         case "local":
-            if (user.emails && user.emails[0] && users.emails[0].address) {
+            if (user.emails && user.emails[0] && user.emails[0].address) {
                 username = user.emails[0].address;
             }
             else {
