@@ -55,7 +55,8 @@ Template.setLocation.helpers({
 
 
 Template.setLocation.events({
-    'click .js-location-submit'(evt, template) {
+    'submit form'(evt, template) {
+        evt.preventDefault();
 
         var lookupByZipCode = (zip) => {
             if (zip) {
@@ -104,5 +105,6 @@ Template.setLocation.events({
         else if (zip) {
             lookupByZipCode(zip);
         }
+        return false;
     }
 })

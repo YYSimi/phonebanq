@@ -11,7 +11,7 @@
   <p>  This site is currently a work-in-progress.  Pardon our dust and exposed wiring -- we're working hard to turn this idea into reality.</p>
   <div class="row">
     <div class="col-xs-5"> {{> createAccount}} </div>
-    <div class="col-xs-2"> <p class="text-center"> -or- </p> </div>
+    <div class="col-xs-2"> <h4 class="text-center"> -or- </h4> </div>
     <div class="col-xs-5"> {{> provideLocation}} </div>
   </div>
   <hr />
@@ -46,7 +46,7 @@
 
 <template name="provideLocation">
   <div class="well well-sm">
-    <p> Tell us where you are </p>
+    <h4> Tell us where you're from: </h4>
     {{> setLocation}}
     <br/>
   </div>
@@ -54,44 +54,46 @@
 
 <!-- TODO:  Eliminate code duplication between this and userSettings. -->
 <template name="setLocation">
-  <!-- TODO:  Start using this or remove it entirely.
-  <div class="form-group row">
-    <label for="user-street" class="col-xs-2 col-form-label"> Street </label>
-    <div class="col-xs-10">
-      <input class="form-control" type="text" placeholder="Enter street address" id="user-street"/>
+  <form>
+    <!-- TODO:  Start using this or remove it entirely.
+    <div class="form-group row">
+      <label for="user-street" class="col-xs-2 col-form-label"> Street </label>
+      <div class="col-xs-10">
+        <input class="form-control" type="text" placeholder="Enter street address" id="user-street"/>
+      </div>
     </div>
-  </div>
-  -->
+    -->
 
-  <div class="form-group row">
-    <label for="user-city" class="col-xs-2 col-form-label"> City </label>
-    <div class="col-xs-10">
-      <input class="form-control" type="text" placeholder="Enter city" id="user-city"/>
+    <div class="form-group row">
+      <label for="user-city" class="col-xs-2 col-form-label"> City </label>
+      <div class="col-xs-10">
+        <input class="form-control" type="text" placeholder="Enter city" id="user-city"/>
+      </div>
     </div>
-  </div>
 
-  <div class="form-group row">
-    <label for="user-state" class="col-xs-3 col-sm-2 col-form-label"> State </label>
-    <div class="col-xs-9 col-sm-10">
-      <!-- TODO:  Enable select2 here or standardize on no-select2. -->
-      <select class="form-control" id="user-state">
-        <option disabled value="na"> Select State </option>
-        {{> selectStates}}
-      </select>
+    <div class="form-group row">
+      <label for="user-state" class="col-xs-3 col-sm-2 col-form-label"> State </label>
+      <div class="col-xs-9 col-sm-10">
+        <!-- TODO:  Enable select2 here or standardize on no-select2. -->
+        <select class="form-control" id="user-state">
+          <option disabled value="na"> Select State </option>
+          {{> selectStates}}
+        </select>
+      </div>
     </div>
-  </div>
 
-  <div class="form-group row">
-    <label for="user-zip" class="col-xs-2 col-form-label"> Zip Code </label>
-    <div class="col-xs-10">
-      <input class="form-control" type="text" placeholder="Enter zip code" id="user-zip"/>
+    <div class="form-group row">
+      <label for="user-zip" class="col-xs-2 col-form-label"> Zip Code </label>
+      <div class="col-xs-10">
+        <input class="form-control" type="text" placeholder="Enter zip code" id="user-zip"/>
+      </div>
     </div>
-  </div>
-  
-  <button type="submit" class="btn btn-primary js-location-submit"> Give me something to do! </button>
-  {{#if fShouldRenderStatusText}}
-    <p>{{renderStatusText}}</p>
-  {{/if}}
+    
+    <input type="submit" class="btn btn-primary js-location-submit" value="Give me something to do!"/>
+    {{#if fShouldRenderStatusText}}
+      <p>{{renderStatusText}}</p>
+    {{/if}}
+  </form>
 </template>
 
 <!-- TODO:  Put this someplace better. Finish implementation.-->
