@@ -119,7 +119,7 @@ Template.credentialsPrompt.helpers({
 })
 
 Template.credentialsPrompt.events({
-    'click .btn-facebook':function(event){
+    'click .btn-face':function(event){
         event.preventDefault();
         Meteor.loginWithFacebook(function(err){
             if(!err) {
