@@ -43,7 +43,6 @@ Template.setLocation.onCreated(function () {
 
 Template.setLocation.helpers({
     renderStatusText () {
-        console.log(Template.instance().statusText);
         if (Template.instance().statusText) {
             return Template.instance().statusText.get();
         }
@@ -108,3 +107,27 @@ Template.setLocation.events({
         return false;
     }
 })
+
+Template.credentialsPrompt.onCreated(function() {
+    Template.instance().fShowRegistrationUi = new ReactiveVar(false);
+})
+
+Template.credentialsPrompt.helpers({
+    fShowRegistrationUi() {
+        return Template.instance().fShowRegistrationUi.get();
+    }
+})
+
+Template.credentialsPrompt.events({
+    'click .btn-facebook':function(event){
+        event.preventDefault();
+        Meteor.loginWithFacebook(function(err){
+            if(!err) {
+                Router.go('/');
+            }
+        });
+    },
+    'click .btn-show-registration': function(evt, tmpl){
+        tmpl.fShowRegistrationUi.set(true);
+    }
+});

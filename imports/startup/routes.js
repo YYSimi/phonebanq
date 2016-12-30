@@ -8,6 +8,7 @@ import '../ui/stringAssets.js'
 import '../ui/findUserWidgets.js'
 import '../ui/userXpWidgets.js'
 import '../ui/userSettings.js'
+import '../ui/loginUi.js'
 
 import '../ui/tasks/completedTasks.js'
 import '../ui/tasks/anonymousTasks.js'

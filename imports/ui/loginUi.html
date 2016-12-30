@@ -1,15 +1,51 @@
-<form id="login-form" action="action">
-  <div>
-    <input type="email" id="login-email" />
-    <input type="password" id="login-password" />
-    <input type="submit" id="login-button" value="Sign in" />
-  </div>
-</form> 
 
-<form id="register-form" action="action">
-  <div>
-    <input type="email" id="account-email" />
-    <input type="password" id="account-password" />
-    <input type="submit" id="create-account" value="Create an Account" />
-  </div>
-</form>
+<template name="login">
+  <form id="login-form" action="action">
+    <div>
+      <label for="account-email">Username or E-mail Address</label>
+      <input class="form-control required" type="email" name="login-email" id="login-email" />
+
+      <label for="account-email">E-mail Address</label>
+      <input class="form-control required" type="password" name="login-password" id="login-password" />
+
+      <input class="form-control required" type="submit" id="login-button" value="Sign in" />
+    </div>
+  </form> 
+</template>
+
+<template name="register">
+  <form id="register-form" action="action">
+    <div>
+      <label for="account-email">E-mail Address</label>
+      <input class="form-control required" type="email" id="account-email" />
+
+      <label for="account-password">Password</label>
+      <input class="form-control required" type="password" id="account-password" />
+
+      <label for="account-confirm-password">Confirm Password</label>
+      <input class="form-control required" type="password" id="account-confirm password" />
+      <br/>
+      <input class="btn btn-primary" type="submit" id="create-account" value="Sign me Up!" />
+    </div>
+  </form>
+</template>
+
+<template name="passwordRecovery">
+  {{#if resetPassword}}
+     <form id="new-password" action="action">
+        <div>
+           <input class="form-control required" type="text" name="old-password" id="old-password" />
+           <input class="form-control required" type="text" name="new-password" id="new-password" />
+           <input class="form-control required" type="text" name="new-password-verify" id="new-password-verify" />
+           <input type="submit" value="Change Password" />
+        </div>
+      </form>
+  {{else}}
+      <form id="recovery-form" action="action">
+        <div>
+           <input type="text" id="recovery-email" />              
+           <input type="submit" value="Send Reset Instructions" />
+         </div>
+      </form>
+  {{/if}}
+</template>
