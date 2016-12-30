@@ -74,18 +74,20 @@ function CreateRandomUserTask(userId, group) {
 
 
 export function PopulateUserTasks(userId) {
-    PopulateNationalUserTasks(userId);
-    PopulateStateUserTasks(userId)
+    nTotalTasksCreated = 0;
+    nTotalTasksCreated += PopulateNationalUserTasks(userId);
+    nTotalTasksCreated += PopulateStateUserTasks(userId)
+    return nTotalTasksCreated;
 }
 
 export function PopulateNationalUserTasks(userId) {
-    PopulateUserTasksForGroup(userId, getNationalGroup());
+    return PopulateUserTasksForGroup(userId, getNationalGroup());
 }
 
 export function PopulateStateUserTasks(userId) {
     user = Meteor.users.findOne(userId);
     if (user && user.profile && user.profile.state) {
-        PopulateUserTasksForGroup(userId, getStateGroupByStateAbbr(user.profile.state));
+        return PopulateUserTasksForGroup(userId, getStateGroupByStateAbbr(user.profile.state));
     }
 
 }
@@ -95,7 +97,6 @@ function PopulateUserTasksForGroup(userId, group) {
         console.log("Invalid group specified"); // TODO:  Look up server-side error handling!
         return;
     }
-    console.log("Populating " + group.name + " (" + group._id + ")" + " tasks for user " + userId);
     DisableExpiredUserTasks(userId);
     var nTasksCreated = 0;
     var nTasksMax = 2;

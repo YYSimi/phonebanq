@@ -312,8 +312,6 @@ function OnFirstLogin(user) {
 function NotifyFacebookUser(user) {
     var accessToken = fbAppInfo.getAccessToken();
     if (accessToken) {
-        console.log("notifying user");
-        console.log(user);
         userFbInfo = user.services.facebook;
 
         // TODO:  This isn't always displaying the "most important" task given today.
@@ -342,7 +340,6 @@ function NotifyFacebookUser(user) {
                         console.log(error);
                     }
                     else {
-                        console.log(response);
                     }
                 });
             }
