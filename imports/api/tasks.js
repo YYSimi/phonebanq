@@ -103,6 +103,8 @@ if (Meteor.isServer) {
     })
 }
 
+Meteor.users.deny({update: function () { return true; }});
+
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
 Meteor.methods({
     // TODO:  Data validation!
