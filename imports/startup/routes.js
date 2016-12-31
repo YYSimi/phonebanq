@@ -1,6 +1,7 @@
 import '../ui/body.js'
 import '../ui/home.js'
 import '../ui/navigation.js'
+import '../ui/footer.js'
 import '../ui/welcome.js'
 import '../ui/about.js'
 import '../ui/stringAssets.js'
@@ -20,6 +21,9 @@ import '../ui/tasks/freeformTask.js'
 
 import '../ui/groupsAdmin.js';
 
+import '../ui/ancillaryPages/licensing.js'
+import '../ui/ancillaryPages/privacyPolicy.js'
+
 Router.configure({
    layoutTemplate: 'main'
 });
@@ -30,6 +34,16 @@ Router.configure({
 
 Router.route('/about', {
     name: 'about',
+    layoutTemplate: 'main'
+});
+
+Router.route('/licensing',{
+    name: 'licensing',
+    layoutTemplate: 'main'
+});
+
+Router.route('/privacy',{
+    name: 'privacyPolicy',
     layoutTemplate: 'main'
 });
 

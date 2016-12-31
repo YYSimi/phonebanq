@@ -1,5 +1,8 @@
 /* CSS declarations go here */
 
+/* Navbar footer styles
+-------------------------------------------------- */
+
 .navbar-brand {
   padding: 0px;
 }
@@ -13,11 +16,41 @@
   color: #888888;
 }
 
-.text-dark {
-  color: #111111;
-}
+/* Carousel styles
+-------------------------------------------------- */
 
 .carousel .item {
   min-height: 300px;
   background: #888888;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 70px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 70px;
+  background-color: #f5f5f5;
+}
+
+.footer > .container {
+  margin: 10px 0;
+  padding-right: 35px;
+  padding-left: 35px;
+}
+
+/* list styles
+-------------------------------------------------- */
+.nobullet {
+  list-style-type: none;
 }

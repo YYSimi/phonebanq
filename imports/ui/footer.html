@@ -1,0 +1,15 @@
+
+<!-- Major warning:  The footer height is _fixed_ to 60px.
+Adding too many items to the footer _will_ overflow it.  Either update the CSS to 
+a new fixed height, or figure out how to properly do a sticky footer.  Apparently
+it's harder than one might expect.' -->
+<template name="footer">
+  <footer class="footer">
+    <div class="container">
+      <ul class="nobullet">
+        <li> <a href="{{pathFor route='privacyPolicy'}}"> Privacy Policy   </a></li>
+        <li class="navlink"> <a href="{{pathFor route='licensing'}}"> Licensing & Attributions  </a></li>
+      </ul>
+    </div>
+  </footer>
+</template>
