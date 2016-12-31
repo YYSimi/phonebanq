@@ -1,5 +1,12 @@
 /* CSS declarations go here */
 
+/* Quill styles
+-------------------------------------------------- */
+
+.ql-out-bottom {
+visibility: initial !important;
+}
+
 /* Navbar styles
 -------------------------------------------------- */
 .navbar {
