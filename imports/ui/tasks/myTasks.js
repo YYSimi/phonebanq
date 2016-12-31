@@ -3,6 +3,8 @@ import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
 import { abbrState, FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
+import { PBTaskTypesEnum } from '../../api/taskClasses.js'
+
 
 import './myTasks.html'
 
@@ -72,6 +74,22 @@ Template.UserTask.helpers({
     userPluralizedString() {
         var bHasExactlyOneCompletion = this.context && this.context.task && this.context.task.statistics && (this.context.task.statistics.completion_count === 1)
         return bHasExactlyOneCompletion ? "user" : "users";
+    },
+    // TODO:  Put this somewhere reusable.
+    getTaskHeaderImgUrl() {
+        var retval = ""
+        switch (this.context.task.task_type) {
+            case PBTaskTypesEnum.phone:
+                retval = "/assets/tasktypes/067-phone-32px.png";
+                break;
+            case PBTaskTypesEnum.freeform:
+                retval = "/assets/tasktypes/035-file-text-32px.png"
+                break;
+            default:
+                throw "Error:  Task type has no registered logo"
+                break;
+        }
+        return retval;
     }
 })
 

@@ -31,8 +31,9 @@
 <!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
 <template name="UserTask">
   <div class="panel panel-default">
-    <div class="panel-heading">
+    <div class="panel-heading clearfix">
       {{> Template.dynamic template=taskButtonsTemplateName data=context}}
+      <span class="pull-left"><img class="task-header-img" src="{{getTaskHeaderImgUrl}}"/> </span>
       <h4> {{context.task.tiny_description}} </h4>
     </div>
     <div class="panel-body">

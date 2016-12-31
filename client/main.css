@@ -60,3 +60,10 @@ body {
 .nobullet {
   list-style-type: none;
 }
+
+/* task styles
+-------------------------------------------------- */
+.task-header-img {
+    height: 32px;
+    padding-right: 10px;
+}
