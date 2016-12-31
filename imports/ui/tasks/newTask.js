@@ -61,7 +61,7 @@ Template.authenticatedUserNewTask.helpers({
                         $("#general-script").val(),
                         $("#supporter-script").val(),
                         $("#opposition-script").val(),
-                        "",
+                        $("#task-notes").val(),
                         $("#call-my-national-senators").val()  === "true",
                         $("#call-my-national-representatives").val()  === "true",
                         $("#call-custom-senators").val(),
@@ -78,11 +78,13 @@ Template.authenticatedUserNewTask.helpers({
                 default:
                     throw "invalid task type"
             }
-            
-            return {
+
+            retval = {
                 task: task,
                 taskDetail: taskDetail
-            }
+            };
+            
+            return retval;
         }
     }
 })

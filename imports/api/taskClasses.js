@@ -31,8 +31,8 @@ export function PhoneTask(general_script, supporter_script, opposition_script, n
     this.supporter_script = supporter_script || "";
     this.opposition_script = opposition_script || "";
     this.notes = notes || "";
-    this.call_my_national_senators = call_my_national_senators || true;
-    this.call_my_national_representatives = call_my_national_representatives || true;
+    this.call_my_national_senators = !!call_my_national_senators;
+    this.call_my_national_representatives = !!call_my_national_representatives;
     this.call_custom_senators = call_custom_senators || [];
     this.call_custom_representatives = call_custom_representatives || [];
     this.call_custom = call_custom || [];
