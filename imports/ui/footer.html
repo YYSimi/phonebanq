@@ -6,10 +6,25 @@ it's harder than one might expect.' -->
 <template name="footer">
   <footer class="footer">
     <div class="container">
-      <ul class="nobullet">
-        <li> <a href="{{pathFor route='privacyPolicy'}}"> Privacy Policy   </a></li>
-        <li class="navlink"> <a href="{{pathFor route='licensing'}}"> Licensing & Attributions  </a></li>
-      </ul>
+      <div class="row">
+        <div class="col-xs-3">
+          <ul class="nobullet">
+            <li> <a href="{{pathFor route='privacyPolicy'}}"> Privacy Policy   </a></li>
+            <li class="navlink"> <a href="{{pathFor route='licensing'}}"> Licensing & Attributions  </a></li>
+          </ul>
+        </div>
+        <div class="col-xs-3">
+          <ul class="nobullet">
+            <li> <a href="{{pathFor route='feedback'}}"> Provide Feedback </a></li>
+            <li class="navlink"> <a href="mailto:grassrootschampion@gmail.com"> Contact Us  </a></li>
+          </ul>
+        </div>
+        <div class="col-xs-3">
+          <ul class="nobullet">
+            <li> <a href="{{pathFor route='bugs'}}"> Report a Bug </a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </footer>
 </template>
