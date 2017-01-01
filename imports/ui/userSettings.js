@@ -51,3 +51,14 @@ Template.loggedInUserSettings.onRendered(function () {
         }
     });
 })
+
+Template.dangerZone.events({
+    'click .js-deleteUser'(){
+        if ($('.js-userSettings-confirmDelete').val() === 'DELETE') {
+            Meteor.call('users.deleteUser');
+        }
+        else {
+            $('#confirmDelete-region').show(250);
+        }
+    }
+})
