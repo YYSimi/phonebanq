@@ -12,7 +12,8 @@ Template.loggedInUserSettings.helpers({
 })
 
 Template.loggedInUserSettings.events({
-    'click .js-userSettings-submit'() {
+    'submit #location'(evt) {
+        evt.preventDefault();
         city = $('#user-city').val();
         state = $('#select-user-state').val();
         zip = $('#user-zip').val()
@@ -27,6 +28,7 @@ Template.loggedInUserSettings.events({
             Meteor.call('users.setCity', city);
         }
         Meteor.call('users.GeocodeLatLong');
+        return false;
     },
     'click .js-userSettings-useFacebookCheckbox'(event) {
         Meteor.call('users.setLocationDataSource', event.target.checked ? "facebook" : "manual" );
@@ -48,6 +50,4 @@ Template.loggedInUserSettings.onRendered(function () {
             }
         }
     });
-    
-    $("#select-user-state").select2({placeholder: 'Select State'});
 })
