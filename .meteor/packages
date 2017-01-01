@@ -30,3 +30,5 @@ twbs:bootstrap
 http
 practicalmeteor:mocha
 force-ssl
+practicalmeteor:chai
+xolvio:cleaner
