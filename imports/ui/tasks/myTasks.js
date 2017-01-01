@@ -68,7 +68,6 @@ Template.myTasks.helpers({
 
 Template.UserTasks.helpers({
     hasUserTasks() {
-        console.log(Template.instance());
         if (Template.instance().data.length > 0) {
             return true;
         }
