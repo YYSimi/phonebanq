@@ -8,6 +8,11 @@ import { PBTaskTypesEnum } from '../../api/taskClasses.js'
 
 import './myTasks.html'
 
+function getUserStateName() {
+    state = Meteor.user().profile.state;
+    return abbrState(state, "name");
+}
+
 Template.myTasks.onCreated(function () {
     this.subscribe('userGroups');
     this.autorun(() => {
@@ -28,7 +33,7 @@ function getUserTasks(groupName) {
     }
 
     var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
-    return userTasks.map(userTask => {
+    var retval =  userTasks.map(userTask => {
         var mapRetval = null;
         var task = FindTaskFromUserTask(userTask);
         if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
@@ -43,12 +48,12 @@ function getUserTasks(groupName) {
         }
         return mapRetval;
     }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
+    return retval;
 }
 
 Template.myTasks.helpers({
     getUserStateName(){
-        state = Meteor.user().profile.state;
-        return abbrState(state, "name");
+        return getUserStateName();
     },
     getUserStateTasks(){
         state = Meteor.user().profile.state;
@@ -60,6 +65,16 @@ Template.myTasks.helpers({
         return getUserTasks(groupName);
     }
 });
+
+Template.UserTasks.helpers({
+    hasUserTasks() {
+        console.log(Template.instance());
+        if (Template.instance().data.length > 0) {
+            return true;
+        }
+        return false;
+    }
+})
 
 Template.UserTask.helpers({
     hasTimeRemaining() {

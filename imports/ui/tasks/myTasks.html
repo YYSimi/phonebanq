@@ -2,7 +2,7 @@
   {{#if currentUser}}
     <h1> Today's Opportunities for Action </h1>
     {{#if Template.subscriptionsReady}}
-      <h2>Around the nation: </h2>
+      <h2>Around the Nation: </h2>
       {{> UserTasks getUserTasks "National"}}
       {{#if currentUser.profile}}
         {{#if currentUser.profile.state}}
@@ -19,13 +19,17 @@
 </template>
 
 <template name="UserTasks">
-  <ul class="list-group js-userTasks-list">
-  {{#each userTask in this}}
-    <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
-      {{> UserTask context=userTask buttonsTemplate="ActiveTaskButtons"}}
-    </li>
-  {{/each}}
-  </ul>
+  {{#if hasUserTasks}}
+    <ul class="list-group js-userTasks-list">
+    {{#each userTask in this}}
+      <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
+        {{> UserTask context=userTask buttonsTemplate="ActiveTaskButtons"}}
+      </li>
+    {{/each}}
+    </ul>
+  {{else}}
+    <p>  That's all of the opportunities we have for today.  We'll let you know when we have more. </p>
+  {{/if}}
 </template>
 
 <!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
