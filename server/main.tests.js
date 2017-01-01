@@ -21,5 +21,4 @@ if (Meteor.isServer) {
             assert.equal(user.username, 'test_account@test.com');
         });
     });
-
 }

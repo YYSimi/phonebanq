@@ -13,7 +13,7 @@ import { PBTaskTypesEnum } from './taskClasses.js'
 // Handle publication for tasks.  TODO:  Is this the correct file for this?
 if (Meteor.isServer) {
     Meteor.publish('userTasks', function() {
-        return UserTasks.find({user_id : this.userId});
+        return UserTasks.find({user_id : Meteor.userId()});
     });
     Meteor.publish('tasksAndDetails', function(taskIds) {
         check(taskIds, [Mongo.ObjectID]);
@@ -41,7 +41,7 @@ if (Meteor.isServer) {
         return Representatives.find();
     });
     Meteor.publish('adminTasks', function() {
-        return Tasks.find({owner : this.userId});
+        return Tasks.find({owner : Meteor.userId()});
     } );
     Meteor.publish('taskDetails', function( taggedTaskDetailIds ) {
         check(taggedTaskDetailIds, [{task_type: String, task_detail_id: String}]);
@@ -159,7 +159,7 @@ Meteor.methods({
 
         // TODO:  Make this work for task types other than phone!
         // TODO:  Take out all manual references to phone task strings!
-        task.owner = this.userId;
+        task.owner = Meteor.userId();
         Tasks.insert(task, function(err, taskId) {
             if (err) { console.log(err); }
             else {

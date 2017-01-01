@@ -10,7 +10,7 @@ import { PopulateStateUserTasks } from '../../server/userTasks.js'
 Meteor.methods({
     'users.setState'(state) { //Set the User's US state.  Record what auth provider or settings pane was used.
         check(state, String);
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
         
@@ -20,23 +20,23 @@ Meteor.methods({
         // then changing their state registration.  Need to improve our task model so we have better timestamp
         // information on when our next tasks should show up.
         if (Meteor.isServer) {
-            PopulateStateUserTasks(this.userId);
+            PopulateStateUserTasks(Meteor.userId());
         }
-        Meteor.users.update({ _id: this.userId}, { $set:
+        Meteor.users.update({ _id: Meteor.userId()}, { $set:
             {"profile.state" : state} });
     },
     'users.setCity'(city) {
         check(city, String)
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update({_id: this.userId}, { $set:
+        Meteor.users.update({_id: Meteor.userId()}, { $set:
             {"profile.city" : city}
         })
     },
     'users.GeocodeLatLong'(){
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
         if (Meteor.isServer) {
@@ -45,47 +45,47 @@ Meteor.methods({
     },
     'users.setLatitude'(latitude) {
         check(latitude, Number)
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update({_id: this.userId}, { $set:
+        Meteor.users.update({_id: Meteor.userId()}, { $set:
             {"profile.latitude" : latitude}
         })
     },
     'users.setLongitude'(longitude) {
         check(longitude, Number)
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update({_id: this.userId}, { $set:
+        Meteor.users.update({_id: Meteor.userId()}, { $set:
             {"profile.longitude" : longitude}
         })
     },
     'users.setZipCode'(zipCode) {
         check(zipCode, String);
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update({ _id: this.userId}, { $set:
+        Meteor.users.update({ _id: Meteor.userId()}, { $set:
             {"profile.zipCode" : zipCode} });
 
         UpdateCongressionalInfo(Meteor.user());        //TODO:  This should definitely be structured so it happens automatically on user location update.
     },
     'users.setStreet'(street) {
         check(street, String)
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Meteor.users.update({ _id: this.userId}, { $set:
+        Meteor.users.update({ _id: Meteor.userId()}, { $set:
             {"profile.street" : street} });
     },
     'users.setLocationDataSource'(locationDataSource) {   //TODO:  LocationDataSource needs to be an Enum!
         check(locationDataSource, String);
-        if (!this.userId) {
+        if (!Meteor.userId()) {
             throw new Meteor.Error('not-authorized');
         }
         
@@ -99,7 +99,7 @@ Meteor.methods({
             }
         }
 
-        Meteor.users.update({ _id: this.userId}, { $set:
+        Meteor.users.update({ _id: Meteor.userId()}, { $set:
             {"profile.locationDataSource" : locationDataSource } });
         
         if (Meteor.isServer) {
@@ -107,5 +107,11 @@ Meteor.methods({
                 PopulateLocationFromFacebook(user.services.facebook.accessToken);
             }
         }
+    },
+    'users.deleteUser'(){
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('not-authorized');
+        }
+        Meteor.users.remove(Meteor.userId());
     }
 });
