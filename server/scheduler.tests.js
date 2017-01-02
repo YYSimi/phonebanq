@@ -84,6 +84,24 @@ if (Meteor.isServer) {
             assert(Math.abs(actualMonthDelta - expectedMonthDelta) < 1, "Monthly Scheduler delta not within tolerance.  Expected " + expectedMonthDelta + " got " + actualMonthDelta );
         });
 
+        it('time deltas override works', () => {
+            var expectedDayDelta = 1500;
+            var actualDayDelta = Scheduler.runScheduler("daily", expectedDayDelta);
+
+            var expectedWeekDelta = 2500;
+            var actualWeekDelta = Scheduler.runScheduler("weekly", expectedWeekDelta);
+
+            var expectedMonthDelta = 3500;
+            var actualMonthDelta = Scheduler.runScheduler("monthly", expectedMonthDelta);
+
+            assert(Math.abs(actualDayDelta - expectedDayDelta) < 1, "Daily Scheduler delta not within tolerance.  Expected " + expectedDayDelta + " got " + actualDayDelta );
+            assert(Math.abs(actualWeekDelta - expectedWeekDelta) < 1, "Weekly Scheduler delta not within tolerance.  Expected " + expectedWeekDelta + " got " + actualWeekDelta );
+            assert(Math.abs(actualMonthDelta - expectedMonthDelta) < 1, "Monthly Scheduler delta not within tolerance.  Expected " + expectedMonthDelta + " got " + actualMonthDelta );
+
+            Scheduer.setSchedulerState("stopped");
+        });
+
+
         it('daily tics work correctly', () => {
             ticTest("daily");
         });

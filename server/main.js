@@ -10,6 +10,7 @@ import '../imports/api/userGroups.js';
 import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js';
 import { indexCallbacks } from '../lib/collections.js';
+import { Scheduler } from './scheduler.js'
 
 var fbAppInfo = function(){
     var fbAppAccessToken = '';
@@ -138,24 +139,11 @@ Meteor.startup(() => {
     FixActiveUserTaskCount();
     FixTaskCompletionCount();
     UpdateAllUserTasks();
-    var fnSetMaintenanceTimer = function () {
-        var midnight = new Date();
-        midnight.setHours(24);
-        midnight.setMinutes(0);
-        midnight.setSeconds(0);
-        midnight.setMinutes(0);
-        var timeUntilMidnight = (midnight.getTime() - new Date().getTime())
-        var periodicTaskDelta = 1000*10;
-        var timeToNextTask = IsProductionMode() ? timeUntilMidnight : periodicTaskDelta; 
 
-        Meteor.setTimeout(
-            function() { 
-                RunMaintenanceTasks(IsProductionMode()); // Run all maintenance tasks in production mode.  Don't run expensive tasks in debug mode.
-                fnSetMaintenanceTimer()
-            }, 
-            timeToNextTask);
-    }
-    fnSetMaintenanceTimer();
+    var testModeFrequency = 1000*10;
+    var frequencyOverride = IsProductionMode() ? null : testModeFrequency;    
+    Scheduler.registerAction(() => {RunMaintenanceTasks(IsProductionMode())}, 1, "daily")
+    Scheduler.runScheduler("daily", frequencyOverride);
 
     RunMaintenanceTasks(IsProductionMode()); 
 });
