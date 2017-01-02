@@ -33,14 +33,16 @@
 		<!-- TODO:  Make this only show up if FB login is active {{#if isUserLoggedInToFacebook}} -->
 		{{#if isUserLoggedInToFacebook}}
 			<div class="form-group row">
-				<label class="col-sm-2"> Use my Facebook profile to update my location </label>
+				<label for="checkboxTempId" class="col-sm-2"> Use my Facebook profile to update my location </label>
 				<input class="form-check-input js-userSettings-useFacebookCheckbox" id="checkboxTempId" type="checkbox" checked="{{isLocationFromFacebook}}"/>
 			</div>
 		{{/if}}
 		<button type="submit" class="btn btn-primary js-userSettings-submit"> Submit </button>
 	</form>
 	<hr/>
-	{{>dangerZone}}
+	{{> contactPreferences currentUser}}
+	<hr/>
+	{{> dangerZone currentUser}}
 </template>
 
 <template name="dangerZone">
@@ -53,7 +55,72 @@
 		<small id="confirm-delete-help" class="form-text text-muted"> BEWARE:  Account deletion is permanent.  We can't get your account back once you've carried this out. </small>
 	</div>
 	<button class="btn btn-danger js-deleteUser"> Delete Account </button>
+</template>
 
+<template name="contactPreferences">
+	<h3> Contact Preferences </h3>
+	<form id="contact-preferences">
+		<div class="form-group row">
+			<label for="select-do-recurring-notifications" class="col-xs-3"> Regularly notify me about new opportunities </label>
+			<div class="col-xs-4 col-sm-2">
+				<select class="form-control" id="select-do-recurring-notifications" value="{{profile.contactPreferences.fRecurringNotify}}">
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-1"> </div>
+			<label for="recurring-notification-frequency-num" class="col-xs-2"> Notify me once every </label>
+			<div class="col-xs-4 col-sm-2">
+				<input class="form-control" id="recurring-notification-frequency-num" type="text" value="{{profile.contactPreferences.notifyPeriod}}"/>
+			</div>
+			<div class="col-xs-4 col-sm-3">
+				<select class="form-control" id="select-recurring-notification-frequency-type">
+					<option value="daily"> Day(s) </option>
+					<option value="weekly"> Week(s) </option>
+					<option value="monthly"> Month(s) </option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-1"></div>
+			<label class="col-xs-2"> Notify me using </label>
+			<div class="col-xs-2">
+				<input type="checkbox" id="recurring-notification-fb-checkbox" name="recurring-notification-fb-checkbox" checked="{{profile.contactPreferences.fUseFacebookForRecurring}}"/>
+				<label for="recurring-notification-fb-checkbox"> Facebook </label>
+			</div>
+			<div class="col-xs-2">
+				<input type="checkbox" id="recurring-notification-email-checkbox" name="recurring-notification-email-checkbox" checked="{{profile.contactPreferences.fUseEmailForRecurring}}"/>
+				<label for="recurring-notification-email-checkbox"> email </label>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="select-do-major-notifications" class="col-xs-3"> Notify me about major news events </label>
+			<div class="col-xs-4 col-sm-2">
+				<select class="form-control" id="select-do-major-notifications">
+					<option value="true"> Yes</option>
+					<option value="false"> No</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-xs-1"></div>
+			<label class="col-xs-2"> Notify me using </label>
+			<div class="col-xs-2">
+				<input type="checkbox" id="major-notification-fb-checkbox" name="major-notification-fb-checkbox" checked="{{profile.contactPreferences.fUseFacebookForMajor}}"/>
+				<label for="major-notification-fb-checkbox"> Facebook </label>
+			</div>
+			<div class="col-xs-2">
+				<input type="checkbox" id="major-notification-email-checkbox" name="major-notification-email-checkbox" checked="{{profile.contactPreferences.fUseFacebookForMajor}}"/>
+				<label for="major-notification-email-checkbox"> email </label>
+			</div>
+		</div>
+
+		<button type="submit" class="btn btn-primary js-contactPreferences-submit"> Submit </button>
+	</form>
 </template>
 
 <template name="selectStates">

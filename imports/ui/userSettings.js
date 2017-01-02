@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
-  
+
+import { ContactPreferences } from '../api/userClasses.js'
+
 import './userSettings.html';
 
 Template.loggedInUserSettings.helpers({
@@ -60,5 +62,35 @@ Template.dangerZone.events({
         else {
             $('#confirmDelete-region').show(250);
         }
+    }
+})
+
+Template.contactPreferences.onRendered(function() {
+    // TODO:  This is a hack.  Figure out how to specify default SELECT values in HTML. 
+    user = Meteor.user();
+    if (user && user.profile && user.profile.contactPreferences) {
+        var prefs = user.profile.contactPreferences;
+        Template.instance().$('#select-do-recurring-notifications').val(prefs.fRecurringNotify ? "true" : "false"),
+        Template.instance().$('#select-do-major-notifications').val(prefs.fMajorEventNotify ? "true" : "false"),
+        Template.instance().$('#select-recurring-notification-frequency-type').val(prefs.notifyPeriodType);
+    }
+})
+
+Template.contactPreferences.events({
+    'submit #contact-preferences'(evt,tmpl){
+        evt.preventDefault();
+        var prefs = new ContactPreferences(
+            tmpl.$('#select-do-recurring-notifications').val() === "true",
+            parseInt(tmpl.$('#recurring-notification-frequency-num').val()),
+            tmpl.$('#select-recurring-notification-frequency-type').val(),
+            tmpl.$('#recurring-notification-fb-checkbox').prop('checked'),
+            tmpl.$('#recurring-notification-email-checkbox').prop('checked'),
+            tmpl.$('#select-do-major-notifications').val() === "true",
+            tmpl.$('#major-notification-fb-checkbox').prop('checked'),
+            tmpl.$('#major-notification-email-checkbox').prop('checked')
+        );
+
+        Meteor.call('users.setContactPreferences', prefs);
+        return false;
     }
 })

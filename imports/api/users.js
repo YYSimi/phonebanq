@@ -113,5 +113,23 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         }
         Meteor.users.remove(Meteor.userId());
+    },
+    'users.setContactPreferences'(prefs){
+        if (!Meteor.userId()) {
+            throw new Meteor.Error('not-authorized');
+        }
+        check(prefs,
+        {
+            fRecurringNotify: Boolean,
+            notifyPeriod: Number,
+            notifyPeriodType: String, //TODO:  Be more specific.
+            fUseFacebookForRecurring: Boolean,
+            fUseEmailForRecurring: Boolean,
+            fMajorEventNotify: Boolean,
+            fUseFacebookForMajor: Boolean,
+            fUseEmailForMajor: Boolean,
+        });
+
+        Meteor.users.update(Meteor.userId(), {$set: {"profile.contactPreferences": prefs}});
     }
 });
