@@ -105,51 +105,70 @@ if (Meteor.isServer) {
 
 Meteor.users.deny({update: function () { return true; }});
 
+function validateTask(task) {
+    check(task,
+    {
+        tiny_description: String,
+        brief_description: String,
+        start_date: Date,
+        end_date: Date,
+        task_type: String,
+        issues: [String],
+        priority: Number,
+        xp_value: Number,
+        group: String
+    });    
+}
+
+function validatePhoneTaskDetail(phoneTask) {
+    check(phoneTask,
+    {
+        general_script: Match.Maybe(String),
+        supporter_script: Match.Maybe(String),
+        opposition_script: Match.Maybe(String),
+        notes: String,
+        call_my_national_senators: Boolean,
+        call_my_national_representatives: Boolean,
+        call_custom_senators: [String],
+        call_custom_representatives: [String],
+        call_custom: [String],
+    });
+}
+
+function validateFreeformTaskDetail(freeformTask) {
+    check(freeformTask,
+    {
+        instructions: String,
+        notes: String
+    });
+}
+
+function validateTaskDetailOfType(taskType, taskDetail) {
+    // TODO:  All of this ugly switch stuff needs to become object-oriented.
+    switch (taskType) {
+        case PBTaskTypesEnum.phone:
+            validatePhoneTaskDetail(taskDetail);
+            break;
+        case PBTaskTypesEnum.freeform:
+            validateFreeformTaskDetail(taskDetail);
+            break;
+        default:
+            throw new Meteor.Error("invalid-parameter", "The given task detail does not match the specified task type ") // TODO:  figure out how check_fail works.
+    }
+}
+
+function checkForEditPermissions(user, task) {
+    return task.owner == user._id;
+}
+
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
 Meteor.methods({
     // TODO:  Data validation!
     // TODO:  _Definitely_ make task DB management a different API/class than userTask management.
     'tasks.registerNewTask'(task, taskDetail){
         // TODO:  If constructor-based matching after Meteor.call starts working in future versions of meteor, use that instead.
-        check(task,
-        {
-            tiny_description: String,
-            brief_description: String,
-            start_date: Date,
-            end_date: Date,
-            task_type: String,
-            issues: [String],
-            priority: Number,
-            xp_value: Number,
-            group: String
-        });
-
-        // TODO:  All of this ugly switch stuff needs to become object-oriented.
-        switch (task.task_type) {
-            case PBTaskTypesEnum.phone:
-                check(taskDetail,
-                {
-                    general_script: Match.Maybe(String),
-                    supporter_script: Match.Maybe(String),
-                    opposition_script: Match.Maybe(String),
-                    notes: String,
-                    call_my_national_senators: Boolean,
-                    call_my_national_representatives: Boolean,
-                    call_custom_senators: [String],
-                    call_custom_representatives: [String],
-                    call_custom: [String],
-                });
-                break;
-            case PBTaskTypesEnum.freeform:
-                check(taskDetail,
-                {
-                    instructions: String,
-                    notes: String
-                });
-                break;
-            default:
-                throw new Meteor.Error("invalid-parameter", "The given task detail does not match the specified task type ") // TODO:  figure out how check_fail works.
-        }
+        validateTask(task);
+        validateTaskDetailOfType(task.task_type, taskDetail);
 
         var user = Meteor.user();
         if (!user || !user.profile || !user.profile.permissions || 
@@ -196,6 +215,45 @@ Meteor.methods({
         if (task && task.owner == user._id) {
             console.log("disabling task")
             Tasks.update(taskId, {$set : { is_disabled : true}})
+        }
+    },
+
+    'tasks.editTask'(taskId, newTask, taskDetail) {
+        check(taskId, Mongo.ObjectID)
+        validateTask(newTask);
+        validateTaskDetailOfType(newTask.task_type, taskDetail);
+        var user = Meteor.user();
+        var oldTask = Tasks.findOne(taskId);
+        if (!user) {
+            throw new Meteor.Error("not-authorized");
+        }
+
+        if (!oldTask) {
+            throw new Meteor.Error("invalid-parameter", "The given task does not exist");
+        }
+
+        if (oldTask.task_type != newTask.task_type) {
+            throw new Meteor.Error("invalid-parameter", "The given task is attempting to changed type.  This is not allowed.")
+        }
+
+        if (!checkForEditPermissions(user, oldTask)) {
+            throw new Meteor.Error("not-authorized", "The given user is not authorized to edit this task");
+        }
+
+        taskDetail.parent_task_id = oldTask._id;
+        newTask.task_detail_id = oldTask.task_detail_id;
+        
+        Tasks.update(taskId, {$set : newTask});
+        switch (newTask.task_type) {
+            case PBTaskTypesEnum.phone:
+                // TODO : Standardize on storing _only_ objectIDs in the database except for userIDs!
+                PhoneTasks.update(new Mongo.ObjectID(newTask.task_detail_id), {$set: taskDetail});
+                break;
+            case PBTaskTypesEnum.freeform:
+                FreeformTasks.update(new Mongo.ObjectID(newTask.task_detail_id), {$set: taskDetail});
+                break;
+            default:
+                throw new Meteor.Error("bad-state", "Unknown task type found");
         }
     }
 })
