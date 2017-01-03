@@ -20,10 +20,10 @@ Migrations.add({
                 true,
                 1,
                 "daily",
-                user.profile.loginsource === "facebook" ? true : false, // fUseFacebokForRecurring
+                (user.profile && user.profile.loginsource === "facebook") ? true : false, // fUseFacebokForRecurring
                 false, // fUseEmailForRecurring
                 true, // fMajorEventNotify
-                user.profile.loginsource === "facebook" ? true : false, // fUseFacebookForMajor
+                (user.profile && user.profile.loginsource === "facebook") ? true : false, // fUseFacebookForMajor
                 true, // fUseEmailForMajor
                 userEmailAddress // emailAddress
             )
