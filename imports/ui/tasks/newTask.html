@@ -1,7 +1,7 @@
 <template name="newTask">
   {{#if currentUser}}
     {{#if fHasNewTaskPermissions}}
-      {{> authenticatedUserNewTask}}
+      {{> authenticatedUserNewTask this}}
     {{else}}
       {{> permissionsRequired}}
     {{/if}}
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div id="task-detail">
-    {{> Template.dynamic template=currentTaskDetailTemplateName}}
+    {{> Template.dynamic data=getTaskDetailToEdit template=currentTaskDetailTemplateName}}
     </div>
     <button type="submit" class="btn btn-primary js-newTask-submit"> Submit </button>
     <button type="button" class="btn btn-info js-newTask-preview"> Preview </button>

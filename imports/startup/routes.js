@@ -68,7 +68,13 @@ Router.route('/completedTasks', {
 Router.route('/newTask', {
     name: 'newTask',
     layoutTemplate: 'main'
+});
 
+Router.route('/editTask/:_id', {
+    name: 'editTask',
+    template: 'newTask',
+    layoutTemplate: 'main',
+    data: function() {return this.params._id}
 });
 
 Router.route('/tasksAdmin', {

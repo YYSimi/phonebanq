@@ -51,7 +51,9 @@ Template.authenticatedTasksAdmin.helpers({
 Template.manageTaskButtons.events({
     'click .js-task-disable'(evt) {
         Meteor.call('tasks.disableTask', this.task._id);
-        return false;
+    },
+    'click .js-edit-task'(evt){
+        Router.go('editTask', {_id: this.task._id._str});
     }
 });
 

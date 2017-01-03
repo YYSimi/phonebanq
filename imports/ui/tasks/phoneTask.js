@@ -14,7 +14,7 @@ Template.PhoneTask.onRendered(function() {
             modules: {
                 toolbar: false
             }
-        });        
+        });
         var delta = JSON.parse(this.data.notes);
 
         quill.setContents(delta);

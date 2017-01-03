@@ -2,6 +2,7 @@
 
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js';
 import { hasEditPermissionsByRank } from '../../api/userGroupClasses.js';
@@ -23,6 +24,9 @@ Template.newTask.helpers({
 })
 
 Template.authenticatedUserNewTask.onCreated(function () {
+    var tmpl = Template.instance();
+    tmpl.taskToEdit = new ReactiveVar({});
+    tmpl.taskDetailToEdit = new ReactiveVar({});
     Meteor.subscribe('senators');
     Meteor.subscribe('representatives');
 });
@@ -39,7 +43,6 @@ Template.authenticatedUserNewTask.helpers({
             var task = {};
             var taskDetail = {};
             var taskType = currentTaskType.get();
-            console.log("current task type is " + currentTaskType.get());
 
             // TODO:  Make quills behave properly for previews.
 
@@ -86,10 +89,15 @@ Template.authenticatedUserNewTask.helpers({
             
             return retval;
         }
+    },
+    getTaskDetailToEdit(){
+        return Template.instance().taskDetailToEdit;
     }
+
 })
 
 Template.authenticatedUserNewTask.onRendered(function() {
+    var tmpl = Template.instance();
     for (taskType in PBTaskTypesEnum) 
     {
         $("#task-type").append("<option> " + taskType + " </option>");
@@ -106,14 +114,50 @@ Template.authenticatedUserNewTask.onRendered(function() {
                 }
             } 
         })
-    })
+    });
+
+    // TODO: This is disgusting, and should not run in response to onRendered.
+    // Move most of this logic to the HTML file.
+    if (tmpl.data) {
+        var taskMongoId = new Mongo.ObjectID(tmpl.data);
+
+        tmpl.subscribe('tasksAndDetails', [taskMongoId],
+            function() { 
+                var task = Tasks.findOne(taskMongoId);
+                if (task) {
+                    tmpl.taskToEdit.set(task);
+
+                    var taskDetail = {};
+                    switch(task.task_type) {
+                        case PBTaskTypesEnum.phone:
+                            taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(task.task_detail_id));
+                            break;
+                        case PBTaskTypesEnum.freeform:
+                            taskDetail = FreeformTasks.findOne(new Mongo.ObjectID(task.task_detail_id));
+                            break;
+                        default:
+                            throw "Unknown task type";
+                    }
+                    tmpl.taskDetailToEdit.set(taskDetail);
+                }
+
+                $("#tiny-description").val(task.tiny_description),
+                $("#brief-description").val(task.brief_description),
+                $("#task-priority").val(task.priority);
+                $("#task-group").val(task.group);
+                $("#task-type").val(task.task_type);
+                currentTaskType.set(task.task_type);
+                $("#task-type").prop("disabled", "disabled");
+            }
+        );
+    }
 
     Template.instance().$("#new-task").validate();
 
 })
 
 Template.authenticatedUserNewTask.events({
-    'submit form'(evt) {
+    'submit form'(evt, tmpl) {
         evt.preventDefault();
         var taskType = currentTaskType.get();
 
@@ -163,10 +207,11 @@ Template.authenticatedUserNewTask.events({
                 throw "invalid task type"
         }
 
-        console.log(task);
-        console.log(taskDetail);
-
-        Meteor.call('tasks.registerNewTask', task, taskDetail);
+        if (tmpl.data) {
+            Meteor.call('tasks.editTask', new Mongo.ObjectID(tmpl.data), task, taskDetail);
+        } else {
+            Meteor.call('tasks.registerNewTask', task, taskDetail);
+        }
         return false;
     },
 
@@ -179,22 +224,83 @@ Template.authenticatedUserNewTask.events({
     }
 });
 
+Template.phoneNewTaskDetail.onCreated(function() {
+    Template.instance().fSenatorsReady = new ReactiveVar(false);
+    Template.instance().fRepresentativesReady = new ReactiveVar(false);
+})
+
 Template.phoneNewTaskDetail.onRendered(function() {
     $("#call-custom-senators").select2({placeholder: 'e.g John McCain'});
     $("#call-custom-representatives").select2({placeholder: 'e.g Jerrold Nadler'});
-    Senators.find({}, {sort: {first_name:1} }).fetch().forEach( (senator) => {
-        $("#call-custom-senators").append("<option value=" + senator.bioguide_id + ">" + senator.first_name + " " + senator.last_name + " </option>");
-    })
-    Representatives.find({}, {sort: {first_name:1} }).fetch().forEach( (rep) => {
-        $("#call-custom-representatives").append("<option value=" + rep.bioguide_id + ">" + rep.first_name + " " + rep.last_name + " </option>");
-    })
+
+    var tmpl = Template.instance();
+    Meteor.subscribe(
+        'senators',
+        function()  {
+            Senators.find({}, {sort: {first_name:1} }).fetch().forEach( (senator) => {
+                $("#call-custom-senators").append("<option value=" + senator.bioguide_id + ">" + senator.first_name + " " + senator.last_name + " </option>");
+            })
+
+            tmpl.fSenatorsReady.set(true);
+        }
+    );
+    Meteor.subscribe(
+        'representatives',
+        function() {
+            Representatives.find({}, {sort: {first_name:1} }).fetch().forEach( (rep) => {
+                $("#call-custom-representatives").append("<option value=" + rep.bioguide_id + ">" + rep.first_name + " " + rep.last_name + " </option>");
+            });
+
+            tmpl.fRepresentativesReady.set(true);
+        }
+    );
 
     quillNotes = new Quill('#task-notes', {
         theme: 'snow'
+    });
+    // Fill out data on the representatives, once the collection is ready.
+    Tracker.autorun(function () {
+        if (tmpl && tmpl.data) {
+            var phoneTask = tmpl.data.get();
+            if (!_.isEmpty(phoneTask) && tmpl.fRepresentativesReady.get()) {
+                tmpl.$("#call-custom-representatives").val(phoneTask.call_custom_representatives).change();
+            }
+        }
+    });
+
+    // Fill out data on the senators, once the collection is ready.
+    Tracker.autorun(function () {
+        if (tmpl && tmpl.data) {
+            var phoneTask = tmpl.data.get();
+            if (!_.isEmpty(phoneTask) && tmpl.fSenatorsReady.get()) {
+                tmpl.$("#call-custom-senators").val(phoneTask.call_custom_senators).change();
+            }
+        }
+    });
+
+    // Fill out data on most of the template.
+    Tracker.autorun(function() {
+        // Pre-filled data means we're editing an existing task.
+        if (tmpl && tmpl.data) {
+            var phoneTask = tmpl.data.get();
+            if (!_.isEmpty(phoneTask)) {
+                tmpl.$("#general-script").val(phoneTask.general_script);
+                tmpl.$("#supporter-script").val(phoneTask.supporter_script);
+                tmpl.$("#opposition-script").val(phoneTask.opposition_script);
+
+                var delta = JSON.parse(phoneTask.notes);
+                quillNotes.setContents(delta);
+
+                tmpl.$("#call-my-national-senators").val(phoneTask.call_my_national_senators ? "true" : "false");
+                tmpl.$("#call-my-national-representatives").val(phoneTask.call_my_national_representatives ? "true" : "false");
+            }
+        }
     })
+
 })
 
 Template.freeformNewTaskDetail.onRendered(function() {
+    var tmpl = Template.instance();
     quillNotes = new Quill('#task-notes', {
         theme: 'snow'
     })
@@ -202,4 +308,11 @@ Template.freeformNewTaskDetail.onRendered(function() {
     quillInstructions = new Quill('#task-instructions', {
         theme: 'snow'
     });
+
+    if (tmpl.data) {
+        var freeformTask = tmpl.data;
+        
+        quillNotes.setContents(JSON.parse(freeformTask.notes));
+        quillInstructions.setContents(JSON.parse(freeformTask.instructions)); 
+    }
 })
