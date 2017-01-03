@@ -67,8 +67,6 @@ export var Scheduler = function() {
 
     // Performs a "tic" of a given frequency type.  Actions are run when enough tics have elapsed.
     function doTic(frequencyType) {
-        console.log("doing a tic")
-
         var actionSource = {};
         switch(frequencyType) {
             case "daily":

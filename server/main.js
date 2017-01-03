@@ -1,11 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
+import { Migrations } from 'meteor/percolate:migrations'
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
 import '../imports/api/util.js';
 import '../imports/api/userTasks.js';
 import '../imports/api/userGroups.js';
+import './migrations.js';
 
 import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js';
@@ -98,6 +100,7 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
+    Migrations.migrateTo('latest');
     indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
 

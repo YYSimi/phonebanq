@@ -1,7 +1,8 @@
 export function ContactPreferences(
     fRecurringNotify, notifyPeriod, notifyPeriodType,
     fUseFacebookForRecurring, fUseEmailForRecurring,
-    fMajorEventNotify, fUseFacebookForMajor, fUseEmailForMajor){
+    fMajorEventNotify, fUseFacebookForMajor, fUseEmailForMajor,
+    emailAddress){
         this.fRecurringNotify = fRecurringNotify;
         this.notifyPeriod = notifyPeriod || 1;
         this.notifyPeriodType = notifyPeriodType || "daily";
@@ -10,4 +11,5 @@ export function ContactPreferences(
         this.fMajorEventNotify = fMajorEventNotify;
         this.fUseFacebookForMajor = fUseFacebookForMajor;
         this.fUseEmailForMajor = fUseEmailForMajor;
+        this.emailAddress = emailAddress;
 }

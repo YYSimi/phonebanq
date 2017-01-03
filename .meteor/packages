@@ -32,3 +32,4 @@ practicalmeteor:mocha
 force-ssl
 practicalmeteor:chai
 xolvio:cleaner
+percolate:migrations
