@@ -79,6 +79,8 @@ Template.contactPreferences.onRendered(function() {
 Template.contactPreferences.events({
     'submit #contact-preferences'(evt,tmpl){
         evt.preventDefault();
+        var user = Meteor.user();
+        var currentEmail = user.profile && user.profile.contactPreferences && user.profile.contactPreferences.emailAddress ? user.profile.contactPreferences.emailAddress : "";
         var prefs = new ContactPreferences(
             tmpl.$('#select-do-recurring-notifications').val() === "true",
             parseInt(tmpl.$('#recurring-notification-frequency-num').val()),
@@ -87,7 +89,8 @@ Template.contactPreferences.events({
             tmpl.$('#recurring-notification-email-checkbox').prop('checked'),
             tmpl.$('#select-do-major-notifications').val() === "true",
             tmpl.$('#major-notification-fb-checkbox').prop('checked'),
-            tmpl.$('#major-notification-email-checkbox').prop('checked')
+            tmpl.$('#major-notification-email-checkbox').prop('checked'),
+            currentEmail //TODO:  Plumb through a setting to select e-mail address.
         );
 
         Meteor.call('users.setContactPreferences', prefs);

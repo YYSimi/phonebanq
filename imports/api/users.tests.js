@@ -35,6 +35,7 @@ if (Meteor.isServer) {
                 false,
                 true,
                 true,
+                "foo@bar.com"
             );
             Meteor.call('users.setContactPreferences', prefs);
             var user = Meteor.users.findOne(userId);

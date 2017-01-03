@@ -128,6 +128,7 @@ Meteor.methods({
             fMajorEventNotify: Boolean,
             fUseFacebookForMajor: Boolean,
             fUseEmailForMajor: Boolean,
+            emailAddress: String    // TODO:  make sure this is a valid email
         });
 
         if (prefs.notifyPeriod < 1) {

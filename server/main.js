@@ -227,7 +227,6 @@ function setDefaultContactPreferences(user) {
         userEmailAddress // emailAddress
     )
     Meteor.users.update(user._id, {$set: {"profile.contactPreferences": defaultSettings}});
-
 }
 
 function generateUsername(user) {
