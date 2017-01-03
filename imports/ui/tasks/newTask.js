@@ -288,8 +288,8 @@ Template.phoneNewTaskDetail.onRendered(function() {
                 tmpl.$("#supporter-script").val(phoneTask.supporter_script);
                 tmpl.$("#opposition-script").val(phoneTask.opposition_script);
 
-                var delta = JSON.parse(phoneTask.notes);
-                quillNotes.setContents(delta);
+                if (phoneTask.notes) {
+                quillNotes.setContents(JSON.parse(phoneTask.notes));
 
                 tmpl.$("#call-my-national-senators").val(phoneTask.call_my_national_senators ? "true" : "false");
                 tmpl.$("#call-my-national-representatives").val(phoneTask.call_my_national_representatives ? "true" : "false");
@@ -309,10 +309,16 @@ Template.freeformNewTaskDetail.onRendered(function() {
         theme: 'snow'
     });
 
-    if (tmpl.data) {
-        var freeformTask = tmpl.data;
-        
-        quillNotes.setContents(JSON.parse(freeformTask.notes));
-        quillInstructions.setContents(JSON.parse(freeformTask.instructions)); 
-    }
+    Tracker.autorun(function() {
+        if (tmpl && tmpl.data) {
+            var freeformTask = tmpl.data.get();
+            
+            if (freeformTask.notes) {
+                quillNotes.setContents(JSON.parse(freeformTask.notes));
+            }
+            if (freeformTask.instructions) {
+                quillInstructions.setContents(JSON.parse(freeformTask.instructions)); 
+            }
+        }
+    });
 })
