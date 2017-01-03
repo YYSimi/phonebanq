@@ -289,7 +289,8 @@ Template.phoneNewTaskDetail.onRendered(function() {
                 tmpl.$("#opposition-script").val(phoneTask.opposition_script);
 
                 if (phoneTask.notes) {
-                quillNotes.setContents(JSON.parse(phoneTask.notes));
+                    quillNotes.setContents(JSON.parse(phoneTask.notes));
+                }
 
                 tmpl.$("#call-my-national-senators").val(phoneTask.call_my_national_senators ? "true" : "false");
                 tmpl.$("#call-my-national-representatives").val(phoneTask.call_my_national_representatives ? "true" : "false");
