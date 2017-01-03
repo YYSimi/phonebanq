@@ -98,7 +98,7 @@ if (Meteor.isServer) {
             assert(Math.abs(actualWeekDelta - expectedWeekDelta) < 1, "Weekly Scheduler delta not within tolerance.  Expected " + expectedWeekDelta + " got " + actualWeekDelta );
             assert(Math.abs(actualMonthDelta - expectedMonthDelta) < 1, "Monthly Scheduler delta not within tolerance.  Expected " + expectedMonthDelta + " got " + actualMonthDelta );
 
-            Scheduer.setSchedulerState("stopped");
+            Scheduler.setSchedulerState("stopped");
         });
 
 
