@@ -62,11 +62,7 @@ function UpdateCongressInfo() {
                     console.log(error);
                 }
                 else {
-                    console.log("got response");
-                    console.log(response);
-
                     response.data.results.forEach( function(elt) {
-                        console.log("Scanning congressperson " + elt.first_name + " " + elt.last_name);
                         if (elt.chamber === "house") {
                             var storedRepresentative = Representatives.findOne( {bioguide_id: elt.bioguide_id} );
                             if (storedRepresentative) {
@@ -89,10 +85,7 @@ function UpdateCongressInfo() {
 
                     var nTotalRecords = response.data.count;
                     var nRecordsSoFar = nRecordsPerPage * page;
-                    console.log("total records: " + nTotalRecords);
-                    console.log("records so far: " + nRecordsSoFar);
                     if (nRecordsSoFar < nTotalRecords) {
-                        console.log("getting next page!")
                         UpdateCongressInfoFromPage(page+1);
                     }
                 }
