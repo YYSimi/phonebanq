@@ -1,6 +1,6 @@
 <template name="anonymousTasks">
   {{#if currentUser}}
-    {{> myTasks}}
+    {{routeToLoggedInUser}}
   {{else}}
     {{> anonymousTasksActual }}
   {{/if}}

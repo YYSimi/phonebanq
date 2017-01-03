@@ -9,6 +9,12 @@ import { FindTaskDetailFromTask } from '../../../lib/common.js'
 
 import './anonymousTasks.html'
 
+Template.anonymousTasks.helpers({
+    routeToLoggedInUser() {
+        Router.go('myTasks');
+    }
+});
+
 Template.anonymousTasksActual.onCreated(function () {
     Meteor.subscribe('topTasks');
 });
