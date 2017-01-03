@@ -130,6 +130,10 @@ Meteor.methods({
             fUseEmailForMajor: Boolean,
         });
 
+        if (prefs.notifyPeriod < 1) {
+            prefs.notifyPeriod = 1;
+        }
+
         Meteor.users.update(Meteor.userId(), {$set: {"profile.contactPreferences": prefs}});
     }
 });

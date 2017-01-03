@@ -14,6 +14,9 @@ import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js';
 import { indexCallbacks } from '../lib/collections.js';
 import { Scheduler } from './scheduler.js'
 
+// TODO:  Create a Users class so that we don't have this hanging out here.
+var userFbNotificationTokens = {};
+
 var fbAppInfo = function(){
     var fbAppAccessToken = '';
     
@@ -141,12 +144,14 @@ Meteor.startup(() => {
 
     FixActiveUserTaskCount();
     FixTaskCompletionCount();
-    UpdateAllUserTasks();
+    runStartupUserTasks();
 
     var testModeFrequency = 1000*10;
     var frequencyOverride = IsProductionMode() ? null : testModeFrequency;    
     Scheduler.registerAction(() => {RunMaintenanceTasks(IsProductionMode())}, 1, "daily")
     Scheduler.runScheduler("daily", frequencyOverride);
+    Scheduler.runScheduler("weekly", frequencyOverride);
+    Scheduler.runScheduler("monthly", frequencyOverride);
 
     RunMaintenanceTasks(IsProductionMode()); 
 });
@@ -193,7 +198,13 @@ Accounts.onLogin(function(loginAttempt) {
     DisableExpiredUserTasks(loginAttempt.user._id);
 
     Meteor.users.update(loginAttempt.user._id, { $set: {"profile.loginSource": loginSource}} )
-})
+});
+
+function runStartupUserTasks() {
+    Meteor.users.find().forEach((user) => {
+        ScheduleFbNotification(user);
+    })
+}
 
 function findLoginSource(user) {
     var retval = "local"
@@ -275,6 +286,22 @@ function FixTaskCompletionCount() {
     })
 }
 
+function ScheduleFbNotification(user) {
+    if (user.profile && user.profile.contactPreferences) {
+        var prefs = user.profile.contactPreferences;
+        if (userFbNotificationTokens[user._id]) {
+            Scheduler.unregisterAction(user._id);
+        }
+        if (prefs.fRecurringNotify && prefs.fUseFacebookForRecurring) {
+            var token = Scheduler.registerAction(
+                () => {NotifyFacebookUser(user);},
+                prefs.notifyPeriod,
+                prefs.notifyPeriodType);
+            userFbNotificationTokens[user._id] = token;
+        }
+    }
+}
+
 // Schedule a job to update the userTask database once per day.
 function UpdateAllUserTasks(){
     console.log("updating all user tasks");
@@ -282,27 +309,20 @@ function UpdateAllUserTasks(){
         console.log("updating user tasks for " + user._id);
         DisableExpiredUserTasks(user._id);
         var nNewTasksCreated = PopulateUserTasks(user._id);
-        if (nNewTasksCreated > 0) {
-            if (user.services && user.services.facebook) {
-                NotifyFacebookUser(user);
-            }
-        }
     })
 }
 
 function OnFirstLogin(user) {
     console.log("running OnFirstLogin");
     var nNewTasksCreated = PopulateUserTasks(user._id);
-    if (nNewTasksCreated > 0) {
-        if (user.services && user.services.facebook) {
-            NotifyFacebookUser(user);
-        }
+    if (user.services && user.services.facebook) {
+        NotifyFacebookUser(user);
     }
 }
 
 function NotifyFacebookUser(user) {
     var accessToken = fbAppInfo.getAccessToken();
-    if (accessToken) {
+    if (user.services && user.services.facebook && accessToken) {
         userFbInfo = user.services.facebook;
 
         // TODO:  This isn't always displaying the "most important" task given today.
