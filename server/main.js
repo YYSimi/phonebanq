@@ -9,6 +9,7 @@ import '../imports/api/userTasks.js';
 import '../imports/api/userGroups.js';
 import './migrations.js';
 
+import { ContactPreferences } from '../imports/api/userClasses.js'
 import { PopulateLocationFromFacebook, UpdateCongressionalInfo} from '../lib/common.js';
 import { PopulateUserTasks, DisableExpiredUserTasks } from './userTasks.js';
 import { indexCallbacks } from '../lib/collections.js';
@@ -153,6 +154,7 @@ Accounts.onCreateUser(function (options, user) {
     if (!user.profile) {user.profile = {};}
     user.profile.loginSource = findLoginSource(user);
     user.username = generateUsername(user);
+    user.profile.contactPreferences = generateDefaultContactPreferences(user);
     return user;
 });
 
@@ -207,7 +209,7 @@ function findLoginSource(user) {
     return retval;
 }
 
-function setDefaultContactPreferences(user) {
+function generateDefaultContactPreferences(user) {
     var userEmailAddress = "";
     if (user.emails && user.emails[0] && user.emails[0].address) {
         userEmailAddress = user.emails[0].address;
@@ -226,7 +228,7 @@ function setDefaultContactPreferences(user) {
         true, // fUseEmailForMajor
         userEmailAddress // emailAddress
     )
-    Meteor.users.update(user._id, {$set: {"profile.contactPreferences": defaultSettings}});
+    return defaultSettings;
 }
 
 function generateUsername(user) {
@@ -329,7 +331,6 @@ function UpdateAllUserTasks(){
 
 function OnFirstLogin(user) {
     console.log("running OnFirstLogin");
-    setDefaultContactPreferences(user);
     var nNewTasksCreated = PopulateUserTasks(user._id);
     if (user.services && user.services.facebook) {
         NotifyFacebookUser(user);
