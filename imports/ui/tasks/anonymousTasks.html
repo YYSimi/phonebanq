@@ -7,16 +7,6 @@
 </template>
 
 <template name="anonymousTasksActual">
-  <p>  Go beyond casting your single, solitary vote at the ballot box and start making your voice heard.  Grassroots Champion is a left-leaning civic engagement platform that streamlines, organizes, and generates a daily task list for activism.  Using your interests and location, we can point you towards meaningful civic action opportunities for causes that you care about. </p>
-  <p>  Right now, Grassroots Champion is oriented towards getting citizens to call their Senators and Representatives about issues that matter to them.  Phone calls are the most effective means of reaching your representatives short of going to their office in-person (we'll be encouraging in-person visits too in the near future).  If you think phone calls are ineffective, read <a href="http://www.attn.com/stories/12768/former-congressional-staffer-explains-how-to-make-congressman-listen"> this former congressional staffer's testimonial </a> to learn why your calls matter.</p>
-  <p>  This site is currently a work-in-progress.  Pardon our dust and exposed wiring -- we're working hard to turn this idea into reality.  This site is also all about activism and involvement.  That means we want our users involved in this site’s evolution and to eventually be creating content such as tasks.  Fill out our <a href="{{pathFor route='feedback'}}">feedback form</a> or contact us directly (grassrootschampion@gmail.com) if you are interested in collaborating on this project. </p>
-  <p>  Enter your city and state below for a sample call to action, or create an account to receive regular updates, track your progress, and help us provide you with the opportunities that are most relavent to you.</p>
-  <div class="row">
-    <div class="col-xs-5"> {{> credentialsPrompt}} </div>
-    <div class="col-xs-2"> <h4 class="text-center"> -or- </h4> </div>
-    <div class="col-xs-5"> {{> provideLocation}} </div>
-  </div>
-  <hr />
   {{#if fShouldShowTasks}}
     {{#if Template.subscriptionsReady}}
       <ul class="list-group js-userTasks-list">
@@ -52,7 +42,7 @@
 
 <template name="provideLocation">
   <div class="well well-sm">
-    <h4> Tell us where you're from: </h4>
+    <h4> Try it out: </h4>
     {{> setLocation}}
   </div>
 </template>
