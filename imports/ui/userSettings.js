@@ -4,7 +4,26 @@ import { ContactPreferences } from '../api/userClasses.js'
 
 import './userSettings.html';
 
+Template.loggedInUserSettings.onCreated(function() {
+    this.currentTab = new ReactiveVar("locationSettings");
+})
+
 Template.loggedInUserSettings.helpers({
+    tab: function() {
+        return Template.instance().currentTab.get();
+    }
+})
+
+Template.loggedInUserSettings.events({
+    'click .nav-tabs li': function(evt, tmpl) {
+        var currentTab = $(event.target).closest('li');
+        currentTab.addClass( "active" );
+        $(".nav-tabs li").not(currentTab).removeClass("active");
+        tmpl.currentTab.set(currentTab.data("template"));
+    }
+})
+
+Template.locationSettings.helpers({
     isLocationFromFacebook() {
         return this.profile && this.profile.locationDataSource === "facebook";
     },
@@ -13,7 +32,7 @@ Template.loggedInUserSettings.helpers({
     }
 })
 
-Template.loggedInUserSettings.events({
+Template.locationSettings.events({
     'submit #location'(evt) {
         evt.preventDefault();
         city = $('#user-city').val();
@@ -37,7 +56,7 @@ Template.loggedInUserSettings.events({
     }
 });
 
-Template.loggedInUserSettings.onRendered(function () {
+Template.locationSettings.onRendered(function() {
     Tracker.autorun( function() {
         var user = Meteor.user();
         if (user && user.profile) {

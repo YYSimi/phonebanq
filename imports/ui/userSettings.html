@@ -7,6 +7,15 @@
 </template>
 
 <template name="loggedInUserSettings">
+	<ul class="nav nav-tabs">
+		<li data-template="locationSettings" role="presentation" class="active"> <a href="#"> Location </a> </li>
+		<li data-template="contactPreferences" role="presentation"> <a href="#"> Contact </a></li>
+		<li data-template="dangerZone" role="presentation"> <a href="#"> Danger Zone </a></li>
+	</ul>
+	{{> Template.dynamic template=tab data=currentUser}}
+</template>
+
+<template name="locationSettings">
 	<form id="location">
 		<h3> Location Settings </h3>
 		<div class="form-group row">
@@ -39,10 +48,6 @@
 		{{/if}}
 		<button type="submit" class="btn btn-primary js-userSettings-submit"> Submit </button>
 	</form>
-	<hr/>
-	{{> contactPreferences currentUser}}
-	<hr/>
-	{{> dangerZone currentUser}}
 </template>
 
 <template name="dangerZone">
