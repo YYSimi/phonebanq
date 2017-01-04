@@ -107,6 +107,10 @@ Template.UserTask.helpers({
     }
 })
 
+Template.UserTask.onRendered(() => {
+    Template.instance().$('.btn').tooltip();
+})
+
 Template.ActiveTaskButtons.events({
     'click .js-task-success'() {
         
