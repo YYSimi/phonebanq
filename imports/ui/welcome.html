@@ -55,7 +55,7 @@
   </div><!-- /.carousel -->
 
   <!-- Featurettes -->
-  <div class="container">
+  <div class="container" id="js-featurettes">
     <hr class="featurette-divider">
 
     <div class="row featurette">
@@ -98,7 +98,11 @@
   </div>
 
   <br/>
-  <div class="container">
+  <div class="container begin-hidden" id="js-anon-tasks">
+    <!-- TODO:  Don't abuse stylesheets like this.  Restyle this guy to fit context -->
+      <div class="marketing-box">
+        {{> credentialsPrompt}}
+      </div>
     {{> anonymousTasks}}
   </div>
 </template>
