@@ -17,6 +17,10 @@ visibility: initial !important;
   margin-top: 20px;
 }
 
+.nav-tabs {
+  margin-bottom: 20px;
+}
+
 /* Navbar footer styles
 -------------------------------------------------- */
 

@@ -6,7 +6,7 @@
       </div>
         <ul class="nav navbar-nav navbar-left">
           {{#if currentUser}} <li class="navlink navlink-myTasks {{#if fIsThisRouteActive 'myTasks'}} active {{/if}}"><a href="{{pathFor route='myTasks'}}"> Today's opportunities </a></li> {{/if}}
-          {{#if currentUser}} <li class="navlink navlink-completedTasks {{#if fIsThisRouteActive 'completedTasks'}} active {{/if}}"><a href="{{pathFor route='completedTasks'}}"> Show completed opportunities </a></li> {{/if}}
+          {{#if currentUser}} <li class="navlink navlink-completedTasks {{#if fIsThisRouteActive 'completedTasks'}} active {{/if}}"><a href="{{pathFor route='completedTasks'}}"> Completed opportunities </a></li> {{/if}}
           <!-- <li class="navlink navlink-about {{#if fIsThisRouteActive 'about'}} active {{/if}}"><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li> -->
           {{#if currentUser}} <li class="navlink navlink-settings {{#if fIsThisRouteActive 'userSettings'}} active {{/if}}"><a href="{{pathFor route='userSettings'}}"> Settings </a></li> {{/if}}
           {{#if fHasNewTaskPermissions}}

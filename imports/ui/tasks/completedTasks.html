@@ -1,6 +1,5 @@
 <template name="completedTasks">
   {{#if currentUser}}
-    <h1> Actions Taken </h1>
     {{#if Template.subscriptionsReady}}
       {{> authenticatedUserCompletedTasks getUserTasks}}
     {{else}}
