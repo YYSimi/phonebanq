@@ -140,12 +140,19 @@ Meteor.startup(() => {
     FixTaskCompletionCount();
     runStartupUserTasks();
 
-    var testModeFrequency = 1000*10;
-    var frequencyOverride = IsProductionMode() ? null : testModeFrequency;    
-    Scheduler.registerAction(() => {RunMaintenanceTasks(IsProductionMode())}, 1, "daily")
-    Scheduler.runScheduler("daily", frequencyOverride);
-    Scheduler.runScheduler("weekly", frequencyOverride);
-    Scheduler.runScheduler("monthly", frequencyOverride);
+    if(IsProductionMode()) 
+    {
+        Scheduler.registerAction(() => {RunMaintenanceTasks(IsProductionMode())}, 1, "daily")
+    }
+    else {
+        var testModeFrequency = 1000*10;
+        Scheduler.createActionGroup("testModeActions", testModeFrequency);
+        Scheduler.registerAction(() => {RunMaintenanceTasks(IsProductionMode())}, 1, "testModeActions");
+        Scheduler.runScheduler("testModeActions");
+    }
+    Scheduler.runScheduler("daily");
+    Scheduler.runScheduler("weekly");
+    Scheduler.runScheduler("monthly");
 
     RunMaintenanceTasks(IsProductionMode()); 
 });

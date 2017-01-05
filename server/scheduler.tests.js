@@ -25,7 +25,7 @@ if (Meteor.isServer) {
             var token = Scheduler.registerAction(() => {++nTimesActionRan}, 1, taskFrequencyType);
             Scheduler.runActions(taskFrequencyType);
 
-            Scheduler.unregisterAction(token);
+            Scheduler.unregisterAction(token, taskFrequencyType);
             Scheduler.runActions(taskFrequencyType);
 
             assert.equal(nTimesActionRan, nTimesActionShouldRun, "Action did not run the correct number of times");        
@@ -46,7 +46,12 @@ if (Meteor.isServer) {
             registerTest("monthly")
         });
 
-        it('time deltas are calculated correctly', () => {
+        it('can register/unregister custom tasks', () => {
+            assert.isTrue(Scheduler.createActionGroup("testGroup", 5000), "failed to create action group");
+            registerTest("testGroup");
+        });
+
+        it('time deltas are calculated correctly for daily/weekly/monthly actions', () => {
             var now = new Date();
             var tomorrow = new Date();
             var nextThursday = new Date();
@@ -79,24 +84,18 @@ if (Meteor.isServer) {
             var expectedMonthDelta = nextMonth-now;
             var actualMonthDelta = Scheduler.runScheduler("monthly");
 
-            assert(Math.abs(actualDayDelta - expectedDayDelta) < 1, "Daily Scheduler delta not within tolerance.  Expected " + expectedDayDelta + " got " + actualDayDelta );
-            assert(Math.abs(actualWeekDelta - expectedWeekDelta) < 1, "Weekly Scheduler delta not within tolerance.  Expected " + expectedWeekDelta + " got " + actualWeekDelta );
-            assert(Math.abs(actualMonthDelta - expectedMonthDelta) < 1, "Monthly Scheduler delta not within tolerance.  Expected " + expectedMonthDelta + " got " + actualMonthDelta );
+            assert(Math.abs(actualDayDelta - expectedDayDelta) < 2, "Daily Scheduler delta not within tolerance.  Expected " + expectedDayDelta + " got " + actualDayDelta );
+            assert(Math.abs(actualWeekDelta - expectedWeekDelta) < 2, "Weekly Scheduler delta not within tolerance.  Expected " + expectedWeekDelta + " got " + actualWeekDelta );
+            assert(Math.abs(actualMonthDelta - expectedMonthDelta) < 2, "Monthly Scheduler delta not within tolerance.  Expected " + expectedMonthDelta + " got " + actualMonthDelta );
         });
 
-        it('time deltas override works', () => {
-            var expectedDayDelta = 1500;
-            var actualDayDelta = Scheduler.runScheduler("daily", expectedDayDelta);
+        it('time deltas are calculated correctly for custom action groups', () => {
+            var customTimeDelta = 5000;
+            assert.isTrue(Scheduler.createActionGroup("testGroup", customTimeDelta), "failed to create action group");
 
-            var expectedWeekDelta = 2500;
-            var actualWeekDelta = Scheduler.runScheduler("weekly", expectedWeekDelta);
+            var actualTimeDelta = Scheduler.runScheduler("testGroup");
 
-            var expectedMonthDelta = 3500;
-            var actualMonthDelta = Scheduler.runScheduler("monthly", expectedMonthDelta);
-
-            assert(Math.abs(actualDayDelta - expectedDayDelta) < 1, "Daily Scheduler delta not within tolerance.  Expected " + expectedDayDelta + " got " + actualDayDelta );
-            assert(Math.abs(actualWeekDelta - expectedWeekDelta) < 1, "Weekly Scheduler delta not within tolerance.  Expected " + expectedWeekDelta + " got " + actualWeekDelta );
-            assert(Math.abs(actualMonthDelta - expectedMonthDelta) < 1, "Monthly Scheduler delta not within tolerance.  Expected " + expectedMonthDelta + " got " + actualMonthDelta );
+            assert(Math.abs(actualTimeDelta - customTimeDelta) < 2, "Custom time Scheduler delta not within tolerance.  Expected " + customTimeDelta + " got " + actualTimeDelta );
 
             Scheduler.setSchedulerState("stopped");
         });
@@ -111,6 +110,11 @@ if (Meteor.isServer) {
         });
 
         it('monthly tics work correctly', () => {
+            ticTest("monthly");
+        });
+
+        it('custom tics work correctly', () => {
+            assert.isTrue(Scheduler.createActionGroup("testGroup", 5000), "failed to create action group");
             ticTest("monthly");
         });
 

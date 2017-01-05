@@ -5,6 +5,12 @@ export var Scheduler = function() {
     var dailyActions = {};
     var weeklyActions = {};
     var monthlyActions = {};
+    var actionGroups = {
+        "daily": {},
+        "weekly": {},
+        "monthly": {}
+    }
+    var customActionGroupFrequencies = {};
 
     var schedulerState = "running";
 
@@ -16,45 +22,41 @@ export var Scheduler = function() {
         this.ticsRemaining = ticsRemaining;
     }
 
-    function registerAction(callback, frequency, frequencyType) {
+    function registerAction(callback, frequency, actionGroup) {
         var token = generateUUID();
         var entry = new SchedulerEntry(callback, frequency, frequency);
-        switch(frequencyType) {
-            case "daily":
-                dailyActions[token] = entry;
-                break;
-            case "weekly":
-                weeklyActions[token] = entry;
-                break;
-            case "monthly":
-                monthlyActions[token] = entry;
-                break;
-            default:
-            throw "Specified unknown freqencyType: " + frequencyType;
+        if (actionGroups[actionGroup]) {
+            actionGroups[actionGroup][token] = entry;
+        }
+        else {
+            throw "Specified unknown actionGroup: " + actionGroup;
         }
         return token;
     };
 
-    function unregisterAction(token) {
-        delete dailyActions[token];
-        delete weeklyActions[token];
-        delete monthlyActions[token];
+    function unregisterAction(token, actionGroup) {
+        if (actionGroups[actionGroup]) {
+            delete actionGroups[actionGroup][token];
+        }
     };
 
+    function createActionGroup(groupName, groupFrequency) {
+        var retval = false;
+        if (!actionGroups.groupName && !customActionGroupFrequencies.groupFrequency) {
+            actionGroups[groupName] = {};
+            customActionGroupFrequencies[groupName] = groupFrequency;
+            retval = true;
+        }
+        return retval;
+    }
+
     // Unconditionally runs all registered actions of a given type.
-    function runActions(frequencyType) {
+    function runActions(actionGroup) {
         var actionSource = {};
-        switch(frequencyType) {
-            case "daily":
-                actionSource = dailyActions;
-                break;
-            case "weekly":
-                actionSource = weeklyActions;
-                break;
-            case "monthly":
-                actionSource = monthlyActions;
-                break;
-            default:
+        if (actionGroups[actionGroup]) {
+            actionSource = actionGroups[actionGroup];
+        }
+        else {
             throw "Specified unknown frequency: " + frequency;
         }
 
@@ -66,19 +68,12 @@ export var Scheduler = function() {
     };
 
     // Performs a "tic" of a given frequency type.  Actions are run when enough tics have elapsed.
-    function doTic(frequencyType) {
+    function doTic(actionGroup) {
         var actionSource = {};
-        switch(frequencyType) {
-            case "daily":
-                actionSource = dailyActions;
-                break;
-            case "weekly":
-                actionSource = weeklyActions;
-                break;
-            case "monthly":
-                actionSource = monthlyActions;
-                break;
-            default:
+        if (actionGroups[actionGroup]) {
+            actionSource = actionGroups[actionGroup];
+        }
+        else {
             throw "Specified unknown frequency: " + frequency;
         }
 
@@ -98,13 +93,13 @@ export var Scheduler = function() {
     // Runs the scheduler for events of a given type.  If a frequencyOverride is passed,
     // then the scheduler will run the events with the given frequency rather than the
     // default frequency for the frequency type.  Returns timeToNextTic as a testing hook.
-    function runScheduler(frequencyType, frequencyOverride) {
+    function runScheduler(actionGroup) {
         var scheduleIt = function() {
             var now = new Date();
             var nextTicTime = new Date();
             nextTicTime.setMinutes(0);
             nextTicTime.setSeconds(0);
-            switch (frequencyType) {
+            switch (actionGroup) {
                 case "daily":
                     nextTicTime.setHours(24);
                     break;
@@ -119,14 +114,22 @@ export var Scheduler = function() {
                     nextTicTime.setDate(1);
                     nextTicTime.setMonth(now.getMonth() + 1);
                     break;
+                // Anything else should be a custom action group.
+                default:
+                    if (actionGroups[actionGroup] && customActionGroupFrequencies[actionGroup]) {
+                        nextTicTime.setTime(now.getTime() + customActionGroupFrequencies[actionGroup]);
+                    }
+                    else {
+                        throw "unknown action group specified"
+                    }
+                    break;
             }
             var timeToNextTic = (nextTicTime.getTime() - now.getTime())
-            if (frequencyOverride) { timeToNextTic = frequencyOverride } 
 
             // TODO:  Figure out how to cancel this if someone changes the state from running.
             Meteor.setTimeout(function() {
                 if (schedulerState === "running") {
-                    doTic(frequencyType);
+                    doTic(actionGroup);
                     scheduleIt();
                 }
             }, timeToNextTic);
@@ -145,6 +148,7 @@ export var Scheduler = function() {
     return {
         registerAction,
         unregisterAction,
+        createActionGroup,
         runActions,
         doTic,
         runScheduler,

@@ -5,7 +5,7 @@ import { assert } from 'meteor/practicalmeteor:chai';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
 
 if (Meteor.isServer) {
-    describe('scheduler tests', () => {
+    describe('task API tests', () => {
         //---- HELPERS
         //-------------------------------------------- //
 
