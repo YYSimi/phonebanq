@@ -63,7 +63,7 @@ if (Meteor.isServer) {
         return [phoneTasks, freeformTasks];
     });
     Meteor.publish('topTasks', function() {
-        var topTasks = Tasks.find({is_disabled: {$ne: true}}, { limit:4})
+        var topTasks = Tasks.find({is_disabled: {$ne: true}}, {sort: {priority: -1, start_date: -1}, limit:4} )
         
        //TODO:  Function-out this task-detial-list-from-task stuff. 
         // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
