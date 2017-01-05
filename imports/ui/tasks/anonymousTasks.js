@@ -9,6 +9,38 @@ import { FindTaskDetailFromTask } from '../../../lib/common.js'
 
 import './anonymousTasks.html'
 
+// This is global so that we can use it as a helper.
+// TODO:  Find a better way to do this.
+// TODO:  This is currently duplicated in another file.  Move it to a common loation.
+function getUserTasks(groupName) {
+    var group = null;
+    if (groupName) {
+        group = UserGroups.findOne({name: groupName});
+        if (!group) {
+            return [];
+        }
+    }
+
+    var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
+    var retval =  userTasks.map(userTask => {
+        var mapRetval = null;
+        var task = FindTaskFromUserTask(userTask);
+        if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
+            var taskDetail = FindTaskDetailFromTask(task);
+            if (taskDetail) {  //Ditto for task detail
+                mapRetval =  {
+                    userTask: userTask,
+                    task: task,
+                    taskDetail: taskDetail
+                }
+            }
+        }
+        return mapRetval;
+    }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
+    return retval;
+}
+
+
 Template.anonymousTasks.helpers({
     routeToLoggedInUser() {
         Router.go('myTasks');
@@ -17,6 +49,7 @@ Template.anonymousTasks.helpers({
 
 Template.anonymousTasksActual.onCreated(function () {
     Meteor.subscribe('topTasks');
+    Meteor.subscribe('userGroups');
 });
 
 Template.anonymousTasksActual.helpers({
@@ -24,7 +57,16 @@ Template.anonymousTasksActual.helpers({
         return !!Session.get("congresspeople");
     },
     getTopTasks() {
-        var tasks = Tasks.find({}, {sort: {priority: -1}});
+        var group = null;
+        group = UserGroups.findOne({name: "National"});
+        if (!group) {
+            console.log("failed to find national group");
+            return [];
+        }
+
+        var tasks = Tasks.find({group: group._id._str}, {sort: {priority: -1, start_date: -1}});
+
+        console.log(tasks.fetch());
 
         var retval = tasks.map(task => {
             var taskDetail = FindTaskDetailFromTask(task)
@@ -36,7 +78,10 @@ Template.anonymousTasksActual.helpers({
                 }
             }
             return mapRetval;
-        }).filter( function(item) { return item != null} );
+        });
+        console.log(retval);
+        retval = retval.filter( function(item) { return item != null} );
+        console.log(retval);
 
         return retval;
 
