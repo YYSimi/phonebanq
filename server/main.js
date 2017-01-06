@@ -243,10 +243,10 @@ function generateDefaultContactPreferences(user) {
         true,
         1,
         "daily",
-        (user.profile && user.profile.loginsource === "facebook") ? true : false, // fUseFacebokForRecurring
+        (user.profile && user.profile.loginSource === "facebook") ? true : false, // fUseFacebokForRecurring
         false, // fUseEmailForRecurring
         true, // fMajorEventNotify
-        (user.profile && user.profile.loginsource === "facebook") ? true : false, // fUseFacebookForMajor
+        (user.profile && user.profile.loginSource === "facebook") ? true : false, // fUseFacebookForMajor
         true, // fUseEmailForMajor
         userEmailAddress // emailAddress
     )
