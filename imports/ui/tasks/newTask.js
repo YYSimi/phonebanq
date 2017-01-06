@@ -6,6 +6,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js';
 import { hasEditPermissionsByRank } from '../../api/userGroupClasses.js';
+import { IsLoaded } from '../../api/isLoaded.js'
 
 import './newTask.html'
 
@@ -255,9 +256,14 @@ Template.phoneNewTaskDetail.onRendered(function() {
         }
     );
 
-    quillNotes = new Quill('#task-notes', {
-        theme: 'snow'
+    Tracker.autorun( () => {
+        if (IsLoaded.getQuillJSLoaded()) {
+            quillNotes = new Quill('#task-notes', {
+                theme: 'snow'
+            });
+        }
     });
+
     // Fill out data on the representatives, once the collection is ready.
     Tracker.autorun(function () {
         if (tmpl && tmpl.data) {
@@ -288,7 +294,7 @@ Template.phoneNewTaskDetail.onRendered(function() {
                 tmpl.$("#supporter-script").val(phoneTask.supporter_script);
                 tmpl.$("#opposition-script").val(phoneTask.opposition_script);
 
-                if (phoneTask.notes) {
+                if (phoneTask.notes && IsLoaded.getQuillJSLoaded()) {
                     quillNotes.setContents(JSON.parse(phoneTask.notes));
                 }
 
@@ -302,16 +308,16 @@ Template.phoneNewTaskDetail.onRendered(function() {
 
 Template.freeformNewTaskDetail.onRendered(function() {
     var tmpl = Template.instance();
-    quillNotes = new Quill('#task-notes', {
-        theme: 'snow'
-    })
+    Tracker.autorun( function() {
+        if (IsLoaded.getQuillJSLoaded() && tmpl && tmpl.data ) {
+            quillNotes = new Quill('#task-notes', {
+                theme: 'snow'
+            })
 
-    quillInstructions = new Quill('#task-instructions', {
-        theme: 'snow'
-    });
+            quillInstructions = new Quill('#task-instructions', {
+                theme: 'snow'
+            });
 
-    Tracker.autorun(function() {
-        if (tmpl && tmpl.data) {
             var freeformTask = tmpl.data.get();
             
             if (freeformTask.notes) {

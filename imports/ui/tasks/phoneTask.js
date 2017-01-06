@@ -1,3 +1,5 @@
+import { IsLoaded } from '../../api/isLoaded.js'
+
 import './phoneTask.html'
 
 Template.PhoneTask.onCreated(function () {
@@ -6,19 +8,22 @@ Template.PhoneTask.onCreated(function () {
 });
 
 Template.PhoneTask.onRendered(function() {
-    // TODO:  This seems janky.  Make sure this pattern is correct.
-    if (this.find('.task-notes-display')) {
-        var quill = new Quill(this.find('.task-notes-display'), {
-            theme: 'snow',
-            readOnly: true,
-            modules: {
-                toolbar: false
-            }
-        });
-        var delta = JSON.parse(this.data.notes);
+    Tracker.autorun( () => {
+        if (IsLoaded.getQuillJSLoaded()) {
+            if (this.find('.task-notes-display')) {
+                var quill = new Quill(this.find('.task-notes-display'), {
+                    theme: 'snow',
+                    readOnly: true,
+                    modules: {
+                        toolbar: false
+                    }
+                });
+                var delta = JSON.parse(this.data.notes);
 
-        quill.setContents(delta);
-    }
+                quill.setContents(delta);
+            }
+        }
+    });
 })
 
 Template.PhoneTask.helpers({
