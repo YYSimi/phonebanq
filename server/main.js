@@ -141,8 +141,8 @@ Meteor.startup(() => {
     FixTaskCompletionCount();
     runStartupUserTasks();
 
-    const limit = 2;
-    const timeRange = 1000;
+    const limit = 5;
+    const timeRange = 2000;
 
     DDPRateLimiter.addRule({
         type: 'method',
