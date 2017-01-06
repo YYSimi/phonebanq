@@ -143,10 +143,17 @@ Meteor.startup(() => {
 
     const limit = 2;
     const timeRange = 1000;
+
     DDPRateLimiter.addRule({
         type: 'method',
         name(name) {return true }
     }, limit, timeRange);
+
+    DDPRateLimiter.addRule({
+        type: 'subscription',
+        name(name) {return true }
+    }, limit, timeRange);
+
 
     if(IsProductionMode()) 
     {
