@@ -48,7 +48,7 @@ Template.locationSettings.events({
         if (city) {
             Meteor.call('users.setCity', city);
         }
-        Meteor.call('users.GeocodeLatLong');
+        Meteor.call('users.geocodeLatLong');
         return false;
     },
     'click .js-userSettings-useFacebookCheckbox'(event) {

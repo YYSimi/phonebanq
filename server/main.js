@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { Migrations } from 'meteor/percolate:migrations'
+import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 
 import '../imports/api/users.js';
 import '../imports/api/tasks.js';
@@ -139,6 +140,13 @@ Meteor.startup(() => {
     FixActiveUserTaskCount();
     FixTaskCompletionCount();
     runStartupUserTasks();
+
+    const limit = 2;
+    const timeRange = 1000;
+    DDPRateLimiter.addRule({
+        type: 'method',
+        name(name) {return true }
+    }, limit, timeRange);
 
     if(IsProductionMode()) 
     {
