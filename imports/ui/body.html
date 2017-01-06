@@ -1,6 +1,14 @@
 <!-- This is pretty wrong, but we'll fix it up later. -->
 
 <template name="main">
+  {{>mainActual fUseContainer=true}}
+</template>
+
+<template name="mainNoContainer">
+  {{>mainActual fUseContainer=false}}
+</template>
+
+<template name="mainActual">
   <!-- Adds support for Select2 -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -13,34 +21,16 @@
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
 
   {{> nav}}
-  <div class="container below-nav">
+  {{#if fUseContainer}}
+    <div class="container below-nav">
+      {{> yield}}
+    </div>
+  {{else}}
     {{> yield}}
-  </div>
+  {{/if}}
 
   <hr/>
   {{#if currentUser}}
-    {{> userXpBar}}
-  {{/if}}
-  {{> footer}}
-</template>
-
-<template name="mainNoContainer">
-  <!-- Adds support for Select2 -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
-  <!-- Include the quillJS library. -->
-  <link href="https://cdn.quilljs.com/1.1.7/quill.snow.css" rel="stylesheet">
-  <script src="https://cdn.quilljs.com/1.1.7/quill.js"></script>
-
-  <!-- Include jquery-validation -->
-  <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
-
-  {{> nav}}
-  {{> yield}}
-
-  {{#if currentUser}}
-    <hr/>
     {{> userXpBar}}
   {{/if}}
   {{> footer}}
