@@ -52,7 +52,7 @@ if (Meteor.isServer) {
         })
 
         it('can edit phone tasks that you created', () => {
-            var taskCookie = "phoneTaskTest"
+            var taskCookie = "phoneTaskTest2"
             var taskCookie2 = "IveBeenChanged!"
             var task = new Task(
                 taskCookie,
