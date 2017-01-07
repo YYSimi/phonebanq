@@ -6,7 +6,7 @@ import { resetDatabase } from 'meteor/xolvio:cleaner';
 import { Roles } from 'meteor/alanning:roles';
 
 if (Meteor.isServer) {
-    describe('task API tests', () => {
+    describe('roles API tests', () => {
         //---- HELPERS
         //-------------------------------------------- //
 
