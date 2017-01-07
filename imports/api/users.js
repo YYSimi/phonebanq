@@ -3,7 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
 import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo } from '../../lib/common.js'
-import { PopulateStateUserTasks } from '../../server/userTasks.js'
+import { PopulateStateUserTasks } from '/server/userTasks.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
