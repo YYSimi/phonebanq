@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
+import { Roles } from 'meteor/alanning:roles';
 
 import { UserGroupRankEnum } from './userGroupClasses.js'
 
@@ -27,8 +28,8 @@ Meteor.methods({
 
 
         var user = Meteor.user();
-        if (!user || !user.profile || !user.profile.permissions || 
-            !user.profile.permissions.manageUserGroups) {
+        // TODO:  role review
+        if (!Roles.userIsInRole(user, 'site-admin')) {
             throw new Meteor.Error('not-authorized', "The logged-in user does not have permission to manage user groups.")
         }
 
@@ -79,8 +80,8 @@ Meteor.methods({
         });
 
         var user = Meteor.user();
-        if (!user || !user.profile || !user.profile.permissions || 
-            !user.profile.permissions.manageUserGroups) {
+        // TODO:  Role review.  This used to be group-admin.
+        if (!Roles.userIsInRole(user, 'site-admin')) {
             throw new Meteor.Error('not-authorized', "The logged-in user does not have permission to manage user groups.")
         }
 

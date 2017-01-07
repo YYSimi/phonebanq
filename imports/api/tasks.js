@@ -1,8 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
+import { Roles } from 'meteor/alanning:roles';
 
-import { PBTaskTypesEnum } from './taskClasses.js'
+import { PBTaskTypesEnum } from './taskClasses.js';
+
 
 // MASSIVE TODO:  This is where all of the server calls go through.  Make sure that the calls are locked-down to...
 //                    1)  Only allow authenticated/admin users to do auth/admin user things
@@ -171,8 +173,8 @@ Meteor.methods({
         validateTaskDetailOfType(task.task_type, taskDetail);
 
         var user = Meteor.user();
-        if (!user || !user.profile || !user.profile.permissions || 
-        !user.profile.permissions.registerNewTasks) {
+        // TODO:  role review.
+        if (!Roles.userIsInRole(user, 'site-admin')) {
             throw new Meteor.Error('not-authorized', "The logged-in user does not have permission to make new tasks.")
         }
 

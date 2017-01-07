@@ -3,6 +3,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Roles } from 'meteor/alanning:roles';
 
 import { Task, PhoneTask } from '../../api/taskClasses.js'
 import { FindTaskDetailFromTask } from '../../../lib/common.js'
@@ -12,7 +13,7 @@ import './tasksAdmin.html'
 Template.tasksAdmin.helpers({
     fHasNewTaskPermissions() {
         var user = Meteor.user();
-        return user && user.profile && user.profile.permissions && user.profile.permissions.registerNewTasks;
+        return Roles.userIsInRole(user, 'site-admin');
     }
 });
 

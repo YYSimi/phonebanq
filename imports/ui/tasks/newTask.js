@@ -3,6 +3,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Roles } from 'meteor/alanning:roles'
 
 import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js';
 import { hasEditPermissionsByRank } from '../../api/userGroupClasses.js';
@@ -20,7 +21,7 @@ var quillNotes;
 Template.newTask.helpers({
     fHasNewTaskPermissions() {
         var user = Meteor.user();
-        return user && user.profile && user.profile.permissions && user.profile.permissions.registerNewTasks;
+        return (Roles.userIsInRole(user, 'site-admin'));
     }
 })
 

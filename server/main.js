@@ -8,6 +8,7 @@ import '../imports/api/tasks.js';
 import '../imports/api/util.js';
 import '../imports/api/userTasks.js';
 import '../imports/api/userGroups.js';
+import '../imports/api/roles.js';
 import './migrations.js';
 
 import { ContactPreferences } from '../imports/api/userClasses.js'
@@ -98,9 +99,10 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
-    Migrations.migrateTo('latest');
+    Migrations.migrateTo(2);
     indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
+    Houston.add_collection(Migrations._collection); // Adds info about migrations to the houston admin UI.  Hacky!
 
     var fbLocalhostAppId = '332532203786554';
     var fbLocalhostSecret = '8b3e5e818c702c199a429e5c7e96311a';

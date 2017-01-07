@@ -1,5 +1,6 @@
 import { ReactiveVar } from 'meteor/reactive-var'
 import { Mongo } from 'meteor/mongo';
+import { Roles } from 'meteor/alanning:roles';
 
 import { UserGroup } from '../api/userGroupClasses.js'
 
@@ -9,7 +10,7 @@ Template.groupsAdmin.helpers({
     fHasManageGroupsPermissions() {
         var user = Meteor.user();
         // TODO: Move this check into a library call.  Code duplication!
-        return user && user.profile && user.profile.permissions && user.profile.permissions.manageUserGroups;
+        return Roles.userIsInRole(user, 'site-admin');
     }
 });
 

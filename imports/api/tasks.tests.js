@@ -3,6 +3,7 @@ import { Task, PhoneTask, PBTaskTypesEnum } from './taskClasses.js';
 
 import { assert } from 'meteor/practicalmeteor:chai';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
+import { Roles } from 'meteor/alanning:roles';
 
 if (Meteor.isServer) {
     describe('task API tests', () => {
@@ -19,7 +20,8 @@ if (Meteor.isServer) {
             userId = Accounts.createUser({email: email, password : password});
             user = Meteor.users.findOne(userId);
             assert(user, "failed to find user");
-            Meteor.users.update(userId, {$set: {"profile.permissions.registerNewTasks": true}});
+            // TODO:  role review
+            Roles.addUsersToRoles(user, 'site-admin', Roles.GLOBAL_GROUP)
             Meteor.userId = function() { return userId; };
             Meteor.user = function() { return Meteor.users.findOne(userId); };
         })
