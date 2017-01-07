@@ -61,17 +61,21 @@ Meteor.methods({
 
         Meteor.users.update(userGroup.owner_id, {$push: {'profile.groups' : ownerGroupMembership } });
 
-        userGroup.admin_ids.forEach(function(id) {
-            Meteor.users.update(id, {$push: {'profile.groups' : adminGroupMembership } });
-        });
+        Roles.addUsersToRoles(userGroup.owner_id, 'owner', groupId._str);
+        Roles.addUsersToRoles(userGroup.admin_ids, 'admin', groupId._str);
+        Roles.addUsersToRoles(userGroup.deputy_ids, 'deputy', groupId._str);
 
-        userGroup.deputy_ids.forEach(function(id) {
-            Meteor.users.update(id, {$push: {'profile.groups' : deputyGroupMembership } });
-        });
+        // userGroup.admin_ids.forEach(function(id) {
+        //     Meteor.users.update(id, {$push: {'profile.groups' : adminGroupMembership } });
+        // });
+
+        // userGroup.deputy_ids.forEach(function(id) {
+        //     Meteor.users.update(id, {$push: {'profile.groups' : deputyGroupMembership } });
+        // });
 
     },
     'userGroups.update'(userGroupId, newUserGroupSettings){
-        check(userGroupId, String);
+        check(userGroupId, Mongo.ObjectID);
         check(newUserGroupSettings, {
             name: String,
             owner_id: String,
@@ -86,7 +90,7 @@ Meteor.methods({
         }
 
 
-        var oldGroup = UserGroups.findOne(new Mongo.ObjectID(userGroupId));
+        var oldGroup = UserGroups.findOne(userGroupId);
         if (!oldGroup) {
             throw new Meteor.Error('invalid-argument', "The given usergroupId does not exist.");
         }
@@ -131,33 +135,18 @@ Meteor.methods({
             return true;
         });
         
-        UserGroups.update(new Mongo.ObjectID(userGroupId), newUserGroupSettings);
-
-        var ownerGroupMembership = {group_id: new Mongo.ObjectID(userGroupId), rank: UserGroupRankEnum.owner };
-        var adminGroupMembership = {group_id: new Mongo.ObjectID(userGroupId), rank: UserGroupRankEnum.admin };
-        var deputyGroupMembership = {group_id: new Mongo.ObjectID(userGroupId), rank: UserGroupRankEnum.deputy };
+        UserGroups.update(userGroupId, newUserGroupSettings);
 
         // Update user ownership info
-        Meteor.users.update(oldGroup.owner_id, {$pull: {'profile.groups' : ownerGroupMembership } });
-        Meteor.users.update(newUserGroupSettings.owner_id, {$push: {'profile.groups' : ownerGroupMembership } });
-
+        Roles.removeUsersFromRoles(oldGroup.owner_id, 'owner', oldGroup._id._str);
+        Roles.addUsersToRoles(newUserGroupSettings.owner_id, 'owner', oldGroup._id._str);
+        
         // Update user admin info
-        oldGroup.admin_ids.forEach(function(id) {
-            Meteor.users.update(id, {$pull: {'profile.groups' : adminGroupMembership } });
-        });
-
-        newUserGroupSettings.admin_ids.forEach(function(id) {
-            Meteor.users.update(id, {$push: {'profile.groups' : adminGroupMembership } });
-        });
+        Roles.removeUsersFromRoles(oldGroup.admin_ids, 'admin', oldGroup._id._str);
+        Roles.addUsersToRoles(newUserGroupSettings.admin_ids, 'admin', oldGroup._id._str);
 
         // Update user deputy info
-        oldGroup.deputy_ids.forEach(function(id) {
-            Meteor.users.update(id, {$pull: {'profile.groups' : deputyGroupMembership } });
-        });
-
-        newUserGroupSettings.deputy_ids.forEach(function(id) {
-            Meteor.users.update(id, {$push: {'profile.groups' : deputyGroupMembership } });
-        });
-
+        Roles.removeUsersFromRoles(oldGroup.deputy_ids, 'deputy', oldGroup._id._str);
+        Roles.addUsersToRoles(newUserGroupSettings.deputy_ids, 'deputy', oldGroup._id._str);
     }
 })

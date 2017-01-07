@@ -28,21 +28,27 @@ if (Meteor.isServer) {
         it('admin users can grant roles to users', () => {
             const testRoleName = 'test-role';
             const testGroupName = 'test-group';
+            const otherGroupName = 'test-group2';
 
             Roles.addUsersToRoles(Meteor.user(), 'site-admin', Roles.GLOBAL_GROUP);
-            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], testGroupName)
+            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], testGroupName);
             assert.isTrue(Roles.userIsInRole(Meteor.user(), testRoleName, testGroupName));
+            assert.isFalse(Roles.userIsInRole(Meteor.user(), testRoleName, otherGroupName));
         });
 
         it('admin users can remove roles from users', () => {
             const testRoleName = 'test-role';
             const testGroupName = 'test-group';
+            const otherGroupName = 'test-group2';
 
             Roles.addUsersToRoles(Meteor.user(), 'site-admin', Roles.GLOBAL_GROUP);
-            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], testGroupName)
+            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], testGroupName);
+            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], otherGroupName);
             assert.isTrue(Roles.userIsInRole(Meteor.user(), testRoleName, testGroupName));
-            Meteor.call('roles.removeUsersFromRoles', [Meteor.userId()], [testRoleName], testGroupName)
+            assert.isTrue(Roles.userIsInRole(Meteor.user(), testRoleName, otherGroupName));
+            Meteor.call('roles.removeUsersFromRoles', [Meteor.userId()], [testRoleName], testGroupName);
             assert.isFalse(Roles.userIsInRole(Meteor.user(), testRoleName, testGroupName));          
+            assert.isTrue(Roles.userIsInRole(Meteor.user(), testRoleName, otherGroupName));
         });
 
         it('non-admin users cannot grant roles to users', () => {
@@ -58,7 +64,7 @@ if (Meteor.isServer) {
             const testGroupName = 'test-group';
 
             Roles.addUsersToRoles(Meteor.user(), 'site-admin', Roles.GLOBAL_GROUP);
-            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], testGroupName)
+            Meteor.call('roles.addUsersToRoles', [Meteor.userId()], [testRoleName], testGroupName);
             assert.isTrue(Roles.userIsInRole(Meteor.user(), testRoleName, testGroupName));
 
             Roles.removeUsersFromRoles(Meteor.user(), 'site-admin', Roles.GLOBAL_GROUP);

@@ -107,14 +107,20 @@ Template.authenticatedUserNewTask.onRendered(function() {
 
     user = Meteor.user();
     Meteor.subscribe('userGroups', function() {
-        // TODO:  Sort alphabetically.
-        user.profile.groups.forEach(function (groupInfo){
-            if (hasEditPermissionsByRank(groupInfo.rank)) {
-                var group = UserGroups.findOne(groupInfo.group_id);
-                if (group) {
-                    $("#task-group").append("<option value=" + group._id + ">" + group.name + "</option>" ); 
-                }
-            } 
+        const allGroupIds = _.reduce(['owner', 'admin', 'deputy'], function(memo, str) {
+            return memo.concat(Roles.getGroupsForUser(user, str))
+        }, []);
+
+        const allGroups = _.reduce(allGroupIds, function(memo, groupId) {
+            var group = UserGroups.findOne(new Mongo.ObjectID(groupId));
+            if (group) {
+                return memo.concat(group);
+            }
+            return memo;
+        }, [])
+
+        allGroups.sort((a,b) => {return (a.name).localeCompare(b.name)}).forEach(function (group){
+            $("#task-group").append("<option value=" + group._id + ">" + group.name + "</option>" ); 
         })
     });
 

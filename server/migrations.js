@@ -38,6 +38,7 @@ Migrations.add({
     }
 })
 
+// Move global user permissions to use the user Roles package
 Migrations.add({
     version: 2,
     up: function() {
@@ -59,5 +60,49 @@ Migrations.add({
             }
             Roles.removeUsersFromRoles(user, 'site-admin', Roles.GLOBAL_GROUP);
         })
+    }
+})
+
+var UserGroupRankEnum = {
+    owner: 10,
+    admin: 7,
+    deputy: 4,
+    member: 1,
+    unknown: 0
+}
+
+// move user group permissions to use the user roles package
+Migrations.add({
+    version: 3,
+    up: function() {
+        Meteor.users.find().forEach((user) => {
+            if (user.profile && user.profile.groups) {
+                user.profile.groups.forEach((group) => {
+                    const groupActual = UserGroups.findOne(group.group_id);
+                    if (groupActual) {
+                        switch(group.rank) {
+                            case UserGroupRankEnum.owner:
+                                Roles.addUsersToRoles(user, 'owner', group.group_id._str);
+                            break;
+                            case UserGroupRankEnum.admin:
+                                Roles.addUsersToRoles(user, 'admin', group.group_id._str);
+                            break;
+                            case UserGroupRankEnum.deputy:
+                                Roles.addUsersToRoles(user, 'deputy', group.group_id._str);
+                            break;
+                            case UserGroupRankEnum.member:
+                                Roles.addUsersToRoles(user, 'member', group.group_id._str);
+                            break;
+                            case UserGroupRankEnum.unknown:
+                            break;
+                        }
+                    }
+                })
+            }
+            Meteor.users.update(user._id, {$unset: {"profile.groups": true}});
+        })
+    },
+    down: function() {
+        // Not worth implementing down functionality here, we're still in alpha. 
     }
 })
