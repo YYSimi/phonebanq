@@ -44,10 +44,10 @@ Migrations.add({
         Meteor.users.find().forEach((user) => {
             const fRegisterNewTasks = user.profile && user.profile.permissions && user.profile.permissions.registerNewTasks;
             const fManageUserGroups = user.profile && user.profile.permissions && user.profile.permissions.manageUserGroups;
-            Meteor.users.update(user._id, {$unset: {"profile.permissions": true}});
             if (fManageUserGroups) {
                 Roles.addUsersToRoles(user, 'site-admin', Roles.GLOBAL_GROUP);
             }
+            Meteor.users.update(user._id, {$unset: {"profile.permissions": true}});
         })
     },
     down: function () {
