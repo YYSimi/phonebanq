@@ -99,7 +99,7 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
-    Migrations.migrateTo(2);
+    Migrations.migrateTo(1);
     indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
     Houston.add_collection(Migrations._collection); // Adds info about migrations to the houston admin UI.  Hacky!
