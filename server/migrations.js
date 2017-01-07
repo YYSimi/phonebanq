@@ -46,7 +46,7 @@ Migrations.add({
             const fManageUserGroups = user.profile && user.profile.permissions && user.profile.permissions.manageUserGroups;
             Meteor.users.update(user._id, {$unset: {"profile.permissions": true}});
             if (fManageUserGroups) {
-                Roles.addUsersToRoles(user, 'site-admin', Roles.GOLBAL_GROUP);
+                Roles.addUsersToRoles(user, 'site-admin', Roles.GLOBAL_GROUP);
             }
         })
     },
@@ -57,7 +57,7 @@ Migrations.add({
                 const adminPermissions = {manageUserGroups: true, registerNewTasks: true };
                 Meteor.users.update(user._id, {$set: {"profile.permissions": adminPermissions} });
             }
-            Roles.removeUsersFromRoles(user, 'site-admin', Roles.GOLBAL_GROUP);
+            Roles.removeUsersFromRoles(user, 'site-admin', Roles.GLOBAL_GROUP);
         })
     }
 })
