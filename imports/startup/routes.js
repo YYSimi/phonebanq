@@ -1,5 +1,4 @@
 import '../ui/body.js'
-import '../ui/home.js'
 import '../ui/navigation.js'
 import '../ui/footer.js'
 import '../ui/welcome.js'
@@ -8,6 +7,7 @@ import '../ui/stringAssets.js'
 
 import '../ui/widgets/findUserWidgets.js'
 import '../ui/widgets/userXpWidgets.js'
+import '../ui/widgets/fillerWidgets.js'
 import '../ui/userSettings.js'
 import '../ui/loginUi.js'
 
@@ -90,7 +90,7 @@ Router.route('/groupsAdmin', {
 });
 
 Router.route('/', {
-    name: 'home',
+    name: 'welcome',
     template: 'welcome',
     layoutTemplate: 'mainNoContainer'
 

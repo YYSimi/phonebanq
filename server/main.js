@@ -133,7 +133,6 @@ Meteor.startup(() => {
                 console.log( error );
             }
             else {
-                console.log( response );
                 fbAppInfo.setAccessToken(response.content.split('=')[1]);
             }
         }
@@ -273,7 +272,6 @@ function generateUsername(user) {
             else {
                 throw "Attempted to generate username for invalid facebook user"
             }
-            console.log("FB UN: " + username);
             break;
         case "local":
             if (user.emails && user.emails[0] && user.emails[0].address) {
@@ -282,7 +280,6 @@ function generateUsername(user) {
             else {
                 throw "Attempted to generate username for invalid local user"
             }
-            console.log("local UN: " + username);
             break;
         default:
             throw "Attempted to generate a username without specifying a loginsource";
@@ -354,7 +351,6 @@ function UpdateAllUserTasks(){
 }
 
 function OnFirstLogin(user) {
-    console.log("running OnFirstLogin");
     var nNewTasksCreated = PopulateUserTasks(user._id);
     if (user.services && user.services.facebook) {
         NotifyFacebookUser(user);
