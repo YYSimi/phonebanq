@@ -1,5 +1,6 @@
 import './task.html'
 
+import { abbrState, FindTaskDetailFromTask, FindTaskFromUserTask, TimeDeltaToPrettyString } from '../../../lib/common.js'
 import { PBTaskTypesEnum } from '../../api/taskClasses.js'
 
 Template.UserTask.helpers({
