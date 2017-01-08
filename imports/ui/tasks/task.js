@@ -1,5 +1,7 @@
 import './task.html'
 
+import { PBTaskTypesEnum } from '../../api/taskClasses.js'
+
 Template.UserTask.helpers({
     hasTimeRemaining() {
       return this.context && this.context.userTask && this.context.userTask.lasts_until ? true : false;
