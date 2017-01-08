@@ -8,7 +8,6 @@ import { PBTaskTypesEnum } from './taskClasses.js';
 
 // MASSIVE TODO:  This is where all of the server calls go through.  Make sure that the calls are locked-down to...
 //                    1)  Only allow authenticated/admin users to do auth/admin user things
-//                    2)  Put at least some protection in around DB flooding/DoS attacks
 // TODO 1 -- Do the above for Meteor Methods.
 // TODO 2 -- DO the above for publications. 
 
@@ -35,6 +34,10 @@ if (Meteor.isServer) {
         var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
 
         return [tasks, phoneTasks, freeformTasks];
+    });
+    Meteor.publish('tasksByGroup', function(groupId) {
+        check(groupId, Mongo.ObjectID);
+        return Tasks.find({group: groupId._str});
     });
     Meteor.publish('senators', function() {
         return Senators.find();

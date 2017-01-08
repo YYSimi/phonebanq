@@ -1,0 +1,20 @@
+<template name="taskOverviewByGroup">
+  {{#each group in groups}}
+    <h4> {{group.name}} </h4>
+    {{>taskOverviewByGroupRow group=group}}
+  {{/each}}
+</template>
+
+<template name="taskOverviewByGroupRow">
+  {{>taskOverview tasks=getTasksFromGroup}}
+</template>
+
+<template name="taskOverview">
+  {{#each task in tasks}}
+    {{>taskOverviewRow task=task}}
+  {{/each}}
+</template>
+
+<template name="taskOverviewRow">
+  <p> {{ task.tiny_description }} </p>
+</template>

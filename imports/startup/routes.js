@@ -8,6 +8,10 @@ import '../ui/stringAssets.js'
 import '../ui/widgets/findUserWidgets.js'
 import '../ui/widgets/userXpWidgets.js'
 import '../ui/widgets/fillerWidgets.js'
+import '../ui/widgets/taskOverviewWidgets.js'
+
+import '../ui/dashboards/adminDashboard.js'
+
 import '../ui/userSettings.js'
 import '../ui/loginUi.js'
 
@@ -86,11 +90,15 @@ Router.route('/tasksAdmin', {
 Router.route('/groupsAdmin', {
     name: 'groupsAdmin',
     layoutTemplate: 'main'
+});
 
+Router.route('/adminDashboard', {
+    name: 'adminDashboard',
+    layoutTemplate: 'main'
 });
 
 Router.route('/', {
-    name: 'welcome',
+    name: 'main',
     template: 'welcome',
     layoutTemplate: 'mainNoContainer'
 
