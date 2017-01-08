@@ -1,12 +1,8 @@
 <template name="groupsAdmin">
-  {{#if currentUser}}
-    {{#if fHasManageGroupsPermissions}}
-      {{> authenticatedGroupsAdmin}}
-    {{else}}
-      {{> permissionsRequired}}
-    {{/if}}
+  {{#if fHasManageGroupsPermissions}}
+    {{> authenticatedGroupsAdmin}}
   {{else}}
-    {{> loginRequired }}
+    {{> permissionsRequired}}
   {{/if}}
 </template>
 

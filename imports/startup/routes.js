@@ -60,19 +60,18 @@ Router.route('/userSettings', {
 
 Router.route('/myTasks', {
     name: 'myTasks',
-    layoutTemplate: 'main'
-
+    layoutTemplate: 'mainLoginRequired'
 });
 
 Router.route('/completedTasks', {
     name: 'completedTasks',
-    layoutTemplate: 'main'
+    layoutTemplate: 'mainLoginRequired'
 
 });
 
 Router.route('/newTask', {
     name: 'newTask',
-    layoutTemplate: 'main'
+    layoutTemplate: 'mainLoginRequired'
 });
 
 Router.route('/editTask/:_id', {
@@ -84,13 +83,13 @@ Router.route('/editTask/:_id', {
 
 Router.route('/tasksAdmin', {
     name: 'tasksAdmin',
-    layoutTemplate: 'main'
+    layoutTemplate: 'mainLoginRequired'
 
 });
 
 Router.route('/groupsAdmin', {
     name: 'groupsAdmin',
-    layoutTemplate: 'main'
+    layoutTemplate: 'mainLoginRequired'
 });
 
 Router.route('/adminDashboard', {

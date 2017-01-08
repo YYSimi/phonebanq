@@ -1,12 +1,8 @@
 <template name="newTask">
-  {{#if currentUser}}
-    {{#if fHasNewTaskPermissions}}
-      {{> authenticatedUserNewTask this}}
-    {{else}}
-      {{> permissionsRequired}}
-    {{/if}}
+  {{#if fHasNewTaskPermissions}}
+    {{> authenticatedUserNewTask this}}
   {{else}}
-    {{> loginRequired }}
+    {{> permissionsRequired}}
   {{/if}}
 </template>
 

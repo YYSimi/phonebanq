@@ -8,16 +8,28 @@
   {{>mainActual fUseContainer=false}}
 </template>
 
-<template name="mainActual">
+<template name="mainLoginRequired">
+  {{>mainActual fUseContainer=true fLoginRequired=true}}
+</template>
 
+<template name="mainActual">
   {{> nav}}
-  {{#if fUseContainer}}
-    <div class="container below-nav">
+  <div class="{{#if fUseContainer}} container below-nav {{/if}}">
+    {{#if fLoginRequired}}
+      {{#if currentUser}}
+        {{> yield}}
+      {{else}}
+        {{#if loggingIn}}
+          {{> loader}}
+        {{else}}
+          {{> loginRequired}}
+        {{/if}}
+      {{/if}}
+    {{else}}
       {{> yield}}
-    </div>
-  {{else}}
-    {{> yield}}
-  {{/if}}
+    {{/if}}
+  </div>
+
 
   <hr/>
   {{#if currentUser}}

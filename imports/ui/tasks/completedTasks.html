@@ -1,12 +1,8 @@
 <template name="completedTasks">
-  {{#if currentUser}}
-    {{#if Template.subscriptionsReady}}
-      {{> authenticatedUserCompletedTasks getUserTasks}}
-    {{else}}
-      {{> loader}}
-    {{/if}}
+  {{#if Template.subscriptionsReady}}
+    {{> authenticatedUserCompletedTasks getUserTasks}}
   {{else}}
-    {{> loginRequired}}
+    {{> loader}}
   {{/if}}
 </template>
 

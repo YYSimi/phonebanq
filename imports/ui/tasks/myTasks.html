@@ -1,19 +1,15 @@
 <template name="myTasks">
-  {{#if currentUser}}
-    {{#if Template.subscriptionsReady}}
-      <h3>Around the Nation: </h3>
-      {{> UserTasks getUserTasks "National"}}
-      {{#if currentUser.profile}}
-        {{#if currentUser.profile.state}}
-          <h3> In {{getUserStateName}}: </h3>
-          {{> UserTasks getUserStateTasks}}
-        {{/if}}
+  {{#if Template.subscriptionsReady}}
+    <h3>Around the Nation: </h3>
+    {{> UserTasks getUserTasks "National"}}
+    {{#if currentUser.profile}}
+      {{#if currentUser.profile.state}}
+        <h3> In {{getUserStateName}}: </h3>
+        {{> UserTasks getUserStateTasks}}
       {{/if}}
-    {{else}}
-      {{> loader}}
     {{/if}}
   {{else}}
-    {{> loginRequired}}
+    {{> loader}}
   {{/if}}
 </template>
 
