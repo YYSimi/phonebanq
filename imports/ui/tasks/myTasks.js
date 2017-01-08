@@ -90,14 +90,14 @@ Template.UserTask.helpers({
         return bHasExactlyOneCompletion ? "user" : "users";
     },
     // TODO:  Put this somewhere reusable.
-    getTaskHeaderImgUrl() {
+    getTaskGylphName() {
         var retval = ""
         switch (this.context.task.task_type) {
             case PBTaskTypesEnum.phone:
-                retval = "/assets/tasktypes/067-phone-32px.png";
+                retval = "glyphicon-earphone";
                 break;
             case PBTaskTypesEnum.freeform:
-                retval = "/assets/tasktypes/035-file-text-32px.png"
+                retval = "glyphicon-list-alt"
                 break;
             default:
                 throw "Error:  Task type has no registered logo"
@@ -115,7 +115,7 @@ Template.ActiveTaskButtons.events({
     'click .js-task-success'() {
         
         //TODO:  re-enable animations.  They're not working properly at the moment.
-        //$("#"+this.userTask._id).hide('slow', () => {
+        //$("#"+this.userTask._id._str).hide('slow', () => {
         //    console.log("Hiding succeeded");
         Meteor.call('userTasks.completeTask', this.userTask._id);
         //})
@@ -123,7 +123,7 @@ Template.ActiveTaskButtons.events({
     'click .js-task-hide'() {
         
         //TODO:  re-enable animations.  They're not working properly at the moment.
-        //$("#"+this.userTask._id).hide('slow', () => {
+        //$("#"+this.userTask._id._str).hide('slow', () => {
         //    console.log("Hiding succeeded");
         Meteor.call('userTasks.cancelTask', this.userTask._id);
         //})
@@ -131,7 +131,7 @@ Template.ActiveTaskButtons.events({
     'click .js-task-hideForever'() {
         
         //TODO:  re-enable animations.  They're not working properly at the moment.
-        //$("#"+this.userTask._id).hide('slow', () => {
+        //$("#"+this.userTask._id._str).hide('slow', () => {
         //    console.log("Hiding succeeded");
         Meteor.call('userTasks.hideTaskForever', this.userTask._id);
         //})

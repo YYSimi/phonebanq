@@ -19,9 +19,9 @@
 
 <template name="UserTasks">
   {{#if hasUserTasks}}
-    <ul class="list-group js-userTasks-list">
+    <ul class="list-group js-userTasks-list no-padding no-margin">
     {{#each userTask in this}}
-      <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
+      <li class="list-group-item" style="border: none" id="tasklistEntry_{{userTask.userTask._id._str}}">
         {{> UserTask context=userTask buttonsTemplate="ActiveTaskButtons"}}
       </li>
     {{/each}}
@@ -33,19 +33,23 @@
 
 <!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
 <template name="UserTask">
-  <div class="panel panel-default">
+  <div class="panel panel-default no-padding no-margin">
     <div class="panel-heading clearfix">
       {{> Template.dynamic template=taskButtonsTemplateName data=context}}
-      <span class="pull-left"><img class="task-header-img" src="{{getTaskHeaderImgUrl}}"/> </span>
-      <h4> {{context.task.tiny_description}} </h4>
+      <span data-toggle="collapse" href="#collapse_{{context.task._id._str}}">
+        <span class="panel-heading-icon pull-left glyphicon {{getTaskGylphName}}"> </span>
+        <h4> {{context.task.tiny_description}} </h4>
+      </span>
     </div>
-    <div class="panel-body">
-      {{> UserTaskDetail context}}
-      <hr/>
-      {{#if hasTimeRemaining}}
-        <p> Expires in {{timeRemaining context}} </p>
-      {{/if}}
-        <p> Completed by {{context.task.statistics.completion_count}} {{userPluralizedString}} so far.</p>
+    <div class="panel-collapse collapse in" id="collapse_{{context.task._id._str}}">
+      <div class="panel-body">
+        {{> UserTaskDetail context}}
+        <hr/>
+        {{#if hasTimeRemaining}}
+          <p> Expires in {{timeRemaining context}} </p>
+        {{/if}}
+          <p> Completed by {{context.task.statistics.completion_count}} {{userPluralizedString}} so far.</p>
+      </div>
     </div>
   </div>
 </template>
