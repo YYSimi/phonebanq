@@ -80,6 +80,10 @@ visibility: initial !important;
   margin: 0px
 }
 
+.no-border {
+  border-width: 0px
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -113,8 +117,17 @@ body {
 
 /* task styles
 -------------------------------------------------- */
+
+.task-panel .panel-heading{
+  padding: 2px 10px;
+}
+
 .panel-heading-icon {
     font-size: 24px;
     padding-right: 10px;
     line-height: 36px;
+}
+
+.task-panel .btn {
+  margin: 1px;
 }

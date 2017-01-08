@@ -1,6 +1,6 @@
 <!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
 <template name="UserTask">
-  <div class="panel panel-default no-padding no-margin">
+  <div class="panel panel-default task-panel">
     <div class="panel-heading clearfix">
       {{> Template.dynamic template=taskButtonsTemplateName data=context}}
       <span data-toggle="collapse" href="#collapse_{{context.task._id._str}}">
@@ -12,10 +12,20 @@
       <div class="panel-body">
         {{> UserTaskDetail context}}
         <hr/>
-        {{#if hasTimeRemaining}}
-          <p> Expires in {{timeRemaining context}} </p>
-        {{/if}}
-          <p> Completed by {{context.task.statistics.completion_count}} {{userPluralizedString}} so far.</p>
+      </div>
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-4">
+            {{#if hasTimeRemaining}}
+              <p> Expires in {{timeRemaining context}} </p>
+            {{/if}}
+          </div>
+          <div class="col-sm-4">
+            <p> Completed by {{context.task.statistics.completion_count}} {{userPluralizedString}} so far.</p>
+          </div>
+          <div class="col-sm-4">
+          </div>
+        </div>
       </div>
     </div>
   </div>
