@@ -1,0 +1,39 @@
+<!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
+<template name="UserTask">
+  <div class="panel panel-default no-padding no-margin">
+    <div class="panel-heading clearfix">
+      {{> Template.dynamic template=taskButtonsTemplateName data=context}}
+      <span data-toggle="collapse" href="#collapse_{{context.task._id._str}}">
+        <span class="panel-heading-icon pull-left glyphicon {{getTaskGylphName}}"> </span>
+        <h4> {{context.task.tiny_description}} </h4>
+      </span>
+    </div>
+    <div class="panel-collapse collapse in" id="collapse_{{context.task._id._str}}">
+      <div class="panel-body">
+        {{> UserTaskDetail context}}
+        <hr/>
+        {{#if hasTimeRemaining}}
+          <p> Expires in {{timeRemaining context}} </p>
+        {{/if}}
+          <p> Completed by {{context.task.statistics.completion_count}} {{userPluralizedString}} so far.</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="ActiveTaskButtons">
+  <span class="pull-right">
+    <button class="btn btn-success glyphicon glyphicon-ok js-task-success" data-toggle="tooltip" title="Mark as Complete"> </button>
+    <button class="btn btn-warning glyphicon glyphicon-minus js-task-hide" data-toggle="tooltip" title="Not interested right now"> </button>
+    <button class="btn btn-danger glyphicon glyphicon-remove js-task-hideForever" data-toggle="tooltip" title="Never show again"> </button>
+  </span>
+</template>
+
+<template name="UserTaskDetail">
+  {{#if equals task.task_type "phone"}}
+    {{> PhoneTask taskDetail}}
+  {{/if}}
+  {{#if equals task.task_type "freeform"}}
+    {{> FreeformTask taskDetail}}
+  {{/if}}
+</template>
