@@ -15,14 +15,14 @@ import '../ui/dashboards/adminDashboard.js'
 import '../ui/userSettings.js'
 import '../ui/loginUi.js'
 
+import '../ui/tasks/task.js'
+import '../ui/tasks/phoneTask.js'
+import '../ui/tasks/freeformTask.js'
 import '../ui/tasks/completedTasks.js'
 import '../ui/tasks/anonymousTasks.js'
 import '../ui/tasks/myTasks.js'
 import '../ui/tasks/newTask.js'
 import '../ui/tasks/tasksAdmin.js'
-import '../ui/tasks/task.js'
-import '../ui/tasks/phoneTask.js'
-import '../ui/tasks/freeformTask.js'
 
 import '../ui/groupsAdmin.js';
 
