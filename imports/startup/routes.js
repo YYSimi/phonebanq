@@ -1,3 +1,5 @@
+import '../ui/globalTemplateHelpers.js'
+
 import '../ui/body.js'
 import '../ui/navigation.js'
 import '../ui/footer.js'
@@ -5,11 +7,14 @@ import '../ui/welcome.js'
 import '../ui/ancillaryPages/about.js'
 import '../ui/stringAssets.js'
 
+import '../ui/widgets/userInfoWidgets.js'
 import '../ui/widgets/findUserWidgets.js'
 import '../ui/widgets/userXpWidgets.js'
 import '../ui/widgets/fillerWidgets.js'
 import '../ui/widgets/taskOverviewWidgets.js'
+import '../ui/widgets/congressionalInfoWidgets.js'
 
+import '../ui/dashboards/userDashboard.js'
 import '../ui/dashboards/adminDashboard.js'
 
 import '../ui/userSettings.js'
@@ -54,8 +59,7 @@ Router.route('/privacy',{
 
 Router.route('/userSettings', {
     name: 'userSettings',
-    layoutTemplate: 'main'
-
+    layoutTemplate: 'mainLoginRequired'
 });
 
 Router.route('/myTasks', {
@@ -92,9 +96,14 @@ Router.route('/groupsAdmin', {
     layoutTemplate: 'mainLoginRequired'
 });
 
+Router.route('/userDashboard', {
+    name: 'userDashboard',
+    layoutTemplate: 'mainLoginRequired'
+});
+
 Router.route('/adminDashboard', {
     name: 'adminDashboard',
-    layoutTemplate: 'main'
+    layoutTemplate: 'mainLoginRequired'
 });
 
 Router.route('/', {

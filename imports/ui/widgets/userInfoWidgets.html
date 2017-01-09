@@ -1,6 +1,7 @@
 <template name="userInfoDisplay">
-  <div class="user-Info-Display">
+  <div class="user-info-display">
     <h4>{{currentUser.username}} </h4>
+    <p> {{currentUser.profile.city}}, {{currentUser.profile.state}}</p>
     {{>userXpBar}}
   </div>
 </template>

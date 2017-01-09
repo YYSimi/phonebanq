@@ -1,0 +1,29 @@
+<template name="nationalSenatorTable">
+  <div class="tiny-accordion">
+    <ul class="list-group js-userTasks-list">
+    {{#each senator in senators}}
+      <li> {{>nationalSenatorTableEntry senator=senator}} </li>
+    {{/each}}
+    </ul>
+  </div>
+</template>
+
+<template name="nationalSenatorTableEntry">
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <span data-toggle="collapse" href="#collapse_{{senator.bioguide_id}}">
+        <span class="pull-left glyphicon glyphicon-chevron-down"> </span>
+        <h5> US Senator {{senator.first_name}} {{senator.last_name}} ({{senator.party}}) from {{senator.state_name}} </h5>
+      </span>
+    </div>
+    <div class="panel-collapse collapse" id="collapse_{{senator.bioguide_id}}">
+      <div class="panel-body">
+        [More Content goes here]
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="nationalRepresentativeTableEntry">
+  <li> US Representative {{first_name}} {{last_name}} ({{party}}) from {{state_name}} district {{district}}: {{phone}}</li>
+</template>
