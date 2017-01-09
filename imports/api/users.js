@@ -3,7 +3,6 @@ import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
 import { PopulateLocationFromFacebook, UpdateUserLatLong, UpdateCongressionalInfo } from '../../lib/common.js'
-import { PopulateStateUserTasks } from '/server/userTasks.js'
 
 // TODO:  Should I have a class implementing user functionality, which Meteor.Methods calls into?
 
@@ -20,6 +19,7 @@ Meteor.methods({
         // then changing their state registration.  Need to improve our task model so we have better timestamp
         // information on when our next tasks should show up.
         if (Meteor.isServer) {
+            import { PopulateStateUserTasks } from '../../server/userTasks.js'
             PopulateStateUserTasks(Meteor.userId());
         }
         Meteor.users.update({ _id: Meteor.userId()}, { $set:
