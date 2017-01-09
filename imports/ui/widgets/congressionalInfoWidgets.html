@@ -12,18 +12,74 @@
   <div class="panel panel-default">
     <div class="panel-heading clearfix">
       <span data-toggle="collapse" href="#collapse_{{senator.bioguide_id}}">
-        <span class="pull-left glyphicon glyphicon-chevron-down"> </span>
+        <span class="pull-left tiny-expander-icon glyphicon glyphicon-chevron-down"> </span>
         <h5> US Senator {{senator.first_name}} {{senator.last_name}} ({{senator.party}}) from {{senator.state_name}} </h5>
       </span>
     </div>
     <div class="panel-collapse collapse" id="collapse_{{senator.bioguide_id}}">
       <div class="panel-body">
-        [More Content goes here]
+        <p> Call: {{senator.phone}} </p>
+        {{#if senator.twitter_id}}
+          <div> {{>twitterButton handle=senator.twitter_id}} </div>
+        {{/if}}
+        {{#if senator.website}}
+          <a href="{{senator.website}}">{{senator.website}}</a>
+        {{/if}}
       </div>
     </div>
   </div>
 </template>
 
+<template name="nationalRepresentativeTable">
+  <div class="tiny-accordion">
+    <ul class="list-group js-userTasks-list">
+    {{#each rep in representatives}}
+      <li> {{>nationalRepresentativeTableEntry representative=rep}} </li>
+    {{/each}}
+    </ul>
+  </div>
+</template>
+
 <template name="nationalRepresentativeTableEntry">
-  <li> US Representative {{first_name}} {{last_name}} ({{party}}) from {{state_name}} district {{district}}: {{phone}}</li>
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <span data-toggle="collapse" href="#collapse_{{senator.bioguide_id}}">
+        <span class="pull-left tiny-expander-icon glyphicon glyphicon-chevron-down"> </span>
+        <h5> US Representative {{representative.first_name}} {{representative.last_name}} ({{representative.party}}) from {{representative.state_name}} district {{representative.district}}</h5>
+      </span>
+    </div>
+    <div class="panel-collapse collapse" id="collapse_{{senator.bioguide_id}}">
+      <div class="panel-body">
+        <p> Call: {{representative.phone}} </p>
+        {{#if representative.twitter_id}}
+          <div> {{>twitterButton handle=representative.twitter_id}} </div>
+        {{/if}}
+        {{#if representative.website}}
+          <a href="{{representative.website}}">{{representative.website}}</a>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="officialRepresentationNav">
+	<ul class="nav nav-tabs">
+		<li data-template="nationalOfficials" role="presentation" class="active"> <a href="#"> National </a> </li>
+		<li data-template="stateOfficials" role="presentation"> <a href="#"> State </a></li>
+		<li data-template="countyOfficials" role="presentation"> <a href="#"> Local </a></li>
+	</ul>
+	{{> Template.dynamic template=tab data=currentUser}}
+</template>
+
+<template name="nationalOfficials">
+  {{>nationalSenatorTable senators=findMySenators}}
+  {{>nationalRepresentativeTable representatives=findMyRepresentatives}}
+</template>
+
+<template name="stateOfficials">
+  {{> TBA}}
+</template>
+
+<template name="countyOfficials">
+  {{> TBA}}
 </template>

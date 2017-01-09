@@ -6,7 +6,6 @@ Template.registerHelper('equals', function (a, b) {
 
 Template.registerHelper('findMySenators', function() {
     user = Meteor.user();
-    console.log("finding senators");
     retval = [];
     if (user) {
         if (user.profile && user.profile.congressInfo && user.profile.congressInfo.senate){

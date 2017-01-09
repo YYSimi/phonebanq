@@ -13,6 +13,7 @@ import '../ui/widgets/userXpWidgets.js'
 import '../ui/widgets/fillerWidgets.js'
 import '../ui/widgets/taskOverviewWidgets.js'
 import '../ui/widgets/congressionalInfoWidgets.js'
+import '../ui/widgets/socialMediaWidgets.js'
 
 import '../ui/dashboards/userDashboard.js'
 import '../ui/dashboards/adminDashboard.js'
