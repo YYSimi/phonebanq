@@ -1,0 +1,13 @@
+machine:
+  node:
+    version: 0.10.43
+dependencies:
+  override:
+    - curl https://install.meteor.com | /bin/sh
+    - npm install
+    - echo "Workaround for arch-specific PhantomJS issue" 
+    - meteor test --once --driver-package dispatch:mocha-phantomjs || true
+    - cd ~/.meteor/packages/dispatch_phantomjs-tests/0.0.7/npm && npm rebuild
+checkout:
+  post:
+    - git submodule update --init

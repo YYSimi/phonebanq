@@ -35,3 +35,4 @@ xolvio:cleaner
 percolate:migrations
 ddp-rate-limiter
 alanning:roles
+dispatch:mocha-phantomjs
