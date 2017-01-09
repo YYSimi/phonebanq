@@ -14,4 +14,8 @@ Meteor.startup(function() {
 
     // QuillJS
     $.getScript("https://cdn.quilljs.com/1.1.8/quill.min.js", () => { IsLoaded.setQuillJSLoaded(true); });
-})
+});
+
+Accounts.onLogout(function() {
+    Router.go('main');
+});
