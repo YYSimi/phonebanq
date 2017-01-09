@@ -1,0 +1,1 @@
+import './userInfoWidgets.html';

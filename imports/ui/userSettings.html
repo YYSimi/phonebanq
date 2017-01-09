@@ -64,7 +64,7 @@
 	<form id="contact-preferences">
 		<div class="form-group row">
 			<label for="select-do-recurring-notifications" class="col-xs-3"> Regularly notify me about new opportunities </label>
-			<div class="col-xs-4 col-sm-2">
+			<div class="col-xs-4 col-sm-3">
 				<select class="form-control" id="select-do-recurring-notifications" value="{{profile.contactPreferences.fRecurringNotify}}">
 					<option value="true">Yes</option>
 					<option value="false">No</option>
@@ -87,12 +87,12 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-1"></div>
-			<label class="col-xs-2"> Notify me using </label>
-			<div class="col-xs-2">
+			<label class="col-xs-3"> Notify me using </label>
+			<div class="col-xs-3">
 				<input type="checkbox" id="recurring-notification-fb-checkbox" name="recurring-notification-fb-checkbox" checked="{{profile.contactPreferences.fUseFacebookForRecurring}}"/>
 				<label for="recurring-notification-fb-checkbox"> Facebook </label>
 			</div>
-			<div class="col-xs-2">
+			<div class="col-xs-3">
 				<input type="checkbox" id="recurring-notification-email-checkbox" name="recurring-notification-email-checkbox" checked="{{profile.contactPreferences.fUseEmailForRecurring}}"/>
 				<label for="recurring-notification-email-checkbox"> email </label>
 			</div>
@@ -100,7 +100,7 @@
 
 		<div class="form-group row">
 			<label for="select-do-major-notifications" class="col-xs-3"> Notify me about major news events </label>
-			<div class="col-xs-4 col-sm-2">
+			<div class="col-xs-4 col-sm-3">
 				<select class="form-control" id="select-do-major-notifications">
 					<option value="true"> Yes</option>
 					<option value="false"> No</option>
@@ -111,11 +111,11 @@
 		<div class="form-group row">
 			<div class="col-xs-1"></div>
 			<label class="col-xs-2"> Notify me using </label>
-			<div class="col-xs-2">
+			<div class="col-xs-3">
 				<input type="checkbox" id="major-notification-fb-checkbox" name="major-notification-fb-checkbox" checked="{{profile.contactPreferences.fUseFacebookForMajor}}"/>
 				<label for="major-notification-fb-checkbox"> Facebook </label>
 			</div>
-			<div class="col-xs-2">
+			<div class="col-xs-3">
 				<input type="checkbox" id="major-notification-email-checkbox" name="major-notification-email-checkbox" checked="{{profile.contactPreferences.fUseFacebookForMajor}}"/>
 				<label for="major-notification-email-checkbox"> email </label>
 			</div>
