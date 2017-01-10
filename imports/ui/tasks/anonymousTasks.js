@@ -43,7 +43,7 @@ function getUserTasks(groupName) {
 
 Template.anonymousTasks.helpers({
     routeToLoggedInUser() {
-        Router.go('myTasks');
+        Router.go('userDashboard');
     }
 });
 

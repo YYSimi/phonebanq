@@ -379,7 +379,7 @@ function NotifyFacebookUser(user) {
                 httpRequestStr='https://graph.facebook.com/' +
                     userFbInfo.id +  '/notifications' +
                     "?access_token=" + fbAppInfo.getAccessToken() +
-                    "&href=/myTasks" +
+                    "&href=/userDashboard" +
                     "&template=" + notificationMessage;
                     httpRequestStr = encodeURI(httpRequestStr);
                 
