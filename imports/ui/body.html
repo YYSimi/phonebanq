@@ -14,15 +14,16 @@
 
 <template name="mainActual">
   {{> nav}}
-  <div class="{{#if fUseContainer}} container below-nav {{/if}}">
     {{#if fLoginRequired}}
       {{#if currentUser}}
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            {{> userInfoDisplay}}
-          </div>
-          <div class="col-xs-12 col-sm-9">
-            {{> yield}}
+        <div class="{{#if fUseContainer}} container left-container below-nav {{/if}}">
+          <div class="row">
+            <div class="col-xs-12 col-sm-3">
+              {{> userInfoDisplay}}
+            </div>
+            <div class="col-xs-12 col-sm-9">
+              {{> yield}}
+            </div>
           </div>
         </div>
       {{else}}
@@ -33,9 +34,10 @@
         {{/if}}
       {{/if}}
     {{else}}
+    <div class="{{#if fUseContainer}} container below-nav {{/if}}">
       {{> yield}}
+    </div>
     {{/if}}
-  </div>
 
 
   <hr/>
