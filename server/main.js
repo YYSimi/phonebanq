@@ -9,6 +9,7 @@ import '../imports/api/util.js';
 import '../imports/api/userTasks.js';
 import '../imports/api/userGroups.js';
 import '../imports/api/roles.js';
+import '../imports/api/blog.js';
 import './migrations.js';
 
 import { ContactPreferences } from '../imports/api/userClasses.js'

@@ -6,6 +6,7 @@ import '../ui/footer.js'
 import '../ui/welcome.js'
 import '../ui/ancillaryPages/about.js'
 import '../ui/stringAssets.js'
+import '../ui/blog.js';
 
 import '../ui/widgets/userInfoWidgets.js'
 import '../ui/widgets/findUserWidgets.js'
@@ -89,7 +90,17 @@ Router.route('/editTask/:_id', {
 Router.route('/tasksAdmin', {
     name: 'tasksAdmin',
     layoutTemplate: 'mainLoginRequired'
+});
 
+Router.route('/postTopic', {
+    name: 'postBlogTopic',
+    layoutTemplate: 'mainLoginRequired',
+});
+
+Router.route('/displayTopic/:_id', {
+    name: 'displayBlogTopic',
+    layoutTemplate: 'mainLoginRequired',
+    data: function() {return this.params._id}
 });
 
 Router.route('/groupsAdmin', {

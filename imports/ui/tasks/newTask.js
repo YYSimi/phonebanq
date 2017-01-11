@@ -6,7 +6,6 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Roles } from 'meteor/alanning:roles'
 
 import { Task, PhoneTask, FreeformTask, PBTaskTypesEnum } from '../../api/taskClasses.js';
-import { hasEditPermissionsByRank } from '../../api/userGroupClasses.js';
 import { IsLoaded } from '../../api/isLoaded.js'
 
 import './newTask.html'
