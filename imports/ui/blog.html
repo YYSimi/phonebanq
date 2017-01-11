@@ -1,0 +1,41 @@
+<template name="postBlogTopic">
+  <form id="new-blog-topic">
+    <div class="form-group row">
+      <div class="col-sm-2">
+        <label for="title"> Title </label>
+      </div>
+      <div class="col-sm-9">
+        <input name="title" class="form-control required" type="text" id="title" placeholder="Enter a title"/>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="group" class="col-sm-2">Group</label>
+      <div class="col-sm-4 col-m-2">
+        <select name="group" class="form-control input-small required" id="group">
+          <option value="" selected disabled> Select group </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="content"> Content </label>
+      <div class="form-control" id="content"></div>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary js-newBlogTopic-submit"> Post it! </button>
+  </form>
+</template>
+
+<template name="displayBlogTopic">
+  <p> Display Blog Topic Template </p>
+</template>
+
+<template name="displayBlogComment">
+  <p> Display Blog Comment Template </p>
+</template>
+
+<template name="postBlogComment">
+  <p> Post Blog Comment Template </p>
+</template>
