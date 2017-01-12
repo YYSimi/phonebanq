@@ -65,7 +65,7 @@ Template.postBlogTopic.events({
         Meteor.call('blogs.postTopic', post);
         return false;
     }
-})
+});
 
 Template.displayBlogTopicsByGroupId.onCreated(function () {
     Meteor.subscribe('userGroups');
@@ -74,34 +74,37 @@ Template.displayBlogTopicsByGroupId.onCreated(function () {
             Meteor.subscribe('blogTopicsByGroupId', getWebsiteGroup()._id);
         }
     });
-})
+});
 
 // TODO:  Make this actually accept group IDs.  For now, it always displays the website group.
 Template.displayBlogTopicsByGroupId.helpers({
     'getBlogTopicsFromGroupId'() {
         retval = [];
-        console.log(getWebsiteGroup);
         if (getWebsiteGroup()) {
             retval = BlogTopics.find({group_id: getWebsiteGroup()._id}, {sort: {created_date: -1}}).fetch();
         }
         return retval;
     }
-})
+});
 
 Template.displayBlogTopicById.onRendered(function () {
-    console.log(Template.instance().data.topicId);
     Meteor.subscribe('blogTopic', new Mongo.ObjectID(Template.instance().data.topicId));
-})
+});
 
 Template.displayBlogTopicById.helpers({
     getBlogTopicFromId() {
         return BlogTopics.findOne(new Mongo.ObjectID(Template.instance().data.topicId));
     }
-})
+});
+
+Template.displayBlogTopic.onRendered(function() {
+    if (Template.instance().data.topic) {
+        Meteor.subscribe('findUsersByIds', [Template.instance().data.topic.user_id]);
+    }
+});
 
 Template.displayBlogTopic.onRendered(function() {
     Tracker.autorun(() => {
-        console.log(this);
         if (IsLoaded.getQuillJSLoaded()) {
             var quillContent = new Quill(this.find('.content'), {
                 theme: 'snow',

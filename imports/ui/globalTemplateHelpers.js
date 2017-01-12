@@ -39,13 +39,7 @@ Template.registerHelper('findMyRepresentatives', function() {
 })
 
 Template.registerHelper('getUsernameFromId', function(userId) {
-    var user = Meteor.users.findOne(userId);
-    if (!user) {
-        Meteor.subscribe('findUsersByIds', [userId]);
-        user = Meteor.users.findOne(userId);
-    }
-    if (user) {
-        return user.username;
-    }
-    return "Unknown user"
+    const user = Meteor.users.findOne(userId);
+    const retval = user ? user.username : "Unknown user";
+    return retval;
 })
