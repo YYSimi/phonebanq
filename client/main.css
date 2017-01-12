@@ -211,3 +211,11 @@ body {
 .blog-topic .ql-container{
   border: none !important;
 }
+
+.blog-comments .ql-container{
+  border: none !important;
+}
+
+.blog-comments .blog-comment:nth-child(odd) {
+  background-color: lightgray
+}
