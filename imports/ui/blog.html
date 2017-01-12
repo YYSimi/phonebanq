@@ -29,7 +29,7 @@
 
 <template name="displayBlogTopicsByGroupId">
   {{#each topic in getBlogTopicsFromGroupId}}
-    {{>displayBlogTopic topic=topic}}
+    {{>displayBlogTopic topic=topic fShowCommentsLink=true}}
   {{/each}}
 </template>
 
@@ -51,6 +51,11 @@
         <div class="panel-body">
           <div class="content"> </div>
         </div>
+        {{#if fShowCommentsLink}}
+          <div class="panel-footer">
+            <a href="{{pathFor route='displayBlogTopicById' data=topic._id}}"> Comments </a>
+          </div>
+        {{/if}}
       </div>
     </div>
   {{else}}
@@ -60,8 +65,10 @@
 
 <template name="blogCommentsSection">
   {{#if topic}}
-    {{> postBlogComment topic=topic}}
-    <hr/>
+    {{#if currentUser}}
+      {{> postBlogComment topic=topic}}
+      <hr/>
+    {{/if}}
     {{> displayBlogComments topic=topic}}
   {{else}}
     <h4> Topic not found. </h4>

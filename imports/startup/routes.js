@@ -109,10 +109,12 @@ Router.route('/blogs/displayGroupBlog/:_id', {
     data: function() {return {topicId: this.params._id} }
 });
 
-Router.route('/blogs/displayTopic/:_id', {
+// TODO:  Use of _str is disgusting here.  Clean it up once we understand
+//        Iron Router better.  For now, it's the _id._str that should be passed in.
+Router.route('/blogs/displayTopic/:_str', {
     name: 'displayBlogTopicById',
     layoutTemplate: 'main',
-    data: function() {return {topicId: this.params._id} }
+    data: function() {return {topicId: this.params._str} }
 });
 
 Router.route('/groupsAdmin', {
