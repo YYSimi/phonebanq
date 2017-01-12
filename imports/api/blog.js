@@ -14,6 +14,10 @@ Meteor.methods({
 
         const user = Meteor.user();
 
+        topic.user_id = user._id;
+        topic.created_date = new Date();
+        topic.updated_date = new Date();
+
         if (!Roles.userIsInRole(user, ['owner', 'admin'], topic.group_id._str)) {
             throw new Meteor.Error('not-authrized', 'The logged in user does not have permission to post a new topic');
         }

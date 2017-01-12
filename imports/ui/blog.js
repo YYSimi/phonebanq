@@ -63,3 +63,32 @@ Template.postBlogTopic.events({
     }
 })
 
+Template.displayBlogTopicById.onRendered(function () {
+    console.log(Template.instance().data.topicId);
+    Meteor.subscribe('blogTopic', new Mongo.ObjectID(Template.instance().data.topicId));
+})
+
+Template.displayBlogTopicById.helpers({
+    getBlogTopicFromId() {
+        return BlogTopics.findOne(new Mongo.ObjectID(Template.instance().data.topicId));
+    }
+})
+
+Template.displayBlogTopic.onRendered(function() {
+    Tracker.autorun(() => {
+        console.log(this);
+        if (IsLoaded.getQuillJSLoaded()) {
+            var quillContent = new Quill(this.find('.content'), {
+                theme: 'snow',
+                readOnly: true,
+                modules: {
+                    toolbar: false
+                }
+            });
+        }
+
+        if (this.data.topic) {
+            quillContent.setContents(JSON.parse(this.data.topic.content));
+        }
+    });
+})

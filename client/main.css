@@ -205,3 +205,9 @@ body {
   padding-bottom: 10px;
 }
 
+/* blogs
+----------------------------------------------- */
+
+.blog-topic .ql-container{
+  border: none !important;
+}

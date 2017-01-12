@@ -98,9 +98,9 @@ Router.route('/postTopic', {
 });
 
 Router.route('/displayTopic/:_id', {
-    name: 'displayBlogTopic',
+    name: 'displayBlogTopicById',
     layoutTemplate: 'mainLoginRequired',
-    data: function() {return this.params._id}
+    data: function() {return {topicId: this.params._id} }
 });
 
 Router.route('/groupsAdmin', {

@@ -23,13 +23,32 @@
       <div class="form-control" id="content"></div>
     </div>
 
-
     <button type="submit" class="btn btn-primary js-newBlogTopic-submit"> Post it! </button>
   </form>
 </template>
 
+<template name="displayBlogTopicById">
+  {{#if getBlogTopicFromId}}
+    {{>displayBlogTopic topic=getBlogTopicFromId}}
+  {{/if}}
+</template>
+
 <template name="displayBlogTopic">
-  <p> Display Blog Topic Template </p>
+  {{#if topic}}
+    <div class="blog-topic">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4> {{topic.title}} </h4>
+          <small> By <u>{{getUsernameFromId topic.user_id}}</u> on {{topic.created_date}}</small>
+        </div>
+        <div class="panel-body">
+          <div class="content"> </div>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <h4> Topic not found. </h4>
+  {{/if}}
 </template>
 
 <template name="displayBlogComment">
