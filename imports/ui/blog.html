@@ -47,7 +47,7 @@
       </div>
     </div>
     <hr/>
-    {{> newCommentForm topic=topic}}
+    {{> postBlogComment topic=topic}}
     <hr/>
     {{> displayBlogComments topic=topic}}
   {{else}}
@@ -55,25 +55,29 @@
   {{/if}}
 </template>
 
-<template name="newCommentForm">
+<template name="postBlogComment">
   <form id="new-blog-comment">
     <div class="form-group">
-      <label for="content"> Comment: </label>
+      <label for="content"> Comment on this: </label>
       <div class="form-control" id="comment"></div>
     </div>
 
     <button type="submit" class="btn btn-primary js-newBlogTopic-submit"> Say it! </button>
-
-  </form></template>
+  </form>
+</template>
 
 <template name="displayBlogComments">
-  <p> Display Blog Comments Template </p>
+  <div class="blog-comments">
+    <label> User Comments: </label>
+    {{#each comment in getBlogComments}}
+      {{>displayBlogComment comment=comment}}
+    {{/each}}
+  </div>
 </template>
 
 <template name="displayBlogComment">
-  <p> Display Blog Comment Template </p>
-</template>
-
-<template name="postBlogComment">
-  <p> Post Blog Comment Template </p>
+  <div class="blog-comment">
+    <div class="quill-comment"> </div>
+    <small> - {{getUsernameFromId comment.user_id}} {{comment.created_date}} </small>
+  </div>
 </template>

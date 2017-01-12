@@ -49,6 +49,8 @@ Meteor.methods({
 
         comment.created_date = new Date();
         comment.updated_date = new Date();
+        comment.user_id = user._id;
+        comment.sequence_number = BlogComments.find({topic_id: comment.topic_id}).count() + 1;
 
         BlogComments.insert(comment);
     }

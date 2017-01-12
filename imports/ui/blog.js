@@ -94,7 +94,7 @@ Template.displayBlogTopic.onRendered(function() {
     });
 })
 
-Template.newCommentForm.onRendered(function() {
+Template.postBlogComment.onRendered(function() {
     Tracker.autorun( () => {
         if (IsLoaded.getQuillJSLoaded()) {
             quillComment = new Quill(Template.instance().find('#comment'), {
@@ -104,7 +104,7 @@ Template.newCommentForm.onRendered(function() {
     });
 })
 
-Template.newCommentForm.events({
+Template.postBlogComment.events({
     'submit form'(evt, tmpl){
         evt.preventDefault();
 
@@ -118,4 +118,33 @@ Template.newCommentForm.events({
         Meteor.call('blogs.postComment', comment);
         return false;
     }
-})
+});
+
+Template.displayBlogComments.onCreated(function () {
+    // We've probably already subscribed to the topic, but just in case...
+    Meteor.subscribe('blogTopic', Template.instance().data.topic._id);
+});
+
+Template.displayBlogComments.helpers({
+    getBlogComments() {
+        return BlogComments.find({topic_id: Template.instance().data.topic._id}, {sort: {created_date: 1}});
+    }
+});
+
+Template.displayBlogComment.onRendered(function () {
+    Tracker.autorun(() => {
+        if (IsLoaded.getQuillJSLoaded()) {
+                Template.instance().quillContent = new Quill(this.find('.quill-comment'), {
+                theme: 'snow',
+                readOnly: true,
+                modules: {
+                    toolbar: false
+                }
+            });
+        }
+
+        if (this.data && this.data.comment && this.data.comment.content) {
+            Template.instance().quillContent.setContents(JSON.parse(this.data.comment.content));
+        }
+    });
+});
