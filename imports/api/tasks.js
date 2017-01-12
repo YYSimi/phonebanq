@@ -108,14 +108,13 @@ if (Meteor.isServer) {
     });
     Meteor.publish('blogTopics', function () {
         // TODO: Lock this down when group membership gets implemented.
-        return [BlogTopics.find(), BlogComments.find()];
+        return BlogTopics.find();
     });
     Meteor.publish('blogTopic', function (id) {
         check(id, Mongo.ObjectID);
         // TODO: Lock this down when group membership gets implemented.
         return [BlogTopics.find(id), BlogComments.find({topic_id: id})];
     });
-
 }
 
 Meteor.users.deny({update: function () { return true; }});

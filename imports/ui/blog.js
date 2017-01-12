@@ -6,7 +6,8 @@ import { IsLoaded } from '../api/isLoaded.js'
 
 import './blog.html'
 
-var quillContent;
+var quillContent; //TODO:  Globals.  Gross.  Attach it to the template maybe?
+var quillComment; //TODO:  Globals.  Gross.  Attach it to the template maybe?
 
 Template.postBlogTopic.onCreated(function () {
     var tmpl = Template.instance();
@@ -91,4 +92,30 @@ Template.displayBlogTopic.onRendered(function() {
             quillContent.setContents(JSON.parse(this.data.topic.content));
         }
     });
+})
+
+Template.newCommentForm.onRendered(function() {
+    Tracker.autorun( () => {
+        if (IsLoaded.getQuillJSLoaded()) {
+            quillComment = new Quill(Template.instance().find('#comment'), {
+                theme: 'snow'
+            });
+        }
+    });
+})
+
+Template.newCommentForm.events({
+    'submit form'(evt, tmpl){
+        evt.preventDefault();
+
+        tmpl.$("#comment").val(JSON.stringify(quillComment.getContents()))
+
+        const comment = {
+            content: tmpl.$('#comment').val(),
+            topic_id: tmpl.data.topic._id
+        }
+
+        Meteor.call('blogs.postComment', comment);
+        return false;
+    }
 })

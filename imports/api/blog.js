@@ -28,5 +28,28 @@ Meteor.methods({
         }
 
         BlogTopics.insert(topic);
+    },
+
+    'blogs.postComment'(comment){
+        check(comment, {
+            content: String,
+            topic_id: Mongo.ObjectID
+        });
+        const user = Meteor.user();
+
+        // TODO:  Figure out who is allowed to post comments.
+        if (!user) {
+            throw new Meteor.Error('not-authorized')
+        }
+
+        const topic = BlogTopics.findOne(comment.topic_id);
+        if (!topic) {
+            throw new Meteor.error('bad-parameter', "The provided topic does not exist");
+        }
+
+        comment.created_date = new Date();
+        comment.updated_date = new Date();
+
+        BlogComments.insert(comment);
     }
 });

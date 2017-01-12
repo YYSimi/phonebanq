@@ -46,9 +46,28 @@
         </div>
       </div>
     </div>
+    <hr/>
+    {{> newCommentForm topic=topic}}
+    <hr/>
+    {{> displayBlogComments topic=topic}}
   {{else}}
     <h4> Topic not found. </h4>
   {{/if}}
+</template>
+
+<template name="newCommentForm">
+  <form id="new-blog-comment">
+    <div class="form-group">
+      <label for="content"> Comment: </label>
+      <div class="form-control" id="comment"></div>
+    </div>
+
+    <button type="submit" class="btn btn-primary js-newBlogTopic-submit"> Say it! </button>
+
+  </form></template>
+
+<template name="displayBlogComments">
+  <p> Display Blog Comments Template </p>
 </template>
 
 <template name="displayBlogComment">
