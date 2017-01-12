@@ -216,6 +216,15 @@ body {
   border: none !important;
 }
 
+.blog-comments .ql-editor{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.blog-comments .blog-comment{
+  padding: 5px;
+}
+
 .blog-comments .blog-comment:nth-child(odd) {
-  background-color: lightgray
+  background-color: #f5f5f5
 }
