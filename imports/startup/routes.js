@@ -122,6 +122,12 @@ Router.route('/groupsAdmin', {
     layoutTemplate: 'mainLoginRequired'
 });
 
+Router.route('/officials', {
+    name: 'officials',
+    template: 'officialRepresentationNav',
+    layoutTemplate: 'mainLoginRequired'
+})
+
 Router.route('/userDashboard', {
     name: 'userDashboard',
     layoutTemplate: 'mainLoginRequired'

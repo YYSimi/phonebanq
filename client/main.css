@@ -14,7 +14,7 @@ visibility: initial !important;
 }
 
 .below-nav {
-  margin-top: 20px;
+  padding-top: 20px;
 }
 
 .nav-tabs {
@@ -153,12 +153,10 @@ body {
 /* user info styles
 -------------------------------------------------- */
 .user-info-display {
-  border-radius: 10px;
-  border-style: solid;
-  border-width: 1px;
   padding: 8px;
   margin: 0;
-  background: white;
+  overflow: hidden;
+  color: white;
 }
 
 .left-container {
@@ -167,8 +165,21 @@ body {
   padding-left: 0;
 }
 
-/* TODO:  This height doesn't actually extend to the bottom of the screen. Must fix that. */
+/* TODO:  This is a hack!  Find the proper way to do this! */
 .left-column {
+  padding-bottom: 5000px;
+  margin-bottom: -5000px;
+  width: 150px;
+  float: left;
+  background-color: #222;
+}
+
+.website-body {
+  overflow:hidden;
+  height: 100%;
+}
+
+.main-content {
   height: 100%;
 }
 

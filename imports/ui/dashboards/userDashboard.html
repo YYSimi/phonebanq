@@ -1,5 +1,13 @@
 <template name="userDashboard">
   {{> myTasks}}
-  <h4> Official Contact Info: </h4>
-  {{> officialRepresentationNav}}
+</template>
+
+<template name="userDashboardNav">
+  <div class="navbar navbar-inverse navbar-fixed-left">
+    <ul class="nav navbar-nav">
+      <li class="navlink {{#if fIsThisRouteActive 'userDashboard'}} active {{/if}}"><a href="{{pathFor route='userDashboard'}}"> Dashboard Home </a></li>
+      <li class="navlink {{#if fIsThisRouteActive 'completedTasks'}} active {{/if}}"><a href="{{pathFor route='completedTasks'}}"> Completed opportunities </a></li>
+      <li class="navlink {{#if fIsThisRouteActive 'officials'}} active {{/if}}"><a href="{{pathFor route='officials'}}"> My Officials </a></li>
+    </ul>
+  </div>
 </template>
