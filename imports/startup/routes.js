@@ -92,14 +92,26 @@ Router.route('/tasksAdmin', {
     layoutTemplate: 'mainLoginRequired'
 });
 
-Router.route('/postTopic', {
+Router.route('/blogs/postTopic', {
     name: 'postBlogTopic',
     layoutTemplate: 'mainLoginRequired',
 });
 
-Router.route('/displayTopic/:_id', {
+Router.route('/blogs/siteBlog/', {
+    name: 'viewSiteBlog',
+    template: 'displayBlogTopicsByGroupId',
+    layoutTemplate: 'main',
+});
+
+Router.route('/blogs/displayGroupBlog/:_id', {
+    name: 'displayBlogTopicsByGroupId',
+    layoutTemplate: 'main',
+    data: function() {return {topicId: this.params._id} }
+});
+
+Router.route('/blogs/displayTopic/:_id', {
     name: 'displayBlogTopicById',
-    layoutTemplate: 'mainLoginRequired',
+    layoutTemplate: 'main',
     data: function() {return {topicId: this.params._id} }
 });
 

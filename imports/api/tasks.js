@@ -106,9 +106,10 @@ if (Meteor.isServer) {
     Meteor.publish('userGroups', function () {
         return UserGroups.find();
     });
-    Meteor.publish('blogTopics', function () {
+    Meteor.publish('blogTopicsByGroupId', function (group_id) {
         // TODO: Lock this down when group membership gets implemented.
-        return BlogTopics.find();
+        check(group_id, Mongo.ObjectID);
+        return BlogTopics.find({group_id : group_id});
     });
     Meteor.publish('blogTopic', function (id) {
         check(id, Mongo.ObjectID);

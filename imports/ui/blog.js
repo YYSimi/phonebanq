@@ -4,6 +4,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Roles } from 'meteor/alanning:roles'
 import { IsLoaded } from '../api/isLoaded.js'
 
+import { getWebsiteGroup } from '../../lib/common.js';
+
+
 import './blog.html'
 
 var quillContent; //TODO:  Globals.  Gross.  Attach it to the template maybe?
@@ -61,6 +64,27 @@ Template.postBlogTopic.events({
 
         Meteor.call('blogs.postTopic', post);
         return false;
+    }
+})
+
+Template.displayBlogTopicsByGroupId.onCreated(function () {
+    Meteor.subscribe('userGroups');
+    Tracker.autorun(() => {
+        if (getWebsiteGroup()) {
+            Meteor.subscribe('blogTopicsByGroupId', getWebsiteGroup()._id);
+        }
+    });
+})
+
+// TODO:  Make this actually accept group IDs.  For now, it always displays the website group.
+Template.displayBlogTopicsByGroupId.helpers({
+    'getBlogTopicsFromGroupId'() {
+        retval = [];
+        console.log(getWebsiteGroup);
+        if (getWebsiteGroup()) {
+            retval = BlogTopics.find({group_id: getWebsiteGroup()._id}, {sort: {created_date: -1}}).fetch();
+        }
+        return retval;
     }
 })
 

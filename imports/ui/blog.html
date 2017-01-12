@@ -27,9 +27,16 @@
   </form>
 </template>
 
+<template name="displayBlogTopicsByGroupId">
+  {{#each topic in getBlogTopicsFromGroupId}}
+    {{>displayBlogTopic topic=topic}}
+  {{/each}}
+</template>
+
 <template name="displayBlogTopicById">
   {{#if getBlogTopicFromId}}
     {{>displayBlogTopic topic=getBlogTopicFromId}}
+    {{>blogCommentsSection topic=getBlogTopicFromId}}
   {{/if}}
 </template>
 
@@ -46,7 +53,13 @@
         </div>
       </div>
     </div>
-    <hr/>
+  {{else}}
+    <h4> Topic not found. </h4>
+  {{/if}}
+</template>
+
+<template name="blogCommentsSection">
+  {{#if topic}}
     {{> postBlogComment topic=topic}}
     <hr/>
     {{> displayBlogComments topic=topic}}
