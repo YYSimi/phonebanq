@@ -162,7 +162,8 @@ body {
 }
 
 .left-container {
-  margin: 0 auto 0 0;
+  margin-left: 0;
+  margin-right: auto;
   padding-left: 0;
 }
 
