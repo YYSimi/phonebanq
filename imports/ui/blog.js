@@ -135,15 +135,17 @@ Template.postBlogComment.events({
     'submit form'(evt, tmpl){
         evt.preventDefault();
 
-        tmpl.$("#comment").val(JSON.stringify(quillComment.getContents()))
+        if (quillComment.getText().trim().length !== 0)
+        {
+            const comment = {
+                content: JSON.stringify(quillComment.getContents()),
+                topic_id: tmpl.data.topic._id
+            }
 
-        const comment = {
-            content: tmpl.$('#comment').val(),
-            topic_id: tmpl.data.topic._id
+            quillComment.setContents([]);
+            Meteor.call('blogs.postComment', comment);
+            return false;
         }
-
-        Meteor.call('blogs.postComment', comment);
-        return false;
     }
 });
 
@@ -153,6 +155,9 @@ Template.displayBlogComments.onCreated(function () {
 });
 
 Template.displayBlogComments.helpers({
+    getCommentCount() {
+        return BlogComments.find({topic_id: Template.instance().data.topic._id}).count();
+    },
     getBlogComments() {
         return BlogComments.find({topic_id: Template.instance().data.topic._id}, {sort: {created_date: 1}});
     }

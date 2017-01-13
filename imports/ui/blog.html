@@ -88,7 +88,7 @@
 
 <template name="displayBlogComments">
   <div class="blog-comments">
-    <label> User Comments: </label>
+  <label> User Comments ({{getCommentCount}}): </label>
     {{#each comment in getBlogComments}}
       {{>displayBlogComment comment=comment}}
     {{/each}}

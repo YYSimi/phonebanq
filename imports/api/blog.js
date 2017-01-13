@@ -36,6 +36,15 @@ Meteor.methods({
             topic_id: Mongo.ObjectID
         });
         const user = Meteor.user();
+        const MAX_LENGTH = 10*1000; // No more than 10,000 characters.
+
+        if (comment.content.length > MAX_LENGTH) {
+            throw new Meteor.Error('invalid-argument', "The passed-in comment is too large")
+        }
+
+        if (comment.content.length === 0) {
+            throw new Meteor.Error('invalid-argument', "Zero length comments are not allowed")
+        }
 
         // TODO:  Figure out who is allowed to post comments.
         if (!user) {
