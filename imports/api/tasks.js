@@ -191,9 +191,12 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized', "The logged-in user does not have permission to make new tasks.")
         }
 
-        // TODO:  Make this work for task types other than phone!
-        // TODO:  Take out all manual references to phone task strings!
+        // Insert server-generated metadata
         task.owner = Meteor.userId();
+        task.statistics = {
+            completion_count: 0
+        }
+        
         var taskId = Tasks.insert(task);
         taskDetail.parent_task_id = taskId._str;
         switch(task.task_type) {
