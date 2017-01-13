@@ -35,18 +35,40 @@ visibility: initial !important;
   color: #888888;
 }
 
-.sidebar-nav ul {
+.visible-xs-block .sidebar-nav {
+  padding: 2px 20px;
+}
+
+.visible-xs-block .sidebar-nav li {
+  display: inline;
+  font-size: 24px;
+}
+
+.visible-xs-block .sidebar-nav li a {
+  display: inline;
+  font-size: 24px;
+}
+
+.visible-xs-block .sidebar-nav li a .navlink-text{
+  display: none;
+}
+
+
+.hidden-xs .sidebar-nav ul {
   float: none;
 }
-.sidebar-nav ul:not {
+
+.hidden-xs .sidebar-nav ul:not {
   display: block;
 }
-.sidebar-nav li {
+
+.hidden-xs .sidebar-nav li {
   float: none;
   display: block;
   width: 100%
 }
-.sidebar-nav li a {
+
+.hidden-xs .sidebar-nav li a {
   padding-top: 12px;
   padding-bottom: 12px;
 }

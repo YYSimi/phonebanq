@@ -17,6 +17,11 @@
     {{#if fLoginRequired}}
       {{#if currentUser}}
         <div class="row">
+          <div class="visible-xs-block">
+            <div>
+              {{> userDashboardNav}}
+            </div>
+          </div>
           <div class="left-column hidden-xs col-sm-3">
             <div>
               {{> userInfoDisplay}}
