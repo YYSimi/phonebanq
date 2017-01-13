@@ -14,7 +14,6 @@
         <ul class="nav navbar-nav navbar-left">
           {{#if currentUser}} <li class="navlink {{#if fIsThisRouteActive 'userDashboard'}} active {{/if}}"><a href="{{pathFor route='userDashboard'}}"> My Dashboard </a></li> {{/if}}
           <!-- <li class="navlink {{#if fIsThisRouteActive 'about'}} active {{/if}}"><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li> -->
-          {{#if currentUser}} <li class="navlink {{#if fIsThisRouteActive 'userSettings'}} active {{/if}}"><a href="{{pathFor route='userSettings'}}"> Settings </a></li> {{/if}}
           <li class="navlink navlink-myTasks {{#if fIsThisRouteActive 'viewSiteBlog'}} active {{/if}}"><a href="{{pathFor route='viewSiteBlog'}}"> Blog </a></li>
           <!-- TODO:  Fix up permissions info on all of these -->
           {{#if fHasNewTaskPermissions}}
