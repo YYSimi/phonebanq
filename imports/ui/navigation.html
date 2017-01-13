@@ -30,8 +30,10 @@
           </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="navlink navlink-feedback {{#if fIsThisRouteActive 'feedback'}} active {{/if}}"><a href="{{pathFor route='feedback'}}"> Feedback </a></li>
-          <li class="navbar-text">  {{> loginButtons align="right"}} </li>
+          <li class="visible-xs-block navbar-text">  {{> loginButtons align="left"}} </li>
+          <li class="hidden-xs navbar-text">  {{> loginButtons align="right"}} </li>
         </ul>
+        <br class="visible-xs-block"/>
       </div>
     </div>
   </nav>
