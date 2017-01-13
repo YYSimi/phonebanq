@@ -16,13 +16,15 @@
   {{> nav}}
     {{#if fLoginRequired}}
       {{#if currentUser}}
-        <div class="left-column">
-          {{> userInfoDisplay}}
-          {{> userDashboardNav}}
-        </div>
-        <div class="{{#if fUseContainer}} container left-container below-nav {{/if}}">
-          <div class="col-xs-12 col-sm-9">
-            {{> yield}}
+        <div class="row">
+          <div class="left-column hidden-xs col-sm-3">
+            <div>
+              {{> userInfoDisplay}}
+              {{> userDashboardNav}}
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-9 {{#if fUseContainer}} container left-container below-nav {{/if}}">
+              {{> yield}}
           </div>
         </div>
       {{else}}

@@ -29,9 +29,26 @@ visibility: initial !important;
   padding: 15px;
   width: auto;
 }
+
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   background-color: #F2EEEE;
   color: #888888;
+}
+
+.sidebar-nav ul {
+  float: none;
+}
+.sidebar-nav ul:not {
+  display: block;
+}
+.sidebar-nav li {
+  float: none;
+  display: block;
+  width: 100%
+}
+.sidebar-nav li a {
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 /* Carousel styles
@@ -87,11 +104,13 @@ html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   /* Margin bottom by footer height */
   margin-bottom: 100px;
-  overflow: hidden;
+  min-height: 100%
 }
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -158,17 +177,16 @@ body {
 }
 
 .left-container {
-  margin-left: 0;
+  margin-left: 0px;
   margin-right: auto;
-  padding-left: 0;
 }
 
 /* TODO:  This is a hack!  Find the proper way to do this! */
 /* TODO:  Find a way to make the left-column extend to the bottom of the screen on short screens. */
 .left-column {
-  padding-bottom: 5000px;
-  margin-bottom: -5000px;
-  width: 150px;
+  min-height: 100vh;
+  height: 100%;
+  max-width: 250px;
   float: left;
   background-color: #222;
 }

@@ -3,11 +3,11 @@
 </template>
 
 <template name="userDashboardNav">
-  <div class="navbar navbar-inverse navbar-fixed-left">
-    <ul class="nav navbar-nav">
-      <li class="navlink {{#if fIsThisRouteActive 'userDashboard'}} active {{/if}}"><a href="{{pathFor route='userDashboard'}}"> Dashboard Home </a></li>
-      <li class="navlink {{#if fIsThisRouteActive 'completedTasks'}} active {{/if}}"><a href="{{pathFor route='completedTasks'}}"> Completed opportunities </a></li>
-      <li class="navlink {{#if fIsThisRouteActive 'officials'}} active {{/if}}"><a href="{{pathFor route='officials'}}"> My Officials </a></li>
+  <div class="navbar navbar-inverse sidebar-nav">
+    <ul class="nav navbar-nav nav-stacked">
+      <li class="navlink {{#if fIsThisRouteActive 'userDashboard'}} active {{/if}}"><a href="{{pathFor route='userDashboard'}}"> <span class="navlink-icon glyphicon glyphicon-home"> </span> <span class="navlink-text"> Dashboard Home </span> </a></li>
+      <li class="navlink {{#if fIsThisRouteActive 'completedTasks'}} active {{/if}}"><a href="{{pathFor route='completedTasks'}}"> <span class="navlink-icon glyphicon glyphicon-ok"> </span> <span class="navlink-text"> Completed Opportunities </span> </a></li>
+      <li class="navlink {{#if fIsThisRouteActive 'officials'}} active {{/if}}"><a href="{{pathFor route='officials'}}"> <span class="navlink-icon glyphicon glyphicon-bullhorn"> </span> <span class="navlink-text"> Contact Officials </span> </a></li>
     </ul>
   </div>
 </template>
