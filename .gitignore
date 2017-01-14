@@ -1,4 +1,5 @@
 node_modules/
+dump/
 
 # These files both store secret keys for oauth.  Not sure which file we'll use yet.
 settings-production.json

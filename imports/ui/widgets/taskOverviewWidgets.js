@@ -6,6 +6,6 @@ Template.taskOverviewByGroupRow.onCreated(() => {
 
 Template.taskOverviewByGroupRow.helpers({
     getTasksFromGroup(){
-        return Tasks.find({group: Template.instance().data.group._id._str });
+        return Tasks.find({group: Template.instance().data.group._id});
     }
 })

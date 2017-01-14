@@ -16,7 +16,7 @@ function getUserStateName() {
 Template.myTasks.onCreated(function () {
     this.subscribe('userGroups');
     this.autorun(() => {
-        var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
+        var taskIds = UserTasks.find().map( function(item) {return item.task_id;});
         this.subscribe('tasksAndDetails', taskIds);
     } )
 });
@@ -47,7 +47,7 @@ function getUserTasks(groupName) {
             }
         }
         return mapRetval;
-    }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
+    }).filter( function(elt) {return (elt != null && (group ? (_.isEqual(elt.task.group_id, group._id)) : true ) ) } );
     return retval;
 }
 

@@ -36,7 +36,7 @@ function getUserTasks(groupName) {
             }
         }
         return mapRetval;
-    }).filter( function(elt) {return (elt != null && (group ? (elt.task.group === group._id._str) : true ) ) } );
+    }).filter( function(elt) {return (elt != null && (group ? (_.isEqual(elt.task.group_id, group._id)) : true ) ) } );
     return retval;
 }
 

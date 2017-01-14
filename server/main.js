@@ -100,7 +100,7 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
-    Migrations.migrateTo(3);
+    Migrations.migrateTo(4);
     indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
     Houston.add_collection(Migrations._collection); // Adds info about migrations to the houston admin UI.  Hacky!
@@ -321,7 +321,7 @@ function FixTaskCompletionCount() {
     });
     // Increment appropriate completion counter by 1 for each completed user task
     UserTasks.find({is_completed: true}).forEach(function(userTask) {
-        Tasks.update(new Mongo.ObjectID(userTask.task_id), {$inc: {"statistics.completion_count": 1}})
+        Tasks.update(userTask.task_id, {$inc: {"statistics.completion_count": 1}})
     })
 }
 
@@ -368,7 +368,7 @@ function NotifyFacebookUser(user) {
         
         if (latestUserTaskCursor.count() > 0) {
             var latestUserTask = latestUserTaskCursor.fetch()[0];
-            latestTask = Tasks.findOne(new Mongo.ObjectID(latestUserTask.task_id));
+            latestTask = Tasks.findOne(latestUserTask.task_id);
 
             if (latestTask) {
                 var fbMaxMessageLength=180;

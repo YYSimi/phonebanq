@@ -22,13 +22,13 @@ if (Meteor.isServer) {
         // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
         // TODO:  Filter, then map. Not visa-versa.
         var phoneTaskIds = tasks.map(function(item) { 
-            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
+            if (item.task_type == "phone") { return item.task_detail_id } // TODO:  Figure out when we use strs vs MongoIDs
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
         var freeformTaskIds = tasks.map(function(item) { 
-            if (item.task_type == "freeform") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
+            if (item.task_type == "freeform") { return item.task_detail_id } // TODO:  Figure out when we use strs vs MongoIDs
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
@@ -37,7 +37,7 @@ if (Meteor.isServer) {
     });
     Meteor.publish('tasksByGroup', function(groupId) {
         check(groupId, Mongo.ObjectID);
-        return Tasks.find({group: groupId._str});
+        return Tasks.find({group_id: groupId});
     });
     Meteor.publish('senators', function() {
         return Senators.find();
@@ -49,18 +49,18 @@ if (Meteor.isServer) {
         return Tasks.find({owner : this.userId});
     } );
     Meteor.publish('taskDetails', function( taggedTaskDetailIds ) {
-        check(taggedTaskDetailIds, [{task_type: String, task_detail_id: String}]);
+        check(taggedTaskDetailIds, [{task_type: String, task_detail_id: Mongo.ObjectID}]);
 
         // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
         // TODO:  Filter, then map. Not visa-versa.
         var phoneTaskIds = taggedTaskDetailIds.map(function(item) { 
-            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) }
+            if (item.task_type == "phone") { return item.task_detail_id; }
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
         var freeformTaskIds = taggedTaskDetailIds.map(function(item) { 
-            if (item.task_type == "freeform") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
+            if (item.task_type == "freeform") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
@@ -74,13 +74,13 @@ if (Meteor.isServer) {
         // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
         // TODO:  Filter, then map. Not visa-versa.
        var phoneTaskIds = topTasks.map(function(item) { 
-            if (item.task_type == "phone") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
+            if (item.task_type == "phone") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
         var freeformTaskIds = topTasks.map(function(item) { 
-            if (item.task_type == "freeform") { return new Mongo.ObjectID(item.task_detail_id) } // TODO:  Figure out when we use strs vs MongoIDs
+            if (item.task_type == "freeform") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
             else { return null; }
         } ).filter( function (elt) {return elt != null } );
         var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
@@ -131,8 +131,12 @@ function validateTask(task) {
         issues: [String],
         priority: Number,
         xp_value: Number,
-        group: String
-    });    
+        group_id: Mongo.ObjectID
+    });
+
+    if (!UserGroups.findOne(task.group_id)) {
+        throw new Meteor.Error('bad-parameter', "The group specified for the task is not valid");
+    }
 }
 
 function validatePhoneTaskDetail(phoneTask) {
@@ -198,15 +202,15 @@ Meteor.methods({
         }
         
         var taskId = Tasks.insert(task);
-        taskDetail.parent_task_id = taskId._str;
+        taskDetail.parent_task_id = taskId;
         switch(task.task_type) {
             case PBTaskTypesEnum.phone:
                 var taskDetailId = PhoneTasks.insert(taskDetail);
-                Tasks.update(taskId, {$set : {task_detail_id : taskDetailId._str}})
+                Tasks.update(taskId, {$set : {task_detail_id : taskDetailId}})
                 break;
             case PBTaskTypesEnum.freeform:
                 var taskDetailId = FreeformTasks.insert(taskDetail)
-                Tasks.update(taskId, {$set : {task_detail_id : taskDetailId._str}})
+                Tasks.update(taskId, {$set : {task_detail_id : taskDetailId}})
                 break;
             default:
                 throw new Meteor.Error("invalid-parameter", "The given task detail does not match the specified task type") // TODO:  figure out how check_fail works.
@@ -218,8 +222,9 @@ Meteor.methods({
         check(taskId, Mongo.ObjectID)
         var user = Meteor.user();
         task = Tasks.findOne(taskId);
-        if (task && task.owner == user._id) {
-            console.log("disabling task")
+
+        // TODO:  Role review
+        if (task && checkForEditPermissions(user)) {
             Tasks.update(taskId, {$set : { is_disabled : true}})
         }
     },
@@ -230,16 +235,17 @@ Meteor.methods({
         validateTaskDetailOfType(newTask.task_type, taskDetail);
         var user = Meteor.user();
         var oldTask = Tasks.findOne(taskId);
-        if (!user) {
-            throw new Meteor.Error("not-authorized");
-        }
 
         if (!oldTask) {
             throw new Meteor.Error("invalid-parameter", "The given task does not exist");
         }
 
         if (oldTask.task_type != newTask.task_type) {
-            throw new Meteor.Error("invalid-parameter", "The given task is attempting to changed type.  This is not allowed.")
+            throw new Meteor.Error("invalid-parameter", "The given task is attempting to change type.  This is not allowed.")
+        }
+
+        if (!_.isEqual(oldTask.group_id, newTask.group_id)) {
+            throw new Meteor.Error("invalid-parameter", "The given task is attempting to change group.  This is not allowed.")
         }
 
         if (!checkForEditPermissions(user, oldTask)) {
@@ -253,10 +259,10 @@ Meteor.methods({
         switch (newTask.task_type) {
             case PBTaskTypesEnum.phone:
                 // TODO : Standardize on storing _only_ objectIDs in the database except for userIDs!
-                PhoneTasks.update(new Mongo.ObjectID(newTask.task_detail_id), {$set: taskDetail});
+                PhoneTasks.update(newTask.task_detail_id, {$set: taskDetail});
                 break;
             case PBTaskTypesEnum.freeform:
-                FreeformTasks.update(new Mongo.ObjectID(newTask.task_detail_id), {$set: taskDetail});
+                FreeformTasks.update(newTask.task_detail_id, {$set: taskDetail});
                 break;
             default:
                 throw new Meteor.Error("bad-state", "Unknown task type found");

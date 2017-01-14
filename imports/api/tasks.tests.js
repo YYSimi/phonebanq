@@ -1,5 +1,6 @@
 import './tasks.js'
 import { Task, PhoneTask, PBTaskTypesEnum } from './taskClasses.js';
+import { UserGroup } from './userGroupClasses.js'
 
 import { assert } from 'meteor/practicalmeteor:chai';
 import { resetDatabase } from 'meteor/xolvio:cleaner';
@@ -9,6 +10,8 @@ if (Meteor.isServer) {
     describe('task API tests', () => {
         //---- HELPERS
         //-------------------------------------------- //
+        var user;
+        var group1MongoId;
 
         //---- TESTCASES
         //-------------------------------------------- //
@@ -24,6 +27,11 @@ if (Meteor.isServer) {
             Roles.addUsersToRoles(user, 'site-admin', Roles.GLOBAL_GROUP)
             Meteor.userId = function() { return userId; };
             Meteor.user = function() { return Meteor.users.findOne(userId); };
+
+            const group1 = new UserGroup("test1", userId, [], []);
+            Meteor.call('userGroups.create', group1);
+            group1MongoId = UserGroups.findOne({name: group1.name})._id;
+
         })
 
         it('can create a new phone task', () => {
@@ -37,7 +45,7 @@ if (Meteor.isServer) {
                 [],
                 3,
                 1,
-                "foo");
+                group1MongoId);
             var phoneTask = new PhoneTask(
                 taskCookie,
                 "",
@@ -65,7 +73,7 @@ if (Meteor.isServer) {
                 [],
                 3,
                 1,
-                "foo");
+                group1MongoId);
             var phoneTask = new PhoneTask(
                 taskCookie,
                 "",

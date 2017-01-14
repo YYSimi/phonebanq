@@ -17,7 +17,7 @@ Meteor.methods({
             throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
 
-        task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id));
+        task = Tasks.findOne(userTask.task_id);
         if (!task) {
             throw new Meteor.Error('bad-state', "The associated task does not exist")
         }
@@ -54,7 +54,7 @@ Meteor.methods({
             throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
         
-        task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id));
+        task = Tasks.findOne(userTask.task_id);
         if (!task) {
             throw new Meteor.Error('bad-state', "The associated task does not exist")
         }
@@ -83,7 +83,7 @@ Meteor.methods({
             throw new Meteor.Error('not-autherized', "The logged-in user does not own this task.");
         }
         
-        task = Tasks.findOne(new Mongo.ObjectID(userTask.task_id));
+        task = Tasks.findOne(userTask.task_id);
         if (!task) {
             throw new Meteor.Error('bad-state', "The associated task does not exist")
         }

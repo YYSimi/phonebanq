@@ -137,10 +137,10 @@ Template.authenticatedUserNewTask.onRendered(function() {
                     var taskDetail = {};
                     switch(task.task_type) {
                         case PBTaskTypesEnum.phone:
-                            taskDetail = PhoneTasks.findOne(new Mongo.ObjectID(task.task_detail_id));
+                            taskDetail = PhoneTasks.findOne(task.task_detail_id);
                             break;
                         case PBTaskTypesEnum.freeform:
-                            taskDetail = FreeformTasks.findOne(new Mongo.ObjectID(task.task_detail_id));
+                            taskDetail = FreeformTasks.findOne(task.task_detail_id);
                             break;
                         default:
                             throw "Unknown task type";
@@ -151,7 +151,8 @@ Template.authenticatedUserNewTask.onRendered(function() {
                 $("#tiny-description").val(task.tiny_description),
                 $("#brief-description").val(task.brief_description),
                 $("#task-priority").val(task.priority);
-                $("#task-group").val(task.group);
+                $("#task-group").val(task.group_id._str);
+                $("#task-group").prop("disabled", "disabled");
                 $("#task-type").val(task.task_type);
                 currentTaskType.set(task.task_type);
                 $("#task-type").prop("disabled", "disabled");

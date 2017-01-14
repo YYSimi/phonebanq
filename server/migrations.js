@@ -3,6 +3,7 @@ import { Migrations } from 'meteor/percolate:migrations'
 import { Roles } from 'meteor/alanning:roles' 
 
 import { ContactPreferences } from '../imports/api/userClasses.js'
+import { PBTaskTypesEnum } from '../imports/api/taskClasses.js'
 
 
 // Adds default values for user settings fields.
@@ -104,5 +105,43 @@ Migrations.add({
     },
     down: function() {
         // Not worth implementing down functionality here, we're still in alpha. 
+    }
+})
+
+// Makes all IDs coming in, resting in, and coming out of our database be MongoIDs, and not Strings.
+Migrations.add({
+    version: 4,
+    up: function() {
+        Tasks.find().forEach((task) => {
+
+            // Updates Tasks collection
+            Tasks.update(task._id, {$set: {group_id: new Mongo.ObjectID(task.group) }});
+            Tasks.update(task._id, {$unset: {group: true }});
+
+            Tasks.update(task._id, {$set: {task_detail_id: new Mongo.ObjectID(task.task_detail_id)}});
+
+            // Updates Task Detail collections
+            switch(task.task_type) {
+                case PBTaskTypesEnum.phone:
+                    PhoneTasks.find({parent_task_id: task._id._str}).forEach((phoneTask) => {
+                        PhoneTasks.update(phoneTask._id, {parent_task_id: task._id});
+                    })
+                    break;
+                case PBTaskTypesEnum.freeform:
+                    FreeformTasks.find({parent_task_id: task._id._str}).forEach((phoneTask) => {
+                        FreeformTasks.update(phoneTask._id, {parent_task_id: task._id});
+                    })
+                break;
+            }
+        });
+
+        // Updates UserTasks collection
+        UserTasks.find().forEach((userTask) => {
+            UserTasks.update(userTask._id, {$set: {task_id: new Mongo.ObjectID(userTask.task_id)}})
+        });
+
+    },
+    down: function () {
+        // Not worth implementing functionality, we're still in beta.
     }
 })

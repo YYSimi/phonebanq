@@ -9,7 +9,7 @@ import './completedTasks.html'
 
 Template.completedTasks.onCreated(function () {
     this.autorun(() => {
-        var taskIds = UserTasks.find().map( function(item) {return new Mongo.ObjectID(item.task_id);});
+        var taskIds = UserTasks.find().map( function(item) {return item.task_id;});
         this.subscribe('tasksAndDetails', taskIds);
     } )
 });
