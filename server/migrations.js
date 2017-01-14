@@ -124,12 +124,12 @@ Migrations.add({
             switch(task.task_type) {
                 case PBTaskTypesEnum.phone:
                     PhoneTasks.find({parent_task_id: task._id._str}).forEach((phoneTask) => {
-                        PhoneTasks.update(phoneTask._id, {parent_task_id: task._id});
+                        PhoneTasks.update(phoneTask._id, {$set: {parent_task_id: task._id}});
                     })
                     break;
                 case PBTaskTypesEnum.freeform:
                     FreeformTasks.find({parent_task_id: task._id._str}).forEach((phoneTask) => {
-                        FreeformTasks.update(phoneTask._id, {parent_task_id: task._id});
+                        FreeformTasks.update(phoneTask._id, {$set: {parent_task_id: task._id}});
                     })
                 break;
             }
