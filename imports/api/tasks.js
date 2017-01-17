@@ -4,7 +4,7 @@ import { Match, check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 
 import { PBTaskTypesEnum } from './taskClasses.js';
-
+import { getNationalGroup } from '../../lib/common.js';
 
 // MASSIVE TODO:  This is where all of the server calls go through.  Make sure that the calls are locked-down to...
 //                    1)  Only allow authenticated/admin users to do auth/admin user things
@@ -68,24 +68,30 @@ if (Meteor.isServer) {
         return [phoneTasks, freeformTasks];
     });
     Meteor.publish('topTasks', function() {
-        var topTasks = Tasks.find({is_disabled: {$ne: true}}, {sort: {priority: -1, start_date: 1}, limit:4} )
-        
-       //TODO:  Function-out this task-detial-list-from-task stuff. 
-        // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
-        // TODO:  Filter, then map. Not visa-versa.
-       var phoneTaskIds = topTasks.map(function(item) { 
-            if (item.task_type == "phone") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
-            else { return null; }
-        } ).filter( function (elt) {return elt != null } );
-        var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
+        var natlGroup = getNationalGroup();
+        retval = [];
+        if (natlGroup) {
+            var topTasks = Tasks.find({is_disabled: {$ne: true}, group_id: natlGroup._id}, {sort: {priority: -1, start_date: 1}, limit:4} )
+            
+        //TODO:  Function-out this task-detial-list-from-task stuff. 
+            // TODO:  Figure out how to iterate automatically so we don't have to touch this code when adding a task type
+            // TODO:  Filter, then map. Not visa-versa.
+        var phoneTaskIds = topTasks.map(function(item) { 
+                if (item.task_type == "phone") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
+                else { return null; }
+            } ).filter( function (elt) {return elt != null } );
+            var phoneTasks = PhoneTasks.find({ '_id': {$in: phoneTaskIds} });
 
-        var freeformTaskIds = topTasks.map(function(item) { 
-            if (item.task_type == "freeform") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
-            else { return null; }
-        } ).filter( function (elt) {return elt != null } );
-        var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
+            var freeformTaskIds = topTasks.map(function(item) { 
+                if (item.task_type == "freeform") { return item.task_detail_id; } // TODO:  Figure out when we use strs vs MongoIDs
+                else { return null; }
+            } ).filter( function (elt) {return elt != null } );
+            var freeformTasks = FreeformTasks.find({ '_id': {$in: freeformTaskIds} });
 
-        return [topTasks, phoneTasks, freeformTasks];
+            retval = [topTasks, phoneTasks, freeformTasks];
+        }
+
+        return retval;
     });
     // MAJOR TODO:  Before leaving alpha, decide who should have access to this function! 
     Meteor.publish('findUsersByRegex', function(name) {

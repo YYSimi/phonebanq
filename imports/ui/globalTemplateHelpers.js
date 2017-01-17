@@ -9,8 +9,6 @@ function fUserHasRolesInSomeGroup(roles) {
         return memo.concat(Roles.getGroupsForUser(user, str))
     }, []);
 
-    console.log(allGroupIds.length);
-
     return allGroupIds.length !== 0;
 }
 
