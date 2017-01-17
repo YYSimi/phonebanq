@@ -100,7 +100,7 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
-    Migrations.migrateTo(4);
+    Migrations.migrateTo(5);
     indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
     Houston.add_collection(Migrations._collection); // Adds info about migrations to the houston admin UI.  Hacky!
@@ -348,6 +348,7 @@ function UpdateAllUserTasks(){
         console.log("updating user tasks for " + user._id);
         DisableExpiredUserTasks(user._id);
         var nNewTasksCreated = PopulateUserTasks(user._id);
+        console.log("Created " + nNewTasksCreated + " new Tasks");
     })
 }
 

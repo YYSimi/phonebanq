@@ -23,16 +23,19 @@ function CreateRandomUserTask(userId, group) {
     var fFoundTask = false;
     var foundTaskType;
     var foundTask;
-        
+
+    console.log("creating Random User Tasks")        
     //TODO:  Standardize storing groupId as MongoID!
-    var tasksCursor = Tasks.find( {is_disabled : { $ne: true }, group: group._id._str },
+    var tasksCursor = Tasks.find( {is_disabled : { $ne: true }, group_id: group._id },
                                   {sort : {priority:-1}});
+
+    console.log(tasksCursor.fetch());
 
     if (tasksCursor.count() > 0) {
         // TODO:  Don't use an array.  .fetch() will have awful performance characteristics when your DB gets large.
         // TODO:  Return only tasks in the appropriate date range.
         IterateRandomStart(tasksCursor.fetch(), (task) => {
-            var existingTask = UserTasks.findOne( { user_id : userId, task_id: task._id._str } );
+            var existingTask = UserTasks.findOne( { user_id : userId, task_id: task._id } );
             // If we found a valid task, break!
             if (!existingTask) {
                 foundTask = task;
@@ -54,7 +57,7 @@ function CreateRandomUserTask(userId, group) {
         var userTask = {
             user_id: userId,
             task_type: foundTaskType,
-            task_id: foundTask._id._str,
+            task_id: foundTask._id,
             task_statistics: "TBA",
             given_on: new Date(),
             lasts_until: tomorrow,
@@ -81,15 +84,17 @@ export function PopulateUserTasks(userId) {
 }
 
 export function PopulateNationalUserTasks(userId) {
+    console.log ("creating national tasks");
     return PopulateUserTasksForGroup(userId, getNationalGroup());
 }
 
 export function PopulateStateUserTasks(userId) {
     user = Meteor.users.findOne(userId);
     if (user && user.profile && user.profile.state) {
+        console.log ("creating state tasks");
         return PopulateUserTasksForGroup(userId, getStateGroupByStateAbbr(user.profile.state));
     }
-
+    return 0;
 }
 
 function PopulateUserTasksForGroup(userId, group) {
@@ -101,6 +106,7 @@ function PopulateUserTasksForGroup(userId, group) {
     var nTasksCreated = 0;
     var nTasksMax = 2;
     currentTaskCount = UserTasks.find({user_id: userId, is_active: true, group_id: group._id}).count();
+    console.log("currentTaskCount: " + currentTaskCount);
 
     // Attempt to create new tasks until we hit the task creation limit or task creation fails.
     while (nTasksCreated + currentTaskCount < nTasksMax) {

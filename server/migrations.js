@@ -145,3 +145,19 @@ Migrations.add({
         // Not worth implementing functionality, we're still in beta.
     }
 })
+
+Migrations.add({
+    version: 5,
+    up: function() {
+        UserTasks.find().forEach((task) => {
+            if (task.is_completed) {
+                UserTasks.update(task._id, {$set: {completed_on: new Date()} });
+            }
+        })
+    },
+    down: function() {
+        UserTasks.find().forEach((task) => {
+            UserTasks.update(task._id, {$unset: {completed_on: true} });
+        })
+    }
+})

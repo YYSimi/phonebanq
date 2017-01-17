@@ -17,6 +17,7 @@ Template.myTasks.onCreated(function () {
     this.subscribe('userGroups');
     this.autorun(() => {
         var taskIds = UserTasks.find().map( function(item) {return item.task_id;});
+        console.log(taskIds);
         this.subscribe('tasksAndDetails', taskIds);
     } )
 });

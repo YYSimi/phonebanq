@@ -33,7 +33,11 @@ Meteor.methods({
             Meteor.users.update(userId, {$set : {"profile.progression.xp" : newXp}})
         }
 
-        UserTasks.update(userTaskId, { $set: {is_completed : true, is_active:false } });
+        UserTasks.update(userTaskId, { $set: {is_completed : true,
+                                              is_active:false,
+                                               completed_on: new Date()
+                                             }
+                                     });
 
         if (userTask.is_active) {
             Meteor.users.update(userId, {$inc: {"statistics.activeTasks": -1} });
@@ -106,7 +110,9 @@ Meteor.methods({
                 Meteor.users.update(userId, {$inc: {"statistics.activeTasks": 1} });
                 UserTasks.update(
                     { _id: userTaskId },
-                    { $set: { "is_active" : true, "is_completed": false} }
+                    { $set: { "is_active" : true, "is_completed": false},
+                      $unset: {"completed_on": true}  
+                    }
                 );
             }
         }
