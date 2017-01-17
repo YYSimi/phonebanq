@@ -18,6 +18,7 @@ import '../ui/widgets/socialMediaWidgets.js'
 
 import '../ui/dashboards/userDashboard.js'
 import '../ui/dashboards/adminDashboard.js'
+import '../ui/dashboards/groupDashboard.js'
 
 import '../ui/userSettings.js'
 import '../ui/loginUi.js'
@@ -136,6 +137,12 @@ Router.route('/userDashboard', {
 Router.route('/adminDashboard', {
     name: 'adminDashboard',
     layoutTemplate: 'mainLoginRequired'
+});
+
+Router.route('/group/:_id', {
+    name: 'groupDashboard',
+    layoutTemplate: 'mainLoginRequired',
+    data: function() {return {groupId: this.params._id }}
 });
 
 Router.route('/', {

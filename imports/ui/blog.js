@@ -79,9 +79,19 @@ Template.displayBlogTopicsByGroupId.onCreated(function () {
 // TODO:  Make this actually accept group IDs.  For now, it always displays the website group.
 Template.displayBlogTopicsByGroupId.helpers({
     'getBlogTopicsFromGroupId'() {
-        retval = [];
-        if (getWebsiteGroup()) {
-            retval = BlogTopics.find({group_id: getWebsiteGroup()._id}, {sort: {created_date: -1}}).fetch();
+        var retval = [];
+        var groupId = null;
+        var tmpl = Template.instance();
+        console.log(Template.instance());
+        if ( tmpl.data && tmpl.data.groupId ) {
+            groupId = new Mongo.ObjectID(tmpl.data.groupId);
+        } else {
+            var websiteGroup = getWebsiteGroup(); 
+            groupId = websiteGroup ? websiteGroup._id : null;
+        }
+        const group = UserGroups.find(groupId); 
+        if (group) {
+            retval = BlogTopics.find({group_id: groupId}, {sort: {created_date: -1}}).fetch();
         }
         return retval;
     }
