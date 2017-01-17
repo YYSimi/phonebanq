@@ -86,8 +86,6 @@ Template.registerHelper('getUsernameFromId', function(userId) {
     return retval;
 })
 
-// This is global so that we can use it as a helper.
-// TODO:  Find a better way to do this.
 function getUserTasks(groupName) {
     var group = null;
     if (groupName) {

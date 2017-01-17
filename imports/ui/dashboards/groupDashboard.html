@@ -1,0 +1,8 @@
+<template name="groupDashboard">
+  {{#with group=getGroupFromGroupId groupId=groupId}}
+    <p> This is the group dashboard for {{group.name}}! </p>
+      {{> UserTasks getUserTasks group.name }}
+
+      {{> displayBlogTopicsByGroupId groupId=groupId}}
+  {{/with}}
+</template>
