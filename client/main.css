@@ -102,6 +102,10 @@ visibility: initial !important;
   color: #5a5a5a;
 }
 
+.featurette-divider {
+  border-color: #222;  
+}
+
 /* Global helper classes
 -------------------------------------------------- */
 .begin-hidden {
@@ -130,7 +134,16 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 100px;
-  min-height: 100%
+  min-height: 100%;
+  background-color: #e7e7e7;
+}
+
+.list-group {
+  background-color: inherit;
+}
+
+.list-group li{
+  background-color: inherit;
 }
 
 .footer {
