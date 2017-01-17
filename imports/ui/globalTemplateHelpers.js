@@ -1,5 +1,6 @@
 // This has no associated .html file.  It is a place where we register global template helpers.
 
+import { abbrState, FindTaskDetailFromTask, FindTaskFromUserTask } from '../../lib/common.js'
 import { Roles } from 'meteor/alanning:roles';
 
 function fUserHasRolesInSomeGroup(roles) {
@@ -84,3 +85,53 @@ Template.registerHelper('getUsernameFromId', function(userId) {
     const retval = user ? user.username : "Unknown user";
     return retval;
 })
+
+// This is global so that we can use it as a helper.
+// TODO:  Find a better way to do this.
+function getUserTasks(groupName) {
+    var group = null;
+    if (groupName) {
+        group = UserGroups.findOne({name: groupName});
+        if (!group) {
+            return [];
+        }
+    }
+
+    var userTasks = UserTasks.find({ user_id: Meteor.userId(), is_completed: false, is_active: true });
+    var retval =  userTasks.map(userTask => {
+        var mapRetval = null;
+        var task = FindTaskFromUserTask(userTask);
+        if (task) { //The task might not exist in our local DB if our subscription hasn't updated yet
+            var taskDetail = FindTaskDetailFromTask(task);
+            if (taskDetail) {  //Ditto for task detail
+                mapRetval =  {
+                    userTask: userTask,
+                    task: task,
+                    taskDetail: taskDetail
+                }
+            }
+        }
+        return mapRetval;
+    }).filter( function(elt) {return (elt != null && (group ? (_.isEqual(elt.task.group_id, group._id)) : true ) ) } );
+    return retval;
+}
+
+function getUserStateName() {
+    state = Meteor.user().profile.state;
+    return abbrState(state, "name");
+}
+
+Template.registerHelper('getUserStateName', function() {
+    return getUserStateName();
+});
+
+Template.registerHelper('getUserStateTasks', function() {
+    state = Meteor.user().profile.state;
+    if (state) {
+        return getUserTasks(abbrState(state, "name"));
+    }
+});
+
+Template.registerHelper('getUserTasks', function(groupName) {
+    return getUserTasks(groupName);
+});
