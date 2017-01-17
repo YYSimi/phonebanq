@@ -180,6 +180,10 @@ function checkForEditPermissions(user, task) {
     return task.owner == user._id;
 }
 
+function checkForCreationPermissions(user, task) {
+    return Roles.userIsInRole(user, ['site-admin', 'owner', 'admin', 'deputy'], task.group_id._str);
+}
+
 // TODO:  Research if you should convert all Meteor.user()/Meteor.userId calls to this.user
 Meteor.methods({
     // TODO:  Data validation!
@@ -190,8 +194,7 @@ Meteor.methods({
         validateTaskDetailOfType(task.task_type, taskDetail);
 
         var user = Meteor.user();
-        // TODO:  role review.
-        if (!Roles.userIsInRole(user, 'site-admin')) {
+        if (!checkForCreationPermissions(user, task)) {
             throw new Meteor.Error('not-authorized', "The logged-in user does not have permission to make new tasks.")
         }
 
@@ -223,7 +226,6 @@ Meteor.methods({
         var user = Meteor.user();
         task = Tasks.findOne(taskId);
 
-        // TODO:  Role review
         if (task && checkForEditPermissions(user)) {
             Tasks.update(taskId, {$set : { is_disabled : true}})
         }
