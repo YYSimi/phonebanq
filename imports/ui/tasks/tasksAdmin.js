@@ -10,13 +10,6 @@ import { FindTaskDetailFromTask } from '../../../lib/common.js'
 
 import './tasksAdmin.html'
 
-Template.tasksAdmin.helpers({
-    fHasNewTaskPermissions() {
-        var user = Meteor.user();
-        return Roles.userIsInRole(user, 'site-admin');
-    }
-});
-
 Template.authenticatedTasksAdmin.onCreated(function () {
     Meteor.subscribe('adminTasks');
 

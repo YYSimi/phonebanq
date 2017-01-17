@@ -16,14 +16,14 @@
           <!-- <li class="navlink {{#if fIsThisRouteActive 'about'}} active {{/if}}"><a href="{{pathFor route='about'}}"> About {{> appName}} </a></li> -->
           <li class="navlink navlink-myTasks {{#if fIsThisRouteActive 'viewSiteBlog'}} active {{/if}}"><a href="{{pathFor route='viewSiteBlog'}}"> Blog </a></li>
           <!-- TODO:  Fix up permissions info on all of these -->
-          {{#if fHasNewTaskPermissions}}
+          {{#if fNeedsAdminMenu}}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"> Admin Tools <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   {{#if fHasNewTaskPermissions}} <li><a href="{{pathFor route='newTask'}}"> Make a new task </a></li> {{/if}}
                   {{#if fHasNewTaskPermissions}} <li><a href="{{pathFor route='tasksAdmin'}}"> Manage tasks </a></li> {{/if}}
                   {{#if fHasManageGroupsPermissions}} <li><a href="{{pathFor route='groupsAdmin'}}"> Manage Groups </a> </li> {{/if}}
-                  <li><a href="{{pathFor route='postBlogTopic'}}"> Post Topic </a></li>
+                  {{#if fHasBlogPostPermissions}} <li><a href="{{pathFor route='postBlogTopic'}}"> Post Topic </a></li> {{/if}}
                 </ul>
             </li>
           {{/if}}

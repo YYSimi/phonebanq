@@ -17,13 +17,6 @@ var currentTaskType = new ReactiveVar("");
 var quillInstructions;
 var quillNotes;
 
-Template.newTask.helpers({
-    fHasNewTaskPermissions() {
-        var user = Meteor.user();
-        return (Roles.userIsInRole(user, 'site-admin'));
-    }
-})
-
 Template.authenticatedUserNewTask.onCreated(function () {
     var tmpl = Template.instance();
     tmpl.taskToEdit = new ReactiveVar({});
