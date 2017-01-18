@@ -139,10 +139,15 @@ Router.route('/adminDashboard', {
     layoutTemplate: 'mainLoginRequired'
 });
 
-Router.route('/group/:_id', {
+Router.route('/groups/:_id', {
     name: 'groupDashboard',
     layoutTemplate: 'mainLoginRequired',
     data: function() {return {groupId: this.params._id }}
+});
+
+Router.route('/groups', {
+    name: 'allGroupsDashboard',
+    layoutTemplate: 'mainLoginRequired'
 });
 
 Router.route('/', {

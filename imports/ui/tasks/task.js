@@ -51,19 +51,12 @@ Template.rawTaskButtons.events({
         task = Template.instance().data.task;
         userTask = Template.instance().data.userTask;
         
-        // If no usertask was passed in, create a new one.
+        // If no usertask was passed in, create a new one and complete it.
         if (!userTask) {
-            Meteor.call('userTasks.createUserTask', task._id);
-            userTask = UserTasks.findOne({task_id: task._id});
+            Meteor.call('userTasks.createUserTask', task._id, true);
         }
-
-        // Either way, complete the task.
-        if (userTask) {
+        else {  // Otherwise, just complete the task.
             Meteor.call('userTasks.completeTask', userTask._id);
-        }
-
-        else {
-            console.log("No UserTask Found");
         }
     }
 });

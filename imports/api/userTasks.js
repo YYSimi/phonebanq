@@ -141,8 +141,9 @@ Meteor.methods({
     },
 
     // Directly creates a userTask for the given taskId.
-    'userTasks.createUserTask'(taskId) {
+    'userTasks.createUserTask'(taskId, fCompletionState) {
         check(taskId, Mongo.ObjectID);
+        check(fCompletionState, Boolean);
         const userId = Meteor.userId();
         const task = Tasks.findOne(taskId);
 
@@ -173,7 +174,10 @@ Meteor.methods({
             group_id: task.group_id
         }
 
-        UserTasks.insert(userTask);
+        const userTaskId = UserTasks.insert(userTask);
         Meteor.users.update(userId, {$inc: {"statistics.activeTasks":1}});
+        if (fCompletionState) {
+            Meteor.call('userTasks.completeTask', userTaskId);
+        }
     }
 })
