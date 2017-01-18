@@ -203,6 +203,11 @@ body {
   margin: 1px;
 }
 
+.task-panel-completed .panel-heading{
+  background-color: lightgreen;
+}
+
+
 /* user info styles
 -------------------------------------------------- */
 .user-info-display {

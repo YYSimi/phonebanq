@@ -138,5 +138,42 @@ Meteor.methods({
         if (userTask.is_active) {
             Meteor.users.update(userId, {$inc: {"statistics.activeTasks": -1} });
         }
+    },
+
+    // Directly creates a userTask for the given taskId.
+    'userTasks.createUserTask'(taskId) {
+        check(taskId, Mongo.ObjectID);
+        const userId = Meteor.userId();
+        const task = Tasks.findOne(taskId);
+
+        if (!task) {
+            throw new Meteor.Error('invalid-parameter', "the given taskId does not have an associated task");
+        }
+
+        if (UserTasks.findOne({task_id: taskId})) {
+            throw new Meteor.Error('bad-state', "the given user has already received this task.");
+        }
+
+        var today = new Date();
+        today.setUTCHours(0,0,0,0);
+        var tomorrow = new Date(today);
+        tomorrow.setUTCHours(23, 59, 59, 999)
+
+        var userTask = {
+            user_id: userId,
+            task_type: task.task_type,
+            task_id: task._id,
+            task_statistics: "TBA",
+            given_on: new Date(),
+            lasts_until: tomorrow,
+            is_active : true,
+            is_completed: false,
+            is_repeatable: false,
+            never_show_again: false,
+            group_id: task.group_id
+        }
+
+        UserTasks.insert(userTask);
+        Meteor.users.update(userId, {$inc: {"statistics.activeTasks":1}});
     }
 })

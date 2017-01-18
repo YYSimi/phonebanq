@@ -1,8 +1,18 @@
 <template name="groupDashboard">
   {{#with group=getGroupFromGroupId groupId=groupId}}
     <p> This is the group dashboard for {{group.name}}! </p>
-      {{> UserTasks getUserTasks group.name }}
-
+      {{> groupTasks taskContexts=getGroupTasks}}
       {{> displayBlogTopicsByGroupId groupId=groupId}}
   {{/with}}
+</template>
+
+<!-- TODO:  Move this elsewhere -->
+<template name="groupTasks">
+  <ul class="list-group js-userTasks-list">
+  {{#each taskContext in taskContexts}}
+    <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
+      {{> UserTask context=taskContext buttonsTemplate="rawTaskButtons"}}
+    </li>
+  {{/each}}
+  </ul>
 </template>

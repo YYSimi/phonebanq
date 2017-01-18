@@ -18,7 +18,7 @@
     <ul class="list-group js-userTasks-list">
     {{#each userTask in this}}
       <li class="list-group-item no-border no-margin" id="tasklistEntry_{{userTask.userTask._id._str}}">
-        {{> UserTask context=userTask buttonsTemplate="ActiveTaskButtons"}}
+        {{> UserTask context=userTask buttonsTemplate="UserTaskButtons"}}
       </li>
     {{/each}}
     </ul>

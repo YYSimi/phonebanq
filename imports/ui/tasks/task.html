@@ -1,6 +1,6 @@
 <!-- TODO:  Move this template into its own file, rename to TasksBase or something similar -->
 <template name="UserTask">
-  <div class="panel panel-default task-panel">
+  <div class="panel panel-default task-panel {{#if fIsCompleted}} task-panel-completed {{/if}}">
     <div class="panel-heading clearfix">
       {{> Template.dynamic template=taskButtonsTemplateName data=context}}
       <span data-toggle="collapse" href="#collapse_{{context.task._id._str}}">
@@ -30,13 +30,22 @@
   </div>
 </template>
 
-<template name="ActiveTaskButtons">
+<!-- This template expects a UserTask to be displayed by its parent template -->
+<template name="UserTaskButtons">
   <span class="pull-right">
     <button class="btn btn-success glyphicon glyphicon-ok js-task-success" data-toggle="tooltip" title="Mark as Complete"> </button>
     <button class="btn btn-warning glyphicon glyphicon-minus js-task-hide" data-toggle="tooltip" title="Not interested right now"> </button>
     <button class="btn btn-danger glyphicon glyphicon-remove js-task-hideForever" data-toggle="tooltip" title="Never show again"> </button>
   </span>
 </template>
+
+<!-- This template expects a Task which may or may not have an associated usertask to be displayed by its parent template -->
+<template name="rawTaskButtons">
+  <span class="pull-right">
+    <button class="btn btn-success glyphicon glyphicon-ok js-task-createAndSuccess" data-toggle="tooltip" title="Mark as Complete"> </button>
+  </span>
+</template>
+
 
 <template name="UserTaskDetail">
   {{#if equals task.task_type "phone"}}

@@ -32,6 +32,9 @@ Template.UserTask.helpers({
                 break;
         }
         return retval;
+    },
+    fIsCompleted() {
+        return this.context && this.context.userTask && this.context.userTask.is_completed;
     }
 })
 
@@ -43,7 +46,29 @@ Template.registerHelper('equals', function (a, b) {
     return a === b;
 });
 
-Template.ActiveTaskButtons.events({
+Template.rawTaskButtons.events({
+    'click .js-task-createAndSuccess'() {
+        task = Template.instance().data.task;
+        userTask = Template.instance().data.userTask;
+        
+        // If no usertask was passed in, create a new one.
+        if (!userTask) {
+            Meteor.call('userTasks.createUserTask', task._id);
+            userTask = UserTasks.findOne({task_id: task._id});
+        }
+
+        // Either way, complete the task.
+        if (userTask) {
+            Meteor.call('userTasks.completeTask', userTask._id);
+        }
+
+        else {
+            console.log("No UserTask Found");
+        }
+    }
+});
+
+Template.UserTaskButtons.events({
     'click .js-task-success'() {
         
         //TODO:  re-enable animations.  They're not working properly at the moment.
