@@ -7,7 +7,7 @@
 </template>
 
 <template name="authenticatedUserCompletedTasks">
-  <ul class="list-group js-userTasks-list">
+  <ul class="list-group transparent-list js-userTasks-list">
   {{#each userTask in this}}
     <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
       {{> UserTask context=userTask buttonsTemplate="completedTaskButtons"}}

@@ -7,7 +7,7 @@
 
 <!-- TODO:  Move this elsewhere -->
 <template name="groupTasks">
-  <ul class="list-group js-userTasks-list">
+  <ul class="list-group transparent-list js-userTasks-list">
   {{#each taskContext in taskContexts}}
     <li class="list-group-item" style="border: none" id={{userTask.userTask._id}}>
       {{> UserTask context=taskContext buttonsTemplate="rawTaskButtons"}}
@@ -25,9 +25,8 @@
 </template>
 
 <template name="allGroupsDashboard">
-  {{> findGroup}}
+  <h3> Your group memberships:</h3>
   {{> myGroups}}
-  {{> createGroup}}
 </template>
 
 <template name="findGroup">
@@ -35,7 +34,11 @@
 </template>
 
 <template name="myGroups">
-  <p> This is the myGroups template</p>
+  {{#each group in findMyGroups}}
+  <ul class="list-group">
+    <li class="list-group-item no-margin"> <a class="big-anchor" href="{{pathFor route='groupDashboard' _id=group._id._str}}"> {{group.name}} </a> </li>
+  </ul>
+  {{/each}}
 </template>
 
 <template name="createGroup">

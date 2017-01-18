@@ -1,4 +1,6 @@
 import { FindTaskDetailFromTask } from '../../../lib/common.js'
+import { getStateGroupByStateAbbr, getNationalGroup } from '../../../lib/common.js';
+import { Roles } from 'meteor/alanning:roles'
 
 import './groupDashboard.html'
 
@@ -95,3 +97,37 @@ Template.groupDashboardNav.events({
         tmpl.currentTab.set(currentTab.data("template"));
     }
 })
+
+Template.myGroups.onCreated(() =>{
+    Meteor.subscribe('userGroups');
+})
+
+Template.myGroups.helpers({
+    findMyGroups() {
+        const user = Meteor.user();
+
+        var allGroupIds = _.reduce(['owner', 'admin', 'member'], function(memo, str) {
+            return memo.concat(Roles.getGroupsForUser(user, str))
+        }, []);
+
+        const nationalGroup = getNationalGroup();
+        const stateGroup = getStateGroupByStateAbbr(user.profile.state)
+
+        // Always include the national and state groups.
+        // TODO:  Make membership opt-in to National/State groups like with other groups.  The challenge here is
+        //        that the 'correct' state group depends on your current location, so we need
+        //        additional infrastructure to treat the State group the same as any other group.
+        if (nationalGroup && !allGroupIds.includes(nationalGroup._id._str)) {allGroupIds.push(nationalGroup._id._str);}
+        if (stateGroup && !allGroupIds.includes(stateGroup._id._str)) {allGroupIds.push(stateGroup._id._str);}
+
+        const allGroups = _.reduce(allGroupIds, function(memo, groupId) {
+            var group = UserGroups.findOne(new Mongo.ObjectID(groupId));
+            if (group) {
+                return memo.concat(group);
+            }
+            return memo;
+        }, [])
+        
+        return allGroups.sort((a,b) => {return (a.name).localeCompare(b.name)});
+    }
+});

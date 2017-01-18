@@ -138,11 +138,11 @@ body {
   background-color: #e7e7e7;
 }
 
-.list-group {
+.transparent-list {
   background-color: inherit;
 }
 
-.list-group li{
+.transparent-list li{
   background-color: inherit;
 }
 
@@ -165,6 +165,10 @@ body {
 -------------------------------------------------- */
 .no-bullet {
   list-style-type: none;
+}
+
+.big-anchor {
+  display: block;
 }
 
 /* task styles

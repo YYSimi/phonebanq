@@ -19,6 +19,7 @@ Template.postBlogTopic.onCreated(function () {
 
 Template.postBlogTopic.onRendered(function (){
 
+    // TODO:  Code for grabbing all of a user's groups is becoming increasingly common.  Factor it out!
     Tracker.autorun(function() {
         const user = Meteor.user();
 
@@ -84,7 +85,6 @@ Template.displayBlogTopicsByGroupId.onCreated(function () {
     });
 });
 
-// TODO:  Make this actually accept group IDs.  For now, it always displays the website group.
 Template.displayBlogTopicsByGroupId.helpers({
     'getBlogTopicsFromGroupId'() {
         var retval = [];
