@@ -1,8 +1,7 @@
 <template name="groupDashboard">
   {{#with group=getGroupFromGroupId groupId=groupId}}
-    <p> This is the group dashboard for {{group.name}}! </p>
-      {{> groupTasks taskContexts=getGroupTasks}}
-      {{> displayBlogTopicsByGroupId groupId=groupId}}
+    <h3> {{group.name}} </h3>
+      {{> groupDashboardNav groupId=groupId}}
   {{/with}}
 </template>
 
@@ -15,4 +14,12 @@
     </li>
   {{/each}}
   </ul>
+</template>
+
+<template name="groupDashboardNav">
+	<ul class="nav nav-tabs">
+		<li data-template="groupTasks" role="presentation" class="active"> <a href="#"> Opportunities </a> </li>
+		<li data-template="displayBlogTopicsByGroupId" role="presentation"> <a href="#"> Blog </a></li>
+	</ul>
+	{{> Template.dynamic template=tab data=tabData}}
 </template>

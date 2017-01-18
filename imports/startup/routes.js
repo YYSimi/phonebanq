@@ -107,7 +107,7 @@ Router.route('/blogs/siteBlog/', {
 Router.route('/blogs/displayGroupBlog/:_id', {
     name: 'displayBlogTopicsByGroupId',
     layoutTemplate: 'main',
-    data: function() {return {topicId: this.params._id} }
+    data: function() {return {groupId: this.params._id} }
 });
 
 // TODO:  Use of _str is disgusting here.  Clean it up once we understand

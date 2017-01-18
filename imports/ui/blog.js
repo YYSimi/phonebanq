@@ -70,8 +70,16 @@ Template.postBlogTopic.events({
 Template.displayBlogTopicsByGroupId.onCreated(function () {
     Meteor.subscribe('userGroups');
     Tracker.autorun(() => {
-        if (getWebsiteGroup()) {
-            Meteor.subscribe('blogTopicsByGroupId', getWebsiteGroup()._id);
+        const tmpl = Template.instance();
+        var groupId = null;
+        if (!tmpl || !tmpl.data || !tmpl.data.groupId) {
+            groupId = getWebsiteGroup() ? getWebsiteGroup()._id : null;
+        }
+        else {
+            groupId = new Mongo.ObjectID(tmpl.data.groupId);
+        }
+        if (groupId) {
+            Meteor.subscribe('blogTopicsByGroupId', groupId);
         }
     });
 });
@@ -82,17 +90,18 @@ Template.displayBlogTopicsByGroupId.helpers({
         var retval = [];
         var groupId = null;
         var tmpl = Template.instance();
-        console.log(Template.instance());
         if ( tmpl.data && tmpl.data.groupId ) {
             groupId = new Mongo.ObjectID(tmpl.data.groupId);
         } else {
             var websiteGroup = getWebsiteGroup(); 
             groupId = websiteGroup ? websiteGroup._id : null;
         }
-        const group = UserGroups.find(groupId); 
+        const group = UserGroups.findOne(groupId); 
+        console.log(group);
         if (group) {
-            retval = BlogTopics.find({group_id: groupId}, {sort: {created_date: -1}}).fetch();
+            retval = BlogTopics.find({group_id: group._id}, {sort: {created_date: -1}}).fetch();
         }
+        console.log(retval);
         return retval;
     }
 });
