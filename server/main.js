@@ -286,7 +286,7 @@ function generateUsername(user) {
             throw "Attempted to generate a username without specifying a loginsource";
     }
 
-    count = Meteor.users.find({"profile.username": username}).count();
+    count = Meteor.users.find({username: username}).count();
     if (count === 0) {
         return username;
     }

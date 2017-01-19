@@ -167,6 +167,11 @@ Migrations.add({
     up: function() {
         Meteor.users.find().forEach((user) => {
             var username = user.username.split("@")[0];
+            count = Meteor.users.find({username: username}).count();
+            if (count != 0) {
+                username = username + (count + 1);
+            }
+
             Meteor.users.update(user._id, {username: username});
         })
     },
