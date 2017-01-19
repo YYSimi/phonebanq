@@ -41,10 +41,11 @@ Template.register.onRendered(function() {
 Template.register.events({
     'submit #register-form' : function(e, t) {
         e.preventDefault();
+        var username = trimInput(t.find('#account-username').value);
         var email = trimInput(t.find('#account-email').value);
         var password = t.find('#account-password').value;
 
-        Accounts.createUser({email: email, password : password}, function(err){
+        Accounts.createUser({username: username, email: email, password : password}, function(err){
             if (err) {
                 console.log(err);
             } else {

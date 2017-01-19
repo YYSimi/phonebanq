@@ -161,3 +161,16 @@ Migrations.add({
         })
     }
 })
+
+Migrations.add({
+    version: 6,
+    up: function() {
+        Meteor.users.find().forEach((user) => {
+            var username = user.username.split("@")[0];
+            Meteor.users.update(user._id, {username: username});
+        })
+    },
+    down: function () {
+        // No way to reliably undo this.
+    }
+})

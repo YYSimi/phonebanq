@@ -100,7 +100,7 @@ function UpdateCongressInfo() {
 }
 
 Meteor.startup(() => {
-    Migrations.migrateTo(5);
+    Migrations.migrateTo(6);
     indexCallbacks.executeCallbacks();
     Houston.add_collection(Meteor.users);
     Houston.add_collection(Migrations._collection); // Adds info about migrations to the houston admin UI.  Hacky!
@@ -276,7 +276,7 @@ function generateUsername(user) {
             break;
         case "local":
             if (user.emails && user.emails[0] && user.emails[0].address) {
-                username = user.emails[0].address;
+                username = user.emails[0].address.split("@")[0];
             }
             else {
                 throw "Attempted to generate username for invalid local user"
