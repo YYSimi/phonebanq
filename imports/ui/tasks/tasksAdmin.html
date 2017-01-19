@@ -9,7 +9,7 @@
 <template name="authenticatedTasksAdmin">
   <ul class="list-group js-userTasks-list">
     {{#each taskAndDetail in getOwnedTasks}}
-      <li class="list-group-item" style="border: none">
+      <li class="list-group-item transparent-list" style="border: none">
         {{> UserTask context=taskAndDetail buttonsTemplate="manageTaskButtons"}}
       </li>
     {{/each}}

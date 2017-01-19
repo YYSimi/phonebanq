@@ -232,7 +232,7 @@ Meteor.methods({
         var user = Meteor.user();
         task = Tasks.findOne(taskId);
 
-        if (task && checkForEditPermissions(user)) {
+        if (task && checkForEditPermissions(user, task)) {
             Tasks.update(taskId, {$set : { is_disabled : true}})
         }
     },

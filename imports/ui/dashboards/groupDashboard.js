@@ -9,7 +9,7 @@ function getGroupFromGroupId(groupId) {
 }
 
 function getGroupTasks(groupId) {
-    var tasks = Tasks.find({group_id: new Mongo.ObjectID(groupId)});
+    var tasks = Tasks.find({group_id: new Mongo.ObjectID(groupId), is_disabled: {$ne: true}});
 
     var retval = tasks.map(task => {
         var mapRetval = null;
@@ -111,7 +111,7 @@ Template.myGroups.helpers({
         }, []);
 
         const nationalGroup = getNationalGroup();
-        const stateGroup = getStateGroupByStateAbbr(user.profile.state)
+        const stateGroup = user.profile && user.profile.state ? getStateGroupByStateAbbr(user.profile.state) : null;
 
         // Always include the national and state groups.
         // TODO:  Make membership opt-in to National/State groups like with other groups.  The challenge here is
